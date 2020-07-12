@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<security>
+	<regexes>
+		<regex name="cleartext" pattern="^[a-zA-Z0-9_()&amp;\\s]+$"/>
+		<regex name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"/>
+		<regex name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*]).{8,64}$"/>
+		<regex name="type" pattern="^(TENANT|OWNER)$"/>
+	</regexes>	
+	<templates>
+		<template name="test">
+			<parameters>
+				<parameter name="test_1" regex="cleartext" max-length="128" required="true"/>
+				<parameter name="test_2" regex="email" max-length="64" required="true"/>
+				<parameter name="test" type="object" template="test_1" requried="true"/>
+			</parameters>
+		</template>
+		<template name="test_1">
+			<parameters>
+				<parameter name="test_3" regex="cleartext" max-length="128" required="true"/>
+				<parameter name="test_4" regex="email" max-length="64" required="true"/>
+			</parameters>
+		</template>
+	</templates>
+	<urls>
+		<url value="/api/user/signup" method="POST" authentication="false">
+			<parameters>
+				<parameter name="email" regex="email" max-length="64" required="true"/>
+				<parameter name="password" regex="password" min-length="8" max-length="64" required="true"/>
+				<parameter name="type" regex="type" required="true"/>
+			</parameters>
+		</url>
+		<url value="/login" method="GET" authentication="false"/>
+		
+	</urls>
+</security>
