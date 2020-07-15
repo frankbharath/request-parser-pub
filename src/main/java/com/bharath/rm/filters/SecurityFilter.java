@@ -29,12 +29,18 @@ public class SecurityFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
-		JSONObject resp=ValidateRequest.checkValidity(req);
-		if(resp.has(Constants.STATUS) && Constants.SUCCESS.equals(resp.get(Constants.STATUS))) {
-			chain.doFilter(request, response);
+		String url=req.getRequestURI();
+		if(url.startsWith("/api/")) {
+			JSONObject resp=ValidateRequest.checkValidity(req);
+			if(resp.has(Constants.STATUS) && Constants.SUCCESS.equals(resp.get(Constants.STATUS))) {
+				chain.doFilter(request, response);
+			}else {
+				Utils.sendJSONResponse((HttpServletResponse)response, resp.toString());
+			}
 		}else {
-			Utils.sendJSONResponse((HttpServletResponse)response, resp.toString());
+			chain.doFilter(request, response);
 		}
+		
 	}
 
 	/**

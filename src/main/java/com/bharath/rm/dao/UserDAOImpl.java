@@ -17,6 +17,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.tables.Column;
 import com.bharath.rm.constants.tables.RM_UserType;
 import com.bharath.rm.constants.tables.RM_UserTypeMapper;
@@ -78,7 +79,7 @@ public class UserDAOImpl implements UserDAO {
 	public long getUserType(String type) {
 		StringBuilder query=new StringBuilder("SELECT ").append(RM_UserType.Columns.TYPEID.getColumnName());
 		query.append(" FROM ").append(RM_UserType.TABLE.getTableName()).append(" WHERE ").append(RM_UserType.Columns.TYPE.getColumnName())
-		.append("=?").toString();
+		.append("=?");
 		return jdbcTemplate.queryForObject(query.toString(), new Object[]{type}, Long.class);
 	}
 
@@ -103,5 +104,33 @@ public class UserDAOImpl implements UserDAO {
 				.append(String.join(",", cols)).append(") VALUES (")
 				.append(Stream.generate(() -> "?").limit(cols.size()).collect(Collectors.joining(","))).append(")");
 		jdbcTemplate.update(builer.toString(), new Object[]{verification.getUserid(),verification.getToken(),verification.getCreationtime()});
+	}
+	
+	@Override
+	public boolean validateVerificationCode(Verification verification) {
+		List<String> cols=new ArrayList<>();
+		cols.add(RM_Userverification.Columns.USERID.getColumnName());
+		cols.add(RM_Userverification.Columns.TOKEN.getColumnName());
+		StringBuilder query=new StringBuilder("SELECT EXISTS (SELECT * FROM ").append(RM_Userverification.TABLE.getTableName()).append(" WHERE ")
+		.append(RM_Userverification.Columns.USERID.getColumnName()).append("=?")
+		.append(" AND ").append(RM_Userverification.Columns.TOKEN.getColumnName()).append("=?")
+		.append(" AND ").append(RM_Userverification.Columns.CREATIONTIME.getColumnName()+"+"+Constants.EXPIRATIONINTERVAL).append(">?)");
+		System.out.println(query.toString());
+		return jdbcTemplate.queryForObject(query.toString(), new Object[] {verification.getUserid(),verification.getToken(),System.currentTimeMillis()}, Boolean.class);
+	}
+	
+	@Override
+	public void deleteVerificationCode(Verification verification) {
+		StringBuilder builder=new StringBuilder(" DELETE FROM ").append(RM_Userverification.TABLE.getTableName()).append(" WHERE ")
+				.append(RM_Userverification.Columns.USERID.getColumnName()).append("=?")
+				.append(" AND ").append(RM_Userverification.Columns.TOKEN.getColumnName()).append("=?");
+		jdbcTemplate.update(builder.toString(), new Object[] {verification.getUserid(),verification.getToken()});
+	}
+	
+	@Override
+	public void verifyUserAccount(long userid) {
+		StringBuilder builder=new StringBuilder(" UPDATE ").append(RM_Users.TABLE.getTableName()).append(" SET ").append(RM_Users.Columns.VERIFIED.getColumnName())
+				.append("=? WHERE ").append(RM_Users.Columns.USERID.getColumnName()).append("=?");
+		jdbcTemplate.update(builder.toString(), new Object[] {true,userid});
 	}
 }

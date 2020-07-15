@@ -15,4 +15,7 @@ public interface UserDAO {
 	 public long addUser(User user);
 	 public void mapUserToType(long userid,long typeid);
 	 public void addVerificationCode(Verification verification);
+	 public boolean validateVerificationCode(Verification verification);
+	void deleteVerificationCode(Verification verification);
+	void verifyUserAccount(long userid);
 }

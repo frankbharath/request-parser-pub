@@ -1,5 +1,10 @@
 package com.bharath.rm.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.mail.MessagingException;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,8 +16,10 @@ import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.dao.UserDAO;
+import com.bharath.rm.model.Mail;
 import com.bharath.rm.model.domain.User;
 import com.bharath.rm.model.domain.Verification;
+import com.bharath.rm.service.interfaces.UserService;
 
 /**
 	* @author bharath
@@ -21,14 +28,14 @@ import com.bharath.rm.model.domain.Verification;
  	* Class Description
 */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
 	private UserDAO userDAO;
 	
 	private PasswordEncoder passwordEncoder;
 	
-	private EmailService emailService;
+	private EmailServiceImpl emailService;
 	
 	@Autowired
 	public UserServiceImpl(UserDAO userDAO) {
@@ -41,33 +48,46 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Autowired
-	public void setEmailUtil(EmailService emailUtil) {
+	public void setEmailUtil(EmailServiceImpl emailUtil) {
 		this.emailService = emailUtil;
 	}
 	
-	
 	@Override
-	public JSONObject addUser(User user) {
-		emailService.sendEmail();
+	public JSONObject addUser(User user) throws MessagingException {
 		if(userDAO.userExist(user.getEmail())) {
-			return Utils.getErrorObject(ErrorCodes.EMAIL_EXISTS, I18NConfig.getMessage("error.admin.email_exists"));
+			return Utils.getErrorObject(ErrorCodes.EMAIL_EXISTS, I18NConfig.getMessage("error.user.email_exists"));
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		long userid=userDAO.addUser(user);
 		long typeId=userDAO.getUserType(user.getType());
 		userDAO.mapUserToType(userid, typeId);
-		sendVerificationCodeForUser(userid);
-		return Utils.getSuccessResponse(null, I18NConfig.getMessage("success.admin.added_success"));
+		String token=addVerificationCodeForUser(userid);
+		emailService.sendVerificationEmailToUser(userid,user.getEmail(),token);
+		return Utils.getSuccessResponse(null, I18NConfig.getMessage("success.user.added_success"));
 	}
 	
 	@Override
-	public void sendVerificationCodeForUser(long userid) {
+	public String addVerificationCodeForUser(long userid) {
 		Verification verification=new Verification();
 		verification.setUserid(userid);
-		verification.setToken(Utils.generateAlphaNumericString(Constants.ALPHANUMLEN));
+		String token=Utils.generateAlphaNumericString(Constants.ALPHANUMLEN);
+		verification.setToken(token);
 		long currentTime=System.currentTimeMillis();
 		verification.setCreationtime(currentTime);
-		
+		userDAO.addVerificationCode(verification);
+		return token;
 	}
-
+	
+	@Override
+	public JSONObject verifyAccountForUser(Verification verification) {
+		boolean isValid=userDAO.validateVerificationCode(verification);
+		if(isValid) {
+			userDAO.deleteVerificationCode(verification);
+			userDAO.verifyUserAccount(verification.getUserid());
+			return Utils.getSuccessResponse(null, I18NConfig.getMessage("success.user.verify_success"));
+		}else {
+			return Utils.getErrorObject(ErrorCodes.LINK_EXPIRED, I18NConfig.getMessage("error.user.verification"));
+		}
+	}
+	
 }

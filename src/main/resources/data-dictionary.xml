@@ -32,7 +32,7 @@
 		<table name="rm_userverification" description="Stores user verification token">
 			<columns>
 				<column name="userid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
-				<column name="token" type="bigint" null="false"/>
+				<column name="token" type="varchar(32)" null="false"/>
 				<column name="creationtime" type="bigint" null="false"/>
 			</columns>
 		</table>

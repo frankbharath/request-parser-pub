@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLEventReader;
@@ -17,6 +19,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.method.P;
 
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.constants.SecurityXMLUtilConstants;
@@ -26,6 +29,7 @@ import com.bharath.rm.model.URL;
 
 import com.bharath.rm.model.Parameter.ParameterBuilder;
 import com.bharath.rm.model.URL.URIBuilder;
+import com.sun.istack.FinalArrayList;
 
 /**
  * @author bharath
@@ -55,8 +59,7 @@ public final class SecurityXMLConfig {
 	/** A map that stores template name and it's parameters in HashMap. It will be cleared when all the url's are processed.  */
 	private final HashMap<String,HashMap<String, Parameter>> templateMaps=new HashMap<>();
 	
-	/** A map that stores template name and it's parameters in HashMap. It will be cleared when all the url's are processed.  */
-	private static final HashMap<String,URL> urlMaps=new HashMap<>();
+	public static final URLNode URLNODES=new URLNode();
 	
 	/** XMLInputFactory instance. */
 	private final XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -361,14 +364,84 @@ public final class SecurityXMLConfig {
 					String endName = endElement.getName().getLocalPart();
 					if(SecurityXMLUtilConstants.URL.equals(endName)) {
 						builder.setParameters(map);
-						URL url =builder.build();
-						urlMaps.put(url.getUrl()+"_"+url.getMethod(), url);
+						URL url=builder.build();
+						String[] split=url.getUrl().split("/");
+						createURLNodeTree(URLNODES,url,split,1);
 						return;
 					}
 				break;
 			}
 		}
 		
+	}
+	
+	public static void createURLNodeTree(final URLNode urlnode, final URL url, final String[] urlTokens, int index) {
+		ArrayList<Node> nodes= urlnode.getNodes();
+		for(Node node:nodes) {
+			if(urlTokens[index].equals(node.getValue())) {
+				if(index==urlTokens.length-1) {
+					node.getUrls().add(url);
+				}else {
+					createURLNodeTree(node.getUrlNode(),url,urlTokens,++index);
+				}
+				return;
+			}
+		}
+		Node node=new Node();
+		node.setValue(urlTokens[index++]);
+		if(index==urlTokens.length) {
+			node.getUrls().add(url);
+		}else {
+			createURLNodeTree(node.getUrlNode(),url,urlTokens,index);
+		}
+		nodes.add(node);
+	}
+	
+	public static URL getUrl(final URLNode urlnode, final String[] searchTokens, int index, String protocol) {
+		ArrayList<Node> nodes= urlnode.getNodes();
+		ArrayList<Node> regexNodes=new ArrayList<>();
+		for(Node node:nodes) {
+			String value=node.getValue();
+			if(searchTokens[index].equals(value)) {
+				if(index==searchTokens.length-1) {
+					ArrayList<URL> urls=node.getUrls();
+					for(URL url:urls ) {
+						String[] urltokens=url.getUrl().split("/");
+						if(searchTokens.length==urltokens.length && url.getMethod().toLowerCase().equals(protocol)) {
+							return url;
+						}
+					}
+				}else {
+					URL url=getUrl(node.getUrlNode(),searchTokens,index+1,protocol);
+					if(url!=null) {
+						return url;
+					}
+				}
+			}else  {
+				Pattern pattern = Pattern.compile(value);
+				Matcher matcher = pattern.matcher(searchTokens[index]);				
+				if(matcher.matches()) {
+					regexNodes.add(node);
+				}
+			}
+		}
+		for(Node node:regexNodes) {
+			if(index==searchTokens.length-1) {
+				ArrayList<URL> urls=node.getUrls();
+				for(URL url:urls ) {
+					String[] urltokens=url.getUrl().split("/");
+					if(searchTokens.length==urltokens.length && url.getMethod().toLowerCase().equals(protocol)) {
+						return url;
+					}
+				}
+			}else {
+				URL url=getUrl(node.getUrlNode(),searchTokens,index+1,protocol);
+				if(url!=null) {
+					return url;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -465,7 +538,6 @@ public final class SecurityXMLConfig {
 	}
 	
 	public static URL getURL(HttpServletRequest request) {
-		String urlMethod=request.getRequestURI()+"_"+request.getMethod();
-		return urlMaps.getOrDefault(urlMethod, null);
+		return getUrl(SecurityXMLConfig.URLNODES, request.getRequestURI().split("/"), 1, request.getMethod().toLowerCase());
 	}
 }

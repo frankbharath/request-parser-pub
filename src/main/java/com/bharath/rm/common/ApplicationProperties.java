@@ -43,7 +43,7 @@ public final class ApplicationProperties {
      * @return single instance of ApplicationProperties
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static ApplicationProperties getInstance() throws IOException  {
+    public static ApplicationProperties getInstance()  {
         if (SINGLE_INSTANCE == null) {
             synchronized (ApplicationProperties.class) {
                 if (SINGLE_INSTANCE == null) {
@@ -52,7 +52,9 @@ public final class ApplicationProperties {
                 	try (final InputStream inputStream = classLoader.getResourceAsStream(APPLICATION_PROPERTIES)) {
                 		SINGLE_INSTANCE = new ApplicationProperties();
                         SINGLE_INSTANCE.properties.load(inputStream);
-                	} 
+                	} catch (IOException e) {
+						log.error(e.getMessage());
+					} 
                 }
             }
         }

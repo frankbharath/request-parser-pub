@@ -135,4 +135,12 @@ public final class Utils {
 		return RandomStringUtils.randomAlphanumeric(length);
 	}
 	
+	public static String getHostURL() {
+		return ApplicationProperties.getInstance().getProperty("server.address");
+	}
+	
+	public static String getHostURLWithPort() {
+		ApplicationProperties properties=ApplicationProperties.getInstance();
+		return "http://"+properties.getProperty("server.address")+":"+properties.getProperty("server.port");
+	}
 }

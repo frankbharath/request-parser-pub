@@ -32,19 +32,19 @@ public enum RM_Userverification implements Table {
 		USERID{
 			@Override
 			public String getColumnName() {
-				return this.name().toLowerCase();
+				return TABLE.getTableName()+"."+this.name().toLowerCase();
 			}
 		},
 		TOKEN{
 			@Override
 			public String getColumnName() {
-				return this.name().toLowerCase();
+				return TABLE.getTableName()+"."+this.name().toLowerCase();
 			}
 		},
 		CREATIONTIME{
 			@Override
 			public String getColumnName() {
-				return this.name().toLowerCase();
+				return TABLE.getTableName()+"."+this.name().toLowerCase();
 			}
 		}
 	}

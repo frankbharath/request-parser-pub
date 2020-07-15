@@ -28,13 +28,13 @@ public enum RM_UserType implements Table{
 		TYPEID{
 			@Override
 			public String getColumnName() {
-				return this.name().toLowerCase();
+				return TABLE.getTableName()+"."+this.name().toLowerCase();
 			}
 		},
 		TYPE{
 			@Override
 			public String getColumnName() {
-				return this.name().toLowerCase();
+				return TABLE.getTableName()+"."+this.name().toLowerCase();
 			}
 		}
 	}

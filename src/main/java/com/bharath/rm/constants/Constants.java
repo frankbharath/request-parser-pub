@@ -28,7 +28,8 @@ public class Constants {
 	/** The Constant DATA. */
 	public static final String DATA="DATA";
 	
-	public static final int ALPHANUMLEN=10;
+	public static final int ALPHANUMLEN=16;
 	
 	public static final long EXPIRATIONINTERVAL=86400000;
+	
 }
