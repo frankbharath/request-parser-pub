@@ -21,18 +21,7 @@ public class ThymeleafTemplateConfig {
 	public SpringTemplateEngine springTemplateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.addTemplateResolver(htmlTemplateResolver());
-        templateEngine.addTemplateResolver(htmlMailTemplateResolver());
         return templateEngine;
-    }
-	
-    @Bean
-    public SpringResourceTemplateResolver htmlMailTemplateResolver(){
-        SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
-        emailTemplateResolver.setPrefix("classpath:/templates/mail/");
-        emailTemplateResolver.setSuffix(".html");
-        emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
-        emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        return emailTemplateResolver;
     }
     
     @Bean

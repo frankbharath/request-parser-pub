@@ -14,8 +14,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 
+import com.bharath.rm.configuration.RentPalThreadLocal;
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.ErrorCodes;
+import com.bharath.rm.constants.SuccessCode;
 
 /**
 	* @author bharath
@@ -106,6 +108,9 @@ public final class Utils {
 		return getSuccessResponse(null, null);
 	}
 	public static JSONObject getSuccessResponse(JSONObject data, String message) {
+		return getSuccessResponse(data,message,null);
+	}
+	public static JSONObject getSuccessResponse(JSONObject data, String message, SuccessCode code) {
 		JSONObject resp=new JSONObject();
 		resp.put(Constants.STATUS, Constants.SUCCESS);
 		if(data!=null) {
@@ -113,6 +118,9 @@ public final class Utils {
 		}
 		if(message!=null) {
 			resp.put(Constants.MESSAGE, message);
+		}
+		if(code!=null) {
+			resp.put(Constants.SUCCESS_CODE, code);
 		}
 		return resp;
 	}
@@ -142,5 +150,13 @@ public final class Utils {
 	public static String getHostURLWithPort() {
 		ApplicationProperties properties=ApplicationProperties.getInstance();
 		return "http://"+properties.getProperty("server.address")+":"+properties.getProperty("server.port");
+	}
+	
+	public static long getUserId() {
+		return Long.parseLong(RentPalThreadLocal.get("userId").toString());
+	}
+	
+	public static String getUserEmail() {
+		return RentPalThreadLocal.get("email").toString();
 	}
 }

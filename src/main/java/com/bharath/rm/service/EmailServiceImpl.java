@@ -19,6 +19,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import com.bharath.rm.common.ApplicationProperties;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
+import com.bharath.rm.constants.Constants.Tokentype;
 import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.Mail;
 import com.bharath.rm.service.interfaces.EmailService;
@@ -32,9 +33,13 @@ import com.bharath.rm.service.interfaces.EmailService;
 @Component
 public class EmailServiceImpl implements EmailService{
 	
-	public static final String VERIFICAIONTEMPLATE="verification";
+	public static final String VERIFICAIONTEMPLATE="mail/verification";
 	
-	public static final String VERIFICAIONAPI="/api/user/verify/";
+	public static final String RESTPASSWORDTEMPLATE="mail/resetpassword";
+	
+	public static final String VERIFICAIONAPI="/verify";
+	
+	public static final String RESETPASSWORDAPI="/reset";
 	
 	private final JavaMailSender javaMailSender;
 	
@@ -46,7 +51,6 @@ public class EmailServiceImpl implements EmailService{
 		this.javaMailSender=javaMailSender;
 		this.templateEngine=templateEngine;
 	}
-	
 	
 	public void sendEmail(Mail mail) throws MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
@@ -61,27 +65,36 @@ public class EmailServiceImpl implements EmailService{
                 context.setVariables(mail.getModel());
             }
         	String html = templateEngine.process(mail.getTemplate(), context);
-        	System.out.println(html);
         	helper.setText(html, true);
         }
-        
         helper.setSubject(mail.getSubject());
         helper.setFrom(mail.getFrom());
         javaMailSender.send(message);
     }
 	
-	public void sendVerificationEmailToUser(Long userid, String email, String token) throws MessagingException {
-		Mail mail=new Mail(getSupportEmail(),email,I18NConfig.getMessage("email.verification.subject"));
-		mail.setTemplate(VERIFICAIONTEMPLATE);
+	public void sendTokenEmailToUser(Long userid, String email, String token, Tokentype type) throws MessagingException {
 		Map<String,Object> model=new HashMap<>();
 		model.put("user", email.split("@")[0]);
-		String url=Utils.getHostURLWithPort()+VERIFICAIONAPI+userid+"?token="+token;
+		String url=Utils.getHostURLWithPort()+(type==Tokentype.VERIFY?VERIFICAIONAPI:RESETPASSWORDAPI)+"?token="+token;
 		model.put("url", url);
-		mail.setModel(model);
-		sendEmail(mail);
+		switch(type) {
+			case RESET:
+				Mail resetemail=new Mail(getSupportEmail(),email,I18NConfig.getMessage("email.resetpassword.subject"));
+				resetemail.setTemplate(RESTPASSWORDTEMPLATE);
+				resetemail.setModel(model);
+				sendEmail(resetemail);
+			break;
+			case VERIFY:
+				Mail verifymail=new Mail(getSupportEmail(),email,I18NConfig.getMessage("email.verification.subject"));
+				verifymail.setTemplate(VERIFICAIONTEMPLATE);
+				verifymail.setModel(model);
+				sendEmail(verifymail);
+			break;
+		}
 	}
-
+	
 	public static String getSupportEmail() {
 		return ApplicationProperties.getInstance().getProperty("spring.mail.username");
 	}
+	
 }

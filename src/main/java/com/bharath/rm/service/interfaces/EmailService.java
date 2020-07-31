@@ -2,6 +2,7 @@ package com.bharath.rm.service.interfaces;
 
 import javax.mail.MessagingException;
 
+import com.bharath.rm.constants.Constants.Tokentype;
 import com.bharath.rm.model.Mail;
 
 /**
@@ -12,5 +13,5 @@ import com.bharath.rm.model.Mail;
 */
 public interface EmailService {
 	public void sendEmail(Mail mail) throws MessagingException;
-	public void sendVerificationEmailToUser(Long userid, String email, String token) throws MessagingException;
+	public void sendTokenEmailToUser(Long userid, String email, String token, Tokentype type) throws MessagingException;
 }

@@ -9,6 +9,7 @@ public class Verification {
 	private Long userid;
 	private String token;
 	private Long creationtime;
+	private int type;
 	/**
 	 * @return the userid
 	 */
@@ -44,5 +45,16 @@ public class Verification {
 	 */
 	public void setCreationtime(Long creationtime) {
 		this.creationtime = creationtime;
+	}
+	
+	@Override
+	public String toString() {
+		return "Verification [userid=" + userid + ", token=" + token + ", creationtime=" + creationtime + "]";
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 }

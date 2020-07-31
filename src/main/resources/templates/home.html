@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<link rel="icon" href="/resources/images/favicon.svg">
+	<meta id="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" th:content="${_csrf.headerName}"/>
+	<title th:utext="#{html.home.title}"></title>
+	<!--link rel="stylesheet" href="D:\projects\rm\rm\src\main\resources\static\css\main.css"-->
+	<link rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+	<div th:switch="${show}">
+		<div class="db-World-root" th:case="${'home'}">
+			<div class="db-World-wrapper Box-root Flex-flex Flex-direction--column">
+				<div class="db-World-scrollWrapper" th:switch="${show}">
+					<div class="db-World-sideNavContainer">
+						<div class="db-SideNav-container Box-root Padding-right--2 Padding-vertical--20 Flex-flex Flex-direction--column">
+							<div class="db-SideNav-navSections">
+								<div class="Box-root" style="pointer-events: none;">
+									<div class="Box-root Flex-flex Flex-direction--column Flex-justifyContent--flexStart Flex-wrap--nowrap">
+										<div class="Box-root Box-hideIfEmpty" style="pointer-events: auto;">
+											<ul>
+												<li>
+													<div>
+														<a class="db-SideNav-link" data-db-analytics-sidenav="home" data-db-analytics-sidenav-path="/dashboard" href="/test/dashboard">
+															<div class="NavItem Box-root  Padding-horizontal--4 Padding-vertical--4">
+																<div class="Box-root Flex-flex Flex-alignItems--flexStart">
+																	<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center">
+																		<div class="SVGInline SVGInline--cleaned SVG db-SideNav-icon db-SideNav-icon--home Box-root Flex-flex">
+																			<svg class="SVGInline-svg SVGInline--cleaned-svg SVG-svg db-SideNav-icon-svg db-SideNav-icon--home-svg" style="width: 16px;height: 16px;" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M9.5 15.035V11.63a.6.6 0 0 0-.607-.596H7.107a.604.604 0 0 0-.607.596v3.405h-4a.998.998 0 0 1-1-.998V7.032c0-.381.218-.729.56-.896l5.96-4.9 5.896 4.889a.997.997 0 0 1 .584.907v7.005a.998.998 0 0 1-.999.998zM8 8.835a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6z" fill="#A3ACB9" class="db-SideNav-iconFill--secondary"></path><path d="M8.002 1.004a.403.403 0 0 0-.307.085L.552 6.873a.4.4 0 0 0-.06.57l.75.925c.138.17.395.2.568.06l6.192-5.015 6.193 5.015c.173.14.43.11.57-.06l.748-.926a.4.4 0 0 0-.06-.57L8.31 1.09a.403.403 0 0 0-.308-.085z" fill="#4F566B" class="db-SideNav-iconFill--primary"></path></g></svg>
+																		</div>
+																	</div>
+																		<span class="Text-color--dark Text-fontSize--14 Text-fontWeight--regular Text-lineHeight--20 Text-numericSpacing--proportional Text-typeface--base Text-wrap--wrap Text-display--inline">
+																	<span>Home</span>
+																	</span>
+																</div>
+															</div>
+														</a>
+														<ul class="db-SideNav--expandable" style="height: 0px; overflow: hidden;"></ul>
+													</div>
+												</li>
+												<li style="margin-top: 10px;">
+													<div>
+														<a class="db-SideNav-link" data-db-analytics-sidenav="payments" data-db-analytics-sidenav-path="/payments" href="/test/payments">
+															<div class="NavItem Box-root Padding-horizontal--4 Padding-vertical--4">
+																<div class="Box-root Flex-flex Flex-alignItems--flexStart">
+																	<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center">
+																		<div class="SVGInline SVGInline--cleaned SVG db-SideNav-icon db-SideNav-icon--payments Box-root Flex-flex">
+																			<svg class="SVGInline-svg SVGInline--cleaned-svg SVG-svg db-SideNav-icon-svg db-SideNav-icon--payments-svg" style="width: 16px;height: 16px;" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M11.1 10.002A2.1 2.1 0 1 0 6.9 10H1c-.552 0-1-.413-1-.923V2.923C0 2.413.448 2 1 2h12.002c.553 0 1 .413 1 .923v7.08zM7.006 4A2.003 2.003 0 1 0 7 8.006 2.003 2.003 0 0 0 7.006 4z" fill="#A3ACB9" class="db-SideNav-iconFill--secondary"></path><path d="M15 14H3c-.552 0-1-.413-1-.923V6.923C2 6.413 2.448 6 3 6h12c.552 0 1 .413 1 .923v6.154c0 .51-.448.923-1 .923zM9.006 8A2.003 2.003 0 1 0 9 12.006 2.003 2.003 0 0 0 9.006 8z" fill="#4F566B" class="db-SideNav-iconFill--primary"></path></g></svg>
+																		</div>
+																	</div>
+																	<span class="Text-color--dark Text-fontSize--14 Text-fontWeight--regular Text-lineHeight--20 Text-numericSpacing--proportional Text-typeface--base Text-wrap--wrap Text-display--inline">
+																		<span>Receipts</span>
+																	</span>
+																</div>
+															</div>
+														</a>
+														<ul class="db-SideNav--expandable" style="height: 0px; overflow: hidden;"></ul>
+													</div>
+												</li>
+												<li style="margin-top: 10px;">
+													<div>
+														<a class="db-SideNav-link" data-db-analytics-sidenav="settings" data-db-analytics-sidenav-path="/settings" href="/settings">
+															<div class="NavItem Box-root Padding-horizontal--4 Padding-vertical--4">
+																<div class="Box-root Flex-flex Flex-alignItems--flexStart">
+																	<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center">
+																		<div class="SVGInline SVGInline--cleaned SVG db-SideNav-icon db-SideNav-icon--settings Box-root Flex-flex">
+																			<svg class="SVGInline-svg SVGInline--cleaned-svg SVG-svg db-SideNav-icon-svg db-SideNav-icon--settings-svg" style="width: 16px;height: 16px;" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M14.197 7.017c-.23 0-1.607 0-2.18-.695 0-.115-.115-.115-.115-.231-.115-.81.918-1.851 1.032-1.967.23-.231.23-.579.115-.694-.115-.116-.574-.579-.688-.81-.115-.232-.46-.116-.689.116-.23.23-1.147 1.157-1.95 1.04-.115 0-.115-.115-.23-.115-.689-.463-.689-1.851-.689-2.082 0-.348-.114-.579-.344-.579H7.311c-.229 0-.344.231-.344.579 0 .23 0 1.62-.688 2.198-.115 0-.115.116-.23.116-.803 0-1.721-.926-1.95-1.157-.23-.232-.574-.232-.69-.116-.114.231-.573.694-.802.81-.115.115-.115.463.114.694.23.231 1.148 1.157 1.033 1.967 0 .116-.115.116-.115.231-.459.695-1.836.695-2.065.695-.344 0-.574.115-.574.347v1.041c0 .231.23.463.574.463.23 0 1.606 0 2.18.694 0 .116.115.116.115.231.115.81-.918 1.852-1.033 1.967-.23.232-.23.579-.115.695.115.115.574.578.689.81.115.115.459.115.688-.116.23-.232 1.148-1.157 1.951-1.042.115 0 .115.116.23.116.688.579.688 1.851.688 2.198 0 .232.23.579.46.579h1.032c.23 0 .459-.231.459-.579 0-.23 0-1.62.689-2.198.114 0 .114-.116.23-.116.802-.115 1.835.926 1.95 1.042.23.231.574.231.688.115l.804-.81c.114-.115.114-.462-.115-.694-.23-.231-1.148-1.157-1.033-1.967 0-.115.115-.115.115-.231.574-.694 1.836-.694 2.18-.694.23 0 .574-.232.574-.463V7.364c-.23-.232-.459-.347-.803-.347zm-6.312 3.47c-1.377 0-2.524-1.156-2.524-2.545 0-1.388 1.147-2.545 2.524-2.545s2.525 1.157 2.525 2.545c0 1.389-1.148 2.546-2.525 2.546z" fill="#4F566B" class="db-SideNav-iconFill--primary" fill-rule="evenodd"></path></svg>
+																		</div>
+																	</div>
+																	<span class="Text-color--dark Text-fontSize--14 Text-fontWeight--regular Text-lineHeight--20 Text-numericSpacing--proportional Text-typeface--base Text-wrap--wrap Text-display--inline">
+																		<span>Settings</span>
+																	</span>
+																</div>
+															</div>
+														</a>
+														<ul class="db-SideNav--expandable" style="height: 0px; overflow: hidden;"></ul>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="db-World-mainWrapper Box-root">
+						<div class="db-World-mainPane Box-root Padding-right--20">
+						<div class="db-World-contentPane">
+							<div>home</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:case="${'showstripe'}" align="center" style="margin-top: 5%;">
+			<img src="/resources/images/icon.svg" width="150" height="60">
+			<div class="Padding-top--48 Padding-bottom--32 Padding-horizontal--48" style="padding-top: 20px;">
+				<div align="center" class="innerdiv basic-drop-shadow" style="height: auto;width: 52%;">
+					<div style="width: 90%;padding-top: 24px;">
+						<span class="Text-fontWeight--medium" id="sucspan" th:text="${message}"></span>
+					</div>
+					<div th:text="#{html.home.stripenote}" class="Text-color--red Text-fontWeight--medium" style="padding-top: 15px;"/>
+					<div class="PressableCore-base" style="width:34%;margin-top:25px;padding-bottom: 32px;">
+						<button name="submit" class="button Text-color--white Text-fontWeight--medium" th:text="#{html.home.stripecontinue}" onclick='window.open("/login", "_self")'></button>
+					</div>
+	  			</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

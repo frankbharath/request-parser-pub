@@ -10,8 +10,8 @@ public class User {
 	private String email;
 	private String password;
 	private Long creationtime;
-	private String type;
 	private boolean verified;
+	private Type type;
 	/**
 	 * @return the userid
 	 */
@@ -60,10 +60,10 @@ public class User {
 	public void setCreationtime(Long creationtime) {
 		this.creationtime = creationtime;
 	}
-	public String getType() {
+	public Type getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 	public boolean isVerified() {

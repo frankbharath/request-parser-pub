@@ -3,6 +3,7 @@ package com.bharath.rm.security;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -44,8 +45,8 @@ import com.sun.istack.FinalArrayList;
 
 public final class SecurityXMLConfig {
 	
-	/** The logger will be used to log information such as exceptions, info or debug. **/
-	private static final Logger log = LoggerFactory.getLogger(SecurityXMLConfig.class);
+	/** The LOGger will be used to LOG information such as exceptions, info or debug. **/
+	private static final Logger LOG = LoggerFactory.getLogger(SecurityXMLConfig.class);
 
 	/** The security.xml is located in the /src/main/resources. */
 	private static final String SECURITYXMLPATH = "security.xml";
@@ -60,6 +61,8 @@ public final class SecurityXMLConfig {
 	private final HashMap<String,HashMap<String, Parameter>> templateMaps=new HashMap<>();
 	
 	public static final URLNode URLNODES=new URLNode();
+	
+	private static final HashSet<String> NOAUTHURL= new HashSet<>();
 	
 	/** XMLInputFactory instance. */
 	private final XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -78,7 +81,7 @@ public final class SecurityXMLConfig {
 	 * Parses the security XML.
 	 */
 	private void parseSecurityXML() {
-		log.info("Parsing security.xml");
+		LOG.info("Parsing security.xml");
 		final ClassLoader classLoader = Utils.classloader();
 		 try(InputStream inputStream = classLoader.getResourceAsStream(SECURITYXMLPATH);) {
 			 final XMLEventReader reader = factory.createXMLEventReader(inputStream);
@@ -98,9 +101,9 @@ public final class SecurityXMLConfig {
                        break;
                 }
 			 }
-			 log.info("Finished parsing security.xml");
+			 LOG.info("Finished parsing security.xml");
 		 } catch (Exception e) {
-			 log.error("Problem while parsing security.xml", e);
+			 LOG.error("Problem while parsing security.xml", e);
 		}
 	}
 	
@@ -111,7 +114,7 @@ public final class SecurityXMLConfig {
 	 * @throws Exception the exception
 	 */
 	private void parseRegexes(final XMLEventReader reader) throws Exception {
-		log.info("Started parsing regexes");
+		LOG.info("Started parsing regexes");
 		while(reader.hasNext()) {
 			final XMLEvent event = reader.nextEvent();
 			switch(event.getEventType()) {
@@ -120,7 +123,7 @@ public final class SecurityXMLConfig {
                     final String startName = startElement.getName().getLocalPart();
                     if(SecurityXMLUtilConstants.REGEX.equals(startName)) {
                     	final Regex regex=parseRegex(startElement);
-                    	log.info("Added regex - "+regex.getRegexName());
+                    	LOG.info("Added regex - "+regex.getRegexName()+" "+regex.getRegexValue());
                     	regexMaps.put(regex.getRegexName(), regex.getRegexValue());
                     }
 				break;
@@ -128,7 +131,7 @@ public final class SecurityXMLConfig {
 					final EndElement endElement = event.asEndElement();
 					final String endName = endElement.getName().getLocalPart();
 					if(SecurityXMLUtilConstants.REGEXES.equals(endName)) {
-						log.info("Finished parsing regexes");
+						LOG.info("Finished parsing regexes");
 						return;
 					}
 				break;
@@ -146,7 +149,7 @@ public final class SecurityXMLConfig {
 	 * @throws Exception the exception
 	 */
 	private void parseTemplates(final XMLEventReader reader) throws Exception  {
-		log.info("Started parsing templates");
+		LOG.info("Started parsing templates");
 		while(reader.hasNext()) {
 			final XMLEvent event = reader.nextEvent();
 			switch(event.getEventType()) {
@@ -176,7 +179,7 @@ public final class SecurityXMLConfig {
 					EndElement endElement = event.asEndElement();
 					String endName = endElement.getName().getLocalPart();
 					if(SecurityXMLUtilConstants.TEMPLATES.equals(endName)) {
-					 	log.info("Finished parsing templates");
+					 	LOG.info("Finished parsing templates");
 						return;
 					}
 				break;
@@ -199,7 +202,7 @@ public final class SecurityXMLConfig {
 	 * @throws Exception the exception
 	 */
 	private void parseTemplate(final XMLEventReader reader, final String templateName) throws Exception {
-		log.info("Parsing the template - "+templateName);
+		LOG.info("Parsing the template - "+templateName);
 		final List<Parameter.ParameterBuilder> list=new ArrayList<>();
 		while(reader.hasNext()) {
 			final XMLEvent event = reader.nextEvent();
@@ -290,7 +293,7 @@ public final class SecurityXMLConfig {
 	 * @throws Exception the exception
 	 */
 	private void parseURLS(final XMLEventReader reader) throws Exception {
-		log.info("Started parsing urls");
+		LOG.info("Started parsing urls");
 		while(reader.hasNext()) {
 			final XMLEvent event = reader.nextEvent();
 			switch(event.getEventType()) {
@@ -305,7 +308,7 @@ public final class SecurityXMLConfig {
 					final EndElement endElement = event.asEndElement();
 					final String endName = endElement.getName().getLocalPart();
 					if(SecurityXMLUtilConstants.URLS.equals(endName)) {
-						log.info("Finished parsing urls");
+						LOG.info("Finished parsing urls");
 						return;
 					}
 				break;
@@ -339,7 +342,7 @@ public final class SecurityXMLConfig {
 				 throw new NullPointerException("Invalid value associated for "+name+".");
 			 }
 			 if(SecurityXMLUtilConstants.VALUE.equals(name)){
-				 log.info("Parsing the url "+value);
+				 LOG.info("Parsing the url "+value);
 				 builder.setUrl(value);
 			 }else if(SecurityXMLUtilConstants.AUTHENTICATION.equals(name)){
 				 builder.setAuthentication(Boolean.parseBoolean(value));
@@ -365,6 +368,9 @@ public final class SecurityXMLConfig {
 					if(SecurityXMLUtilConstants.URL.equals(endName)) {
 						builder.setParameters(map);
 						URL url=builder.build();
+						if(!url.isAuthentication() && !NOAUTHURL.contains(url.getUrl())) {
+							NOAUTHURL.add(url.getUrl());
+						}
 						String[] split=url.getUrl().split("/");
 						createURLNodeTree(URLNODES,url,split,1);
 						return;
@@ -372,7 +378,6 @@ public final class SecurityXMLConfig {
 				break;
 			}
 		}
-		
 	}
 	
 	public static void createURLNodeTree(final URLNode urlnode, final URL url, final String[] urlTokens, int index) {
@@ -537,6 +542,19 @@ public final class SecurityXMLConfig {
     	return new Regex(regexName, regexValue);
 	}
 	
+	public static String[] getNoAuthUrl() {
+		String[] noAuthUrls=new String[NOAUTHURL.size()];
+		Iterator<String> iterator=NOAUTHURL.iterator();
+		int i=0;
+		while(iterator.hasNext()) {
+			noAuthUrls[i++]=iterator.next();
+		}
+		return noAuthUrls;
+	}
+	
+	public static boolean  isNoAuthUrl(String url) {
+		 return NOAUTHURL.contains(url);
+	}
 	public static URL getURL(HttpServletRequest request) {
 		return getUrl(SecurityXMLConfig.URLNODES, request.getRequestURI().split("/"), 1, request.getMethod().toLowerCase());
 	}

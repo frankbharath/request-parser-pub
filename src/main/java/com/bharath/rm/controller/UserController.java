@@ -28,7 +28,7 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String home() throws StripeException {
 		//System.out.println(testInject.toString());
 		
@@ -44,7 +44,7 @@ public class UserController {
 		User user=new User();
 		user.setEmail(email);
 		user.setPassword(password);
-		user.setType(type);
+		//user.setType(type);
 		user.setCreationtime(System.currentTimeMillis());
 		return userService.addUser(user).toString();
 	}
@@ -54,8 +54,7 @@ public class UserController {
 		Verification verification=new Verification();
 		verification.setUserid(userid);
 		verification.setToken(token);
-		model.addAttribute("response", userService.verifyAccountForUser(verification));
+		//model.addAttribute("response", userService.verifyAccountForUser(verification));
 		return "verificationstatus";
 	}
-	
 }

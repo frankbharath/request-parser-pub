@@ -25,6 +25,9 @@ public class Constants {
 	/** The Constant ERROR_CODE. */
 	public static final String ERROR_CODE="ERROR_CODE";
 	
+	/** The Constant ERROR_CODE. */
+	public static final String SUCCESS_CODE="SUCCESS_CODE";
+	
 	/** The Constant DATA. */
 	public static final String DATA="DATA";
 	
@@ -32,4 +35,22 @@ public class Constants {
 	
 	public static final long EXPIRATIONINTERVAL=86400000;
 	
+	public static final String VERIFY="VERIFY";
+	
+	public enum Tokentype {
+		VERIFY(1),
+		RESET(2);
+		private final int value;
+		private Tokentype(int val) {
+			this.value=val;
+		}
+		public int getValue() {
+	        return value;
+	    }
+	}
+	
+	public enum UserTye{
+		OWNER,
+		TENANT;
+	}
 }

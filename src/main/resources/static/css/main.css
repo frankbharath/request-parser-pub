@@ -1,0 +1,205 @@
+@charset "ISO-8859-1";
+body {
+	font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Ubuntu,sans-serif !important;
+    color: #3c4257;
+    font-size: 14px;
+}
+body {
+     margin: 0; 
+}
+.iconcolor{
+	color:#34A42D;
+}
+.basic-drop-shadow {
+	box-shadow: 0 0 10px;
+	height: 350px;
+	width:30%;
+	border-radius: 3px;
+}
+.Padding-top--48{padding-top:48px}
+.Padding-top--25{padding-top:25px}
+.Padding-horizontal--48{padding-right:48px;padding-left:48px}
+.Padding-bottom--32{padding-bottom:32px}
+.Text-fontSize--20 {font-size: 20px;}
+.Text-color--dark {color: #1a1f36;}
+.Text-fontWeight--regular {font-weight: 400;}
+.Text-fontWeight--medium {font-weight: 500;}
+.Text-color--blue {color: #5469d4;}
+.PressableCore-base {
+	position: relative;
+    z-index: 1;
+    display: inherit;
+    -ms-flex-align: inherit;
+    align-items: inherit;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    margin-top:10px;
+}
+.inputbox{
+	border: 0;
+	border-radius: 4px;
+	box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(58, 151, 212, 0.36) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+	min-height: 35px;
+	width: 96%;
+}
+.button{
+	background-color: #34A42D;
+    border: 0;
+    border-radius: 4px;
+    width: 96%;
+    min-height: 35px;
+    cursor:pointer;
+}
+.button_opacity{
+	opacity:0.5;
+	cursor:default !important;
+}
+.Text-color--white {
+  	color: #fff;
+}
+button {
+	font-family: inherit;   
+}
+.Padding-top--32 {
+	padding-top: 32px;
+}
+.Box-root {
+  		box-sizing: border-box;
+}
+.Margin-left--4 {
+  		margin-left: 4px;
+}
+.Margin-top--4 {
+  		margin-top: 4px;
+}
+.Box-root {
+  		box-sizing: border-box;
+}
+.UnstyledLink {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+    font-style: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+}
+label {
+     float: left;
+     clear: none;
+     display: block;
+     padding: 0px 1em 0px 8px;
+}
+
+input[type=radio]{
+	float: left;
+  	clear: none;
+  	margin: 4px 0 0 2px;
+}
+.Text-color--red {
+    color: #cd3d64;
+}
+.Text-fontSize--12 {
+    font-size: 12px;
+}
+.Text-fontSize--13 {
+    font-size: 13px;
+}
+.Text-fontSize--14 {
+    font-size: 14px;
+}
+.Text-fontSize--16{
+	font-size: 16px;
+}
+.Box-root {
+    box-sizing: border-box;
+}
+.Flex-direction--column {
+    flex-direction: column;
+}
+.Flex-flex {
+    display: flex;
+}
+.db-World-scrollWrapper {
+    min-width: 1024px;
+    position: relative;
+    padding-left: calc(50vw - 695px);
+}
+.db-World-sideNavContainer {
+    bottom: 0;
+    justify-content: flex-end;
+    padding-left: 20px;
+    position: fixed;
+    top: 0;
+    width: 240px;
+    z-index: 10;
+    margin-top: 40px;
+}
+.db-SkipToContentButton {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 12;
+}
+.Padding-vertical--20 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.Padding-right--2 {
+    padding-right: 2px;
+}
+.Box-background--surface {
+    background-color: #e3e8ee;
+}
+.db-SideNav-container {
+    height: 100%;
+}
+.db-SideNav-navSections {
+    position: relative;
+    flex-grow: 1;
+    overflow-y: auto;
+    user-select: none;
+}
+.Padding-horizontal--4 {
+    padding-right: 4px;
+    padding-left: 4px;
+}
+.Padding-vertical--4 {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.Flex-alignItems--flexStart {
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+.db-World-mainWrapper {
+    position: relative;
+    padding-left: 270px;
+    height: 100vh;
+}
+.db-World-mainPane {
+    overflow-x: hidden;
+    position: relative;
+    z-index: 0;
+    padding-left: 8px;
+    min-height: 100%;
+}
+.db-World-contentPane{
+	max-width: 1092px;
+    min-width: 760px;
+    width: calc(100vw - 302px);
+}
+li {
+    list-style: none;
+}
+.Margin-right--12 {
+    margin-right: 12px;
+}
+a{
+	text-decoration: blink;
+}

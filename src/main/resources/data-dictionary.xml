@@ -8,6 +8,12 @@
 				<column name="creationtime" type="bigint" null="false"/>
 			</columns>
 		</table-->
+		<table name="rm_usertype" description="There are two types of user as of now, i) Tenant, ii) Owner">
+			<columns>
+				<column name="typeid" type="bigserial" null="false" primary-key="true"/>
+				<column name="type" type="varchar(16)" null="false" unique-key="true"/>
+			</columns>
+		</table>
 		<table name="rm_users" description="Stores user information">
 			<columns>
 				<column name="userid" type="bigserial" null="false" primary-key="true"/>
@@ -15,25 +21,24 @@
 				<column name="password" type="varchar(1024)" null="false"/>
 				<column name="creationtime" type="bigint" null="false"/>
 				<column name="verified" type="boolean" null="false"/>
+				<column name="typeid" type="bigint" null="false" foreign-key="true" reference-table="rm_usertype" reference-column="typeid"/>
 			</columns>
 		</table>
-		<table name="rm_usertype" description="There are two types of user as of now, i) Tenant, ii) Owner">
-			<columns>
-				<column name="typeid" type="bigserial" null="false" primary-key="true"/>
-				<column name="type" type="varchar(16)" null="false" unique-key="true"/>
-			</columns>
-		</table>
-		<table name="rm_usertypemapper" description="Maps user to a type">
+		<table name="rm_userverification" description="Stores user verification and reset tokens">
 			<columns>
 				<column name="userid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
-				<column name="typeid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_usertype" reference-column="typeid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="rm_userverification" description="Stores user verification token">
-			<columns>
-				<column name="userid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
+				<column name="type" type="int" null="false" primary-key="true" allowed-values="1,2"/>
 				<column name="token" type="varchar(32)" null="false"/>
 				<column name="creationtime" type="bigint" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_stripeusers" description="Stores stripe accouns for an user">
+			<columns>
+				<column name="userid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
+				<column name="stripeid" type="bigint" null="false" unique-key="true"/>
+				<column name="refreshtoken" type="varchar(64)" null="false"/>
+				<column name="accesstoken" type="varchar(64)" null="false"/>
+				<column name="publishablekey" type="varchar(64)" null="false"/>
 			</columns>
 		</table>
 		<!-- table name="bq_group" description="This table helps to group similar question and can be easily used to create a quiz">

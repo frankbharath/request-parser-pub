@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title></title>
+	<meta charset="ISO-8859-1">
+	<title th:utext="#{verificationstatus.emailconfirmtitle}"></title>
+	<link rel="icon" href="/resources/images/favicon.svg">
+	<!--link rel="stylesheet" href="D:\projects\rm\rm\src\main\resources\static\css\main.css"-->
+	<link rel="stylesheet" href="/resources/css/main.css">
 </head>
 <body>
-
-<div th:switch="${response.get(T(com.bharath.rm.constants.Constants).STATUS)}">
-  <div th:case="${T(com.bharath.rm.constants.Constants).SUCCESS}" th:text="${response.get(T(com.bharath.rm.constants.Constants).MESSAGE)}"></div>
-  <div th:case="${T(com.bharath.rm.constants.Constants).FAILED}" th:text="${response.get(T(com.bharath.rm.constants.Constants).MESSAGE)}"></div>
+<div align="center" style="margin-top: 5%;">
+	<img src="/resources/images/icon.svg" width="150" height="60">
+	<div class="Padding-top--48 Padding-bottom--32 Padding-horizontal--48">
+		<div th:if= "${response != null}" th:switch="${response.get(T(com.bharath.rm.constants.Constants).STATUS)}">
+  			<div th:case="${T(com.bharath.rm.constants.Constants).SUCCESS}" align="center" class="innerdiv basic-drop-shadow" style="height:228px;">
+  				<div style="padding-top: 20px;">
+					<img src="/resources/images/success.gif" width="81" height="70">
+				</div>
+				<div style="width: 90%;margin-top: 12px;">
+					<span class="Text-fontWeight--medium" id="sucspan" th:text="${response.get(T(com.bharath.rm.constants.Constants).MESSAGE)}"></span>
+				</div>
+				<div class="PressableCore-base" style="width:80%;margin-top:25px;">
+					<button name="submit" class="button Text-color--white Text-fontWeight--medium" th:text="#{verificationstatus.continuetorentpal}" onclick='window.open("/login", "_self")'></button>
+				</div>
+  			</div>
+  			<div th:case="${T(com.bharath.rm.constants.Constants).FAILED}" align="center" class="innerdiv basic-drop-shadow" style="width: 45%;height: 150px;">
+  				<div th:text="${response.get(T(com.bharath.rm.constants.Constants).MESSAGE)}" class="Text-color--red Text-fontWeight--medium" style="padding-top: 27px;"/>
+  				<div style="margin: 25px;" class="newlink" th:utext="#{verificationstatus.expirationmsg}"></div>
+  			</div>
+		</div>
+		<div th:switch="${STATUS}">
+			<div th:case="${T(com.bharath.rm.constants.Constants).VERIFY}" align="center" class="innerdiv basic-drop-shadow" style="width: 45%;height: 150px;">
+  				<div th:text="#{verificationstatus.verificationreq}" class="Text-fontWeight--medium" style="padding-top: 27px;"/>
+  				<div style="margin: 25px;" class="newlink" th:utext="#{verificationstatus.verificationreqtext}"></div>
+  			</div>
+  		</div>
+	</div>
 </div>
-
 </body>
 </html>

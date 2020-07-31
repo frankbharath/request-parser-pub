@@ -18,6 +18,12 @@ import com.bharath.rm.model.domain.Verification;
 */
 public interface UserService {
 	public JSONObject addUser(User user) throws MessagingException;
-	public String addVerificationCodeForUser(long userid);
-	public JSONObject verifyAccountForUser(Verification verification);
+	public JSONObject verifyAccountForUser(String token);
+	public JSONObject sendVerificationLinkToUser(long userid, String email) throws MessagingException;
+	public JSONObject resetPassword(String email) throws MessagingException;
+	public String getUserEmailForResetToken(String token);
+	public JSONObject updatePassword(String token, String password);
+	public Boolean userVerificationStatus(long userId);
+	public Boolean userCreatedStripeAccount();
+	public String getUserType();
 }

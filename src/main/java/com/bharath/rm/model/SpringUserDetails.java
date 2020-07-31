@@ -17,54 +17,62 @@ public class SpringUserDetails implements UserDetails {
 	
 	private String userName;
 	private String password;
+	private long userId;
 
 	/**
 	 * @param userName
 	 */
-	public SpringUserDetails(String userName) {
+	public SpringUserDetails(String userName, String password) {
 		this.userName = userName;
+		this.password = password;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return "pass";
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return userName;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	@Override
+	public String toString() {
+		return "SpringUserDetails [userName=" + userName + ", password=" + password + ", userId=" + userId + "]";
 	}
 
 }
