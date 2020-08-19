@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data-dictionary>
 	<tables>
-		<!--table name="bq_organization" description="High level information of schools, college or organization creating an account">
-			<columns>
-				<column name="orgid" type="bigserial" null="false" primary-key="true"/>
-				<column name="orgname" type="varchar(128)" null="false"/>
-				<column name="creationtime" type="bigint" null="false"/>
-			</columns>
-		</table-->
 		<table name="rm_usertype" description="There are two types of user as of now, i) Tenant, ii) Owner">
 			<columns>
 				<column name="typeid" type="bigserial" null="false" primary-key="true"/>
@@ -39,6 +32,45 @@
 				<column name="refreshtoken" type="varchar(64)" null="false"/>
 				<column name="accesstoken" type="varchar(64)" null="false"/>
 				<column name="publishablekey" type="varchar(64)" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_propertytype" description="There are two types of properties as of now i) Home ii) Appartment">
+			<columns>
+				<column name="propertytypeid" type="bigserial" null="false" primary-key="true"/>
+				<column name="propertytype" type="varchar(16)" null="false" unique-key="true"/>
+			</columns>
+		</table>
+		<table name="rm_property" description="Stores information about property details such as property name, type">
+			<columns>
+				<column name="propertyid" type="bigserial" null="false" primary-key="true"/>
+				<column name="propertyname" type="varchar(256)" null="false"/>
+				<column name="propertytypeid" type="bigint" null="false" foreign-key="true" reference-table="rm_propertytype" reference-column="propertytypeid"/>
+				<column name="userid" type="bigint" null="false" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
+			</columns>
+		</table>
+		<table name="rm_propertyaddress" description="Stores address information of each property">
+			<columns>
+				<column name="propertyid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_property" reference-column="propertyid" delete-cascade="true"/>
+				<column name="address_1" type="varchar(128)" null="false"/>
+				<column name="address_2" type="varchar(128)" null="false"/>
+				<column name="ville" type="varchar(64)" null="false"/>
+				<column name="postal" type="bigint" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_propertydetails" description="Stores property information such as area, rent, capacity and so on">
+			<columns>
+				<column name="propertyid" type="bigint" null="false" foreign-key="true" reference-table="rm_property" reference-column="propertyid" delete-cascade="true"/>
+				<column name="propertydetailsid" type="bigserial" null="false" primary-key="true"/>
+				<column name="capacity" type="int" null="false"/>
+				<column name="area" type="float(2)" null="false"/>
+				<column name="rent" type="float(2)" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_appartmentpropertydetails" description="Stores appartment such as door number and floor number">
+			<columns>
+				<column name="propertydetailsid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_propertydetails" reference-column="propertydetailsid" delete-cascade="true"/>
+				<column name="doorno" type="varchar(8)" null="false"/>
+				<column name="floorno" type="int" null="false"/>
 			</columns>
 		</table>
 		<!-- table name="bq_group" description="This table helps to group similar question and can be easily used to create a quiz">
@@ -150,6 +182,10 @@
 		<default-value table="rm_usertype">
 			<default-row type="TENANT"/>
 			<default-row type="OWNER"/>
+		</default-value>
+		<default-value table="rm_propertytype">
+			<default-row propertytype="HOUSE"/>
+			<default-row propertytype="APPARTMENT"/>
 		</default-value>
 	</default-values>
 </data-dictionary>

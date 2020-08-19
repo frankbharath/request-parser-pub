@@ -157,6 +157,7 @@ public final class CreateTableConfig extends DefaultHandler{
 	        	final String[] createStatements=getCreateStatementforTables(tables);
 	        	CreateTablesDAO dao=new CreateTablesDAO();
 	        	dao.addTablestoDB(createStatements);
+	        	System.out.println(handler.insertDefaultValues);
 	        	dao.insertDefaultValuestoTable(handler.insertDefaultValues);
 	        	dao.close();
 	        	log.info("Finised updating tables to the database");

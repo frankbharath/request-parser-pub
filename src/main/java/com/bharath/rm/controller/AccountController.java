@@ -120,6 +120,7 @@ public class AccountController {
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String method(CsrfToken token, Model model) {
+		/*String stripe="https://connect.stripe.com/express/oauth/authorize?redirect_uri=http://localhost:8080/api/stripe/response&client_id=ca_HbtDEi0Wpetq79s4WFTTAB5fVQFxjRIa&state="+token.getToken();
 		if(userService.userCreatedStripeAccount()) {
 			model.addAttribute("show", "home");
 		}else {
@@ -130,7 +131,7 @@ public class AccountController {
 				model.addAttribute("message", I18NConfig.getMessage("html.home.stripetenanttext"));
 			}
 			model.addAttribute("show", "showstripe");
-		}
+		}*/
 		return "home";
 	}
 	

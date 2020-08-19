@@ -31,7 +31,7 @@
 				<parameter name="password" regex="password" required="true"/>
 			</parameters>
 		</url>
-		<url value="/home" method="get" authentication="true"/>
+		<url value="/home" method="get" authentication="false"/>
 		<url value="/register" method="get" authentication="false"/>
 		<url value="/register" method="post" authentication="false">
 			<parameters>
