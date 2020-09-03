@@ -49,7 +49,12 @@ public class Constants {
 	    }
 	}
 	
-	public enum UserTye{
+	public enum PropertyType {
+		HOUSE,
+		APPARTMENT
+	}
+	
+	public enum UserType{
 		OWNER,
 		TENANT;
 	}

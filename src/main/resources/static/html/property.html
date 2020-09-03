@@ -1,14 +1,14 @@
 <div>
 	<div class="container">
 	<div style="float:left;width:66%">
-	<div style="margin-left: 20px;margin-top: 8%;"><span class="Text-color--darkgrey Text-fontSize--25 Text-fontWeight--bold">Properties</span></div>
+	<div style="margin-left: 20px;"><span class="Text-color--darkgrey Text-fontSize--25 Text-fontWeight--bold">Properties</span></div>
 	<div class="propertydiv settabrow">
 		<div class="pull-left">
 			<div class="checkbox-head">
 				<input type="checkbox" name="propertyAll"/>
 			</div>
 			<div style="margin-top: 8px;float: left;">
-				<button name="addproperty" class="btn btn-md bgcolorgreen m-r-5 Text-color--white" ng-click="addProperty()">Add</button>
+				<button name="addproperty" class="btn btn-md bgcolorgreen m-r-5 Text-color--white" ng-click="property.addProperty()">Add</button>
 				<button name="deleteproperties" class="btn btn-md m-r-5 bgcolorlightgrey">Delete</button>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 		<div style="float: left;width: 101%;">
 			<table style="width: 100%;border-collapse: collapse;" id="propertylist">
 				<tbody>
-					<tr style="height: 66px;" class="settabrow oversel" ng-mouseover="trOnHover($event)" ng-mouseleave="trOffHover($event)">
+					<tr style="height: 66px;" class="settabrow oversel">
 						<td style="vertical-align: middle;">
 							<div style="margin-left: 20px;">
 								<div class="checkbox-head" style="margin-top: 18px;">
@@ -54,85 +54,7 @@
 							</div>
 						</td>
 					</tr>
-					<tr style="height: 66px;" class="settabrow" ng-mouseover="trOnHover($event)" ng-mouseleave="trOffHover($event)">
-						<td style="vertical-align: middle;">
-							<div style="margin-left: 20px;">
-								<div class="checkbox-head" style="margin-top: 18px;">
-									<input type="checkbox"/>
-								</div>
-								<div class="card-view-list-left"><span class="card-view-list-no-image">M</span></div>
-								<div style="float:left;margin-top: 18px;margin-left: 10px;">Maison Alfort</div>
-								<div class="propertyicons">
-									<a style="margin-right: 10px;">
-										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" class="svg18 margintopleft5" xml:space="preserve">
-											<g><polygon points="0,303.947 0,383.947 80,383.947 316.053,147.893 236.053,67.893"/><path d="M377.707,56.053L327.893,6.24c-8.32-8.32-21.867-8.32-30.187,0l-39.04,39.04l80,80l39.04-39.04     C386.027,77.92,386.027,64.373,377.707,56.053z"/></g>
-										</svg>
-									</a>
-									<a>
-										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" class="svg18 margintopleft5" xml:space="preserve">
-											<g xmlns="http://www.w3.org/2000/svg">
-												<path d="M64,341.333C64,364.907,83.093,384,106.667,384h170.667C300.907,384,320,364.907,320,341.333v-256H64V341.333z"/>
-												<polygon points="266.667,21.333 245.333,0 138.667,0 117.333,21.333 42.667,21.333 42.667,64 341.333,64 341.333,21.333    "/>
-											</g>
-										</svg>
-									</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr style="height: 66px;" class="settabrow" ng-mouseover="trOnHover($event)" ng-mouseleave="trOffHover($event)">
-						<td style="vertical-align: middle;">
-							<div style="margin-left: 20px;">
-								<div class="checkbox-head" style="margin-top: 18px;">
-									<input type="checkbox"/>
-								</div>
-								<div class="card-view-list-left"><span class="card-view-list-no-image">M</span></div>
-								<div style="float:left;margin-top: 18px;margin-left: 10px;">Maison Alfort</div>
-								<div class="propertyicons">
-									<a style="margin-right: 10px;">
-										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" class="svg18 margintopleft5" xml:space="preserve">
-											<g><polygon points="0,303.947 0,383.947 80,383.947 316.053,147.893 236.053,67.893"/><path d="M377.707,56.053L327.893,6.24c-8.32-8.32-21.867-8.32-30.187,0l-39.04,39.04l80,80l39.04-39.04     C386.027,77.92,386.027,64.373,377.707,56.053z"/></g>
-										</svg>
-									</a>
-									<a>
-										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" class="svg18 margintopleft5" xml:space="preserve">
-											<g xmlns="http://www.w3.org/2000/svg">
-												<path d="M64,341.333C64,364.907,83.093,384,106.667,384h170.667C300.907,384,320,364.907,320,341.333v-256H64V341.333z"/>
-												<polygon points="266.667,21.333 245.333,0 138.667,0 117.333,21.333 42.667,21.333 42.667,64 341.333,64 341.333,21.333    "/>
-											</g>
-										</svg>
-									</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr style="height: 66px;" class="settabrow" ng-mouseover="trOnHover($event)" ng-mouseleave="trOffHover($event)">
-						<td style="vertical-align: middle;">
-							<div style="margin-left: 20px;">
-								<div class="checkbox-head" style="margin-top: 18px;">
-									<input type="checkbox"/>
-								</div>
-								<div class="card-view-list-left"><span class="card-view-list-no-image">M</span></div>
-								<div style="float:left;margin-top: 18px;margin-left: 10px;">Maison Alfort</div>
-								<div class="propertyicons">
-									<a style="margin-right: 10px;">
-										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" class="svg18 margintopleft5" xml:space="preserve">
-											<g><polygon points="0,303.947 0,383.947 80,383.947 316.053,147.893 236.053,67.893"/><path d="M377.707,56.053L327.893,6.24c-8.32-8.32-21.867-8.32-30.187,0l-39.04,39.04l80,80l39.04-39.04     C386.027,77.92,386.027,64.373,377.707,56.053z"/></g>
-										</svg>
-									</a>
-									<a>
-										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" class="svg18 margintopleft5" xml:space="preserve">
-											<g xmlns="http://www.w3.org/2000/svg">
-												<path d="M64,341.333C64,364.907,83.093,384,106.667,384h170.667C300.907,384,320,364.907,320,341.333v-256H64V341.333z"/>
-												<polygon points="266.667,21.333 245.333,0 138.667,0 117.333,21.333 42.667,21.333 42.667,64 341.333,64 341.333,21.333    "/>
-											</g>
-										</svg>
-									</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr style="height: 66px;" class="settabrow" ng-mouseover="trOnHover($event)" ng-mouseleave="trOffHover($event)">
+					<tr style="height: 66px;" class="settabrow">
 						<td style="vertical-align: middle;">
 							<div style="margin-left: 20px;">
 								<div class="checkbox-head" style="margin-top: 18px;">
@@ -223,4 +145,4 @@
 	</div>
 	</div>
 </div>
-<div ui-view="add-property-view" ng-class="{'ng-hide': hideAddProperty}" class="overlay-bg"></div>
+<div ui-view="add-property-view"></div>

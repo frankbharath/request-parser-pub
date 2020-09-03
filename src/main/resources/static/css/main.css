@@ -25,9 +25,31 @@ html, body, div, input, span, ul, li, button {
     margin: 0;
     padding: 0;
     border: 0;
-    outline: 0;
+  	outline:0;
     vertical-align: baseline;
     background: transparent;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border: 4px;
+  border-radius: 8px;
+  background-clip: padding-box;  
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 a{cursor:pointer;}
 input, select, textarea, button{font-family:inherit;}
@@ -36,6 +58,8 @@ input, select, textarea, button{font-family:inherit;}
 .Padding-left--10{padding-left:10px}
 .Padding-left--20{padding-left:20px}
 .Padding-horizontal--48{padding-right:48px;padding-left:48px}
+.Padding-horizontal--5{padding-right:5px;padding-left:5px}
+.Padding-horizontal--40{padding-right:40px;padding-left:40px}
 .Padding-vertical--10{padding-top: 10px;padding-bottom: 10px;}
 .Padding-vertical--5{padding-top: 5px;padding-bottom: 5px;}
 .Padding-bottom--32{padding-bottom:32px}
@@ -57,6 +81,16 @@ input, select, textarea, button{font-family:inherit;}
     border-radius: inherit;
     margin-top:10px;
 }
+.PressableCore-base.invalid input.inputbox {
+	box-shadow: 0 0 5px #db1111;
+    border-color: #db1111;
+}
+.PressableCore-base.invalid span.errormessage{
+	display:block;
+}
+.PressableCore-base span.errormessage{
+	display:none;
+}
 .inputbox{
 	border: 0;
 	border-radius: 4px;
@@ -64,6 +98,19 @@ input, select, textarea, button{font-family:inherit;}
 	min-height: 35px;
 	width: 96%;
 	padding-left: 5px;
+}
+input.inputbox:focus{
+	box-shadow: 0 0 5px #6994b9;
+    border-color: #6994b9;
+}
+#dynamic-content li:hover div.closeicon{
+	display:block;
+}
+#dynamic-content div.closeicon{
+	width: 0%;
+	position: relative;
+	right: 2%;
+	display:none;
 }
 .button{
 	background-color: #34A42D;
@@ -167,11 +214,12 @@ input[type=radio]{
 .db-World-sideNavContainer {
     bottom: 0;
     justify-content: flex-end;
-    position: fixed;
     top: 0;
     width: 260px;
     z-index: 10;
     background-color: #34A42D;
+    float:left;
+    height: 100vh;
 }
 .db-SkipToContentButton {
     position: absolute;
@@ -197,7 +245,7 @@ input[type=radio]{
     flex-grow: 1;
     overflow-y: auto;
     user-select: none;
-    margin-top: 80px;
+    margin-top: 40%;
 }
 .Padding-horizontal--4 {
     padding-right: 4px;
@@ -247,26 +295,12 @@ li {
 a{
 	text-decoration: blink;
 }
-html.db-FlatChromeUI .db-World-topContent {
+ .db-World-topContent {
     background: #fff;
     box-shadow: 0 1px #e3e8ee;
     margin: 0;
-    padding: 0;
     height: auto;
-    max-width: 1420px;
-    min-width: 816px;
-}
-.db-World-topContent {
-    height: 68px;
-    margin: 0 -8px;
     width: calc(100vw - 270px);
-    max-width: 1124px;
-    min-width: 792px;
-    padding-left: 16px;
-    padding-right: 16px;
-    position: fixed;
-    top: 0;
-    z-index: 11;
 }
 html.db-FlatChromeUI .db-TopNav {
     margin: 0 auto;
@@ -418,8 +452,14 @@ tr:nth-child(6n+6) .card-view-list-no-image{
 }
 .container {
     height: auto;
-    width: 100%;
+    width: 83%;
+    position: absolute;
 }
+
+#propertylist .settabrow:hover .propertyicons{
+	 display:block;
+}
+
 .propertyicons{
 	float:right;
 	margin-top: 15px;
@@ -431,7 +471,6 @@ tr:nth-child(6n+6) .card-view-list-no-image{
     float: left;
     height: 92vh;
     background-color: #f3f3f3;
-    margin-top: 58px;
 }
 .property-view-details-panel {
     padding: 20px;
@@ -506,6 +545,8 @@ tr:nth-child(6n+6) .card-view-list-no-image{
 .Box-background--offset {
     background-color: #f7fafc;
     padding: 30px;
+    max-height: 513px;
+    overflow-y: scroll;
 }
 .modal-panel-footer{
 	padding: 10px 15px 10px;

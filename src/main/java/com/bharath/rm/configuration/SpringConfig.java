@@ -24,8 +24,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import com.bharath.rm.dao.UserDAO;
 import com.bharath.rm.dao.UserDAOImpl;
+import com.bharath.rm.dao.interfaces.UserDAO;
 import com.bharath.rm.payment.StripePayment;
 
 

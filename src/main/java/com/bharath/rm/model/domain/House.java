@@ -5,7 +5,7 @@ package com.bharath.rm.model.domain;
 	* Creation time: Aug 11, 2020 2:59:28 PM
  	* Class Description
 */
-public class Home extends Property{
+public class House extends Property{
 	private PropertyDetails propertydetails;
 
 	/**

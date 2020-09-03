@@ -6,10 +6,24 @@ package com.bharath.rm.model.domain;
  	* Class Description
 */
 public class Property {
+	private Long userid;
 	private Long propertyid;
 	private String name;
+	private Long creationtime;
 	private PropertyType type;
 	private Address address;
+	/**
+	 * @return the userid
+	 */
+	public Long getUserid() {
+		return userid;
+	}
+	/**
+	 * @param userid the userid to set
+	 */
+	public void setUserid(Long userid) {
+		this.userid = userid;
+	}
 	/**
 	 * @return the propertyid
 	 */
@@ -33,6 +47,12 @@ public class Property {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	public Long getCreationtime() {
+		return creationtime;
+	}
+	public void setCreationtime(Long creationtime) {
+		this.creationtime = creationtime;
 	}
 	/**
 	 * @return the type

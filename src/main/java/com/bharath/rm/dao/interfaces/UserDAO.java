@@ -1,4 +1,4 @@
-package com.bharath.rm.dao;
+package com.bharath.rm.dao.interfaces;
 
 import com.bharath.rm.constants.Constants.Tokentype;
 import com.bharath.rm.model.domain.User;

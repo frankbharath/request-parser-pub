@@ -28,6 +28,7 @@ import com.bharath.rm.constants.tables.RM_Stripeusers;
 import com.bharath.rm.constants.tables.RM_UserType;
 import com.bharath.rm.constants.tables.RM_Users;
 import com.bharath.rm.constants.tables.RM_Userverification;
+import com.bharath.rm.dao.interfaces.UserDAO;
 import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.domain.User;
 import com.bharath.rm.model.domain.Verification;

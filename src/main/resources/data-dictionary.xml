@@ -46,6 +46,7 @@
 				<column name="propertyname" type="varchar(256)" null="false"/>
 				<column name="propertytypeid" type="bigint" null="false" foreign-key="true" reference-table="rm_propertytype" reference-column="propertytypeid"/>
 				<column name="userid" type="bigint" null="false" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
+				<column name="creationtime" type="bigint" null="false"/>
 			</columns>
 		</table>
 		<table name="rm_propertyaddress" description="Stores address information of each property">

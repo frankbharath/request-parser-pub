@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bharath.rm.configuration.I18NConfig;
-import com.bharath.rm.dao.UserDAO;
 import com.bharath.rm.dao.UserDAOImpl;
+import com.bharath.rm.dao.interfaces.UserDAO;
 import com.bharath.rm.model.SpringUserDetails;
 import com.bharath.rm.model.domain.User;
 

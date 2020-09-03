@@ -63,5 +63,6 @@
 				<parameter name="confirmpassword" regex="password" required="true"/>
 			</parameters>
 		</url>
+		<url value="/api/property/house" method="post" authentication="false"/>
 	</urls>
 </security>

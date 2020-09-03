@@ -18,7 +18,7 @@ import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.constants.SuccessCode;
 import com.bharath.rm.constants.Constants.Tokentype;
-import com.bharath.rm.dao.UserDAO;
+import com.bharath.rm.dao.interfaces.UserDAO;
 import com.bharath.rm.model.Mail;
 import com.bharath.rm.model.domain.Type;
 import com.bharath.rm.model.domain.User;
