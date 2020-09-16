@@ -20,7 +20,6 @@ import com.bharath.rm.common.ApplicationProperties;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.Constants.Tokentype;
-import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.Mail;
 import com.bharath.rm.service.interfaces.EmailService;
 

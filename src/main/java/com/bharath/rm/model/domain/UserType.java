@@ -5,7 +5,7 @@ package com.bharath.rm.model.domain;
 	* Creation time: Jul 27, 2020 10:18:09 PM
  	* Class Description
 */
-public class Type {
+public class UserType {
 	private Long typeid;
 	private String type;
 	/**

@@ -2,22 +2,29 @@ package com.bharath.rm.common;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.http.HttpStatus;
 
 import com.bharath.rm.configuration.RentPalThreadLocal;
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.constants.SuccessCode;
+import com.bharath.rm.dto.APIRequestResponse;
+import com.bharath.rm.exception.APIException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
 	* @author bharath
@@ -104,6 +111,20 @@ public final class Utils {
             servletStream.flush();
         }
     }
+	
+	public static void sendJSONErrorResponse(HttpServletResponse response, APIException exception) throws IOException
+	{
+		response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=resp.txt;");
+        response.setHeader("X-Download-Options", "noopen");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(exception.getHttpStatus().value());
+        try (ServletOutputStream out = response.getOutputStream()) {
+        	ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(out, exception);
+            out.flush();
+        }        
+	}
 	public static JSONObject getSuccessResponse() {
 		return getSuccessResponse(null, null);
 	}
@@ -125,11 +146,11 @@ public final class Utils {
 		return resp;
 	}
 	
-	public static JSONObject getErrorObject(ErrorCodes code) {
+	/*public static JSONObject getErrorObject(ErrorCodes code) {
 		return getErrorObject(code,null);
-	}
+	}*/
 	
-	public static JSONObject getErrorObject(ErrorCodes code,String message) {
+	public static JSONObject getErrorObject(ErrorCodes code, String message) {
 		JSONObject resp=new JSONObject();
 		resp.put(Constants.STATUS, Constants.FAILED);
 		resp.put(Constants.ERROR_CODE, code.toString());
@@ -138,7 +159,33 @@ public final class Utils {
 		}
 		return resp;
 	}
-	
+	public static APIException getApiException(String message, HttpStatus status) {
+		return getApiException(message, status ,null);
+	}
+	public static APIException getApiException(String message, HttpStatus status, ErrorCodes errorCode) {
+		APIException exception=new APIException();
+		exception.setTimestamp(Utils.getDate(System.currentTimeMillis()));
+		exception.setHttpStatus(status);
+		exception.setMessage(message);
+		if(errorCode!=null) {
+			exception.setErrorCode(errorCode.toString());
+		}
+		exception.setStatus(Constants.FAILED);
+		return exception;
+	}
+	public static APIRequestResponse getApiRequestResponse(String message) {
+		return getApiRequestResponse(message,null);
+	}
+	public static APIRequestResponse getApiRequestResponse(String message, Object data) {
+		APIRequestResponse response=new APIRequestResponse();
+		if(data!=null) {
+			response.setData(data);
+		}
+		response.setMessage(message);
+		response.setHttpStatus(HttpStatus.OK);
+		response.setStatus(Constants.SUCCESS);
+		return response;
+	}
 	public static String generateAlphaNumericString(int length) {
 		return RandomStringUtils.randomAlphanumeric(length);
 	}
@@ -158,5 +205,14 @@ public final class Utils {
 	
 	public static String getUserEmail() {
 		return RentPalThreadLocal.get("email").toString();
+	}
+	
+	public static boolean isAjaxRequest(HttpServletRequest request) {
+		return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+	}
+	
+	public static String getDate(Long milliseconds) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, YYYY a");
+		return simpleDateFormat.format(new Date(milliseconds));
 	}
 }

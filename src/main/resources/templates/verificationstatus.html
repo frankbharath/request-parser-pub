@@ -28,12 +28,6 @@
   				<div style="margin: 25px;" class="newlink" th:utext="#{verificationstatus.expirationmsg}"></div>
   			</div>
 		</div>
-		<div th:switch="${STATUS}">
-			<div th:case="${T(com.bharath.rm.constants.Constants).VERIFY}" align="center" class="innerdiv basic-drop-shadow" style="width: 45%;height: 150px;">
-  				<div th:text="#{verificationstatus.verificationreq}" class="Text-fontWeight--medium" style="padding-top: 27px;"/>
-  				<div style="margin: 25px;" class="newlink" th:utext="#{verificationstatus.verificationreqtext}"></div>
-  			</div>
-  		</div>
 	</div>
 </div>
 </body>

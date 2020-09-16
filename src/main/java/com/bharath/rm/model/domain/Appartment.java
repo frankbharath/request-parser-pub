@@ -24,4 +24,9 @@ public class Appartment extends Property{
 	public void setList(List<AppartmentPropertyDetails> list) {
 		this.list = list;
 	}
+
+	@Override
+	public String toString() {
+		return "Appartment [list=" + list + "]";
+	}
 }

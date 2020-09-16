@@ -2,7 +2,9 @@ package com.bharath.rm.service.interfaces;
 
 import org.json.JSONObject;
 
+import com.bharath.rm.model.domain.Appartment;
 import com.bharath.rm.model.domain.House;
+import com.bharath.rm.model.domain.Property;
 
 /**
 	* @author bharath
@@ -11,5 +13,7 @@ import com.bharath.rm.model.domain.House;
  	* Class Description
 */
 public interface PropertyService {
-	public JSONObject addHouse(House house);
+	public House addHouse(House house);
+	public Long addProperty(Property property);
+	public Appartment addAppartment(Appartment appartment);
 }

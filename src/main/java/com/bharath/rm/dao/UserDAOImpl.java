@@ -19,7 +19,6 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.Constants.Tokentype;
@@ -29,7 +28,6 @@ import com.bharath.rm.constants.tables.RM_UserType;
 import com.bharath.rm.constants.tables.RM_Users;
 import com.bharath.rm.constants.tables.RM_Userverification;
 import com.bharath.rm.dao.interfaces.UserDAO;
-import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.domain.User;
 import com.bharath.rm.model.domain.Verification;
 
@@ -69,7 +67,7 @@ public class UserDAOImpl implements UserDAO {
 	            pst.setObject(2, user.getPassword());
 	            pst.setObject(3, user.getCreationtime());
 	            pst.setObject(4, false);
-	            pst.setObject(5, user.getType().getTypeid());
+	            pst.setObject(5, user.getUsertype().getTypeid());
 	            return pst;
 	        }
 	    },keyHolder);

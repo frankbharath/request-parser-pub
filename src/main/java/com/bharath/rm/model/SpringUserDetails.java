@@ -18,6 +18,7 @@ public class SpringUserDetails implements UserDetails {
 	private String userName;
 	private String password;
 	private long userId;
+	private boolean enabled;
 
 	/**
 	 * @param userName
@@ -59,9 +60,12 @@ public class SpringUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 
+	public void setEnabled(boolean enabled) {
+		this.enabled=enabled;
+	}
 	public long getUserId() {
 		return userId;
 	}
@@ -69,10 +73,4 @@ public class SpringUserDetails implements UserDetails {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-
-	@Override
-	public String toString() {
-		return "SpringUserDetails [userName=" + userName + ", password=" + password + ", userId=" + userId + "]";
-	}
-
 }

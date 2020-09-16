@@ -19,8 +19,10 @@ import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.constants.SuccessCode;
 import com.bharath.rm.constants.Constants.Tokentype;
 import com.bharath.rm.dao.interfaces.UserDAO;
+import com.bharath.rm.dto.UserDTO;
+import com.bharath.rm.exception.APIRequestException;
 import com.bharath.rm.model.Mail;
-import com.bharath.rm.model.domain.Type;
+import com.bharath.rm.model.domain.UserType;
 import com.bharath.rm.model.domain.User;
 import com.bharath.rm.model.domain.Verification;
 import com.bharath.rm.service.interfaces.UserService;
@@ -57,35 +59,42 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public JSONObject addUser(User user) throws MessagingException {
+	public UserDTO addUser(User user) throws MessagingException {
 		if(userDAO.userExist(user.getEmail())) {
-			return Utils.getErrorObject(ErrorCodes.EMAIL_EXISTS, I18NConfig.getMessage("error.user.email_exists"));
+			throw new APIRequestException(I18NConfig.getMessage("error.user.email_exists"));
 		}
+		user.setCreationtime(System.currentTimeMillis());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		long typeId=userDAO.getUserType(user.getType().getType());
-		user.getType().setTypeid(typeId);
+		long typeId=userDAO.getUserType(user.getUsertype().getType());
+		user.getUsertype().setTypeid(typeId);
 		long userid=userDAO.addUser(user);
-		JSONObject resp=sendVerificationLinkToUser(userid,user.getEmail());
-		return Utils.getSuccessResponse(null, I18NConfig.getMessage("success.user.added_success",new Object[] {resp.getString(Constants.MESSAGE)}));
+		sendVerificationLinkToUser(userid, user.getEmail());
+		user.setUserid(userid);
+		UserDTO userDTO=new UserDTO();
+		userDTO.setEmail(user.getEmail());
+		userDTO.setUserid(userid);
+		userDTO.setUsertype(user.getUsertype().getType());
+		userDTO.setCreationtime(Utils.getDate(user.getCreationtime()));
+		return userDTO;
 	}
 	
 	@Override
-	public JSONObject verifyAccountForUser(String token) {
+	public void verifyAccountForUser(String token) {
 		Verification verification=userDAO.getVerificationCode(token,Constants.Tokentype.VERIFY);
-		if(verification!=null && verification.getCreationtime()+Constants.EXPIRATIONINTERVAL>System.currentTimeMillis()) {
+		if(verification==null || verification.getCreationtime()+Constants.EXPIRATIONINTERVAL<System.currentTimeMillis()) {
+			if(verification!=null) {
+				userDAO.deleteVerificationCode(verification);
+				userDAO.deleteUserAccount(verification.getUserid());
+			}
+			throw new APIRequestException(I18NConfig.getMessage("error.user.verification"));
+		}else {
 			userDAO.deleteVerificationCode(verification);
 			userDAO.verifyUserAccount(verification.getUserid());
-			return Utils.getSuccessResponse(null, I18NConfig.getMessage("success.user.verify_success"));
 		}
-		if(verification!=null) {
-			userDAO.deleteVerificationCode(verification);
-			userDAO.deleteUserAccount(verification.getUserid());
-		}
-		return Utils.getErrorObject(ErrorCodes.LINK_EXPIRED, I18NConfig.getMessage("error.user.verification"));
 	}
 	
 	@Override
-	public JSONObject sendVerificationLinkToUser(long userid, String email) throws MessagingException {
+	public void sendVerificationLinkToUser(long userid, String email) throws MessagingException {
 		Verification verification=new Verification();
 		verification.setUserid(userid);
 		String token=Utils.generateAlphaNumericString(Constants.ALPHANUMLEN);
@@ -95,13 +104,12 @@ public class UserServiceImpl implements UserService {
 		verification.setType(Constants.Tokentype.VERIFY.getValue());
 		userDAO.addVerificationCode(verification);
 		emailService.sendTokenEmailToUser(userid,email,token,Tokentype.VERIFY);
-		return Utils.getSuccessResponse(null, I18NConfig.getMessage("verification.sent"), SuccessCode.VERIFICATION_SENT);
 	}
 	
 	@Override
-	public JSONObject resetPassword(String email) throws MessagingException {
+	public void resetPassword(String email) throws MessagingException {
 		Long userId=userDAO.getUserId(email);
-		if(userId!=null) {
+		if(userId!=null && userDAO.isUserAccountVerified(userId)) {
 			String token=Utils.generateAlphaNumericString(Constants.ALPHANUMLEN);
 			Verification verification=new Verification();
 			verification.setUserid(userId);
@@ -111,29 +119,30 @@ public class UserServiceImpl implements UserService {
 			userDAO.deleteVerificationCode(verification);
 			userDAO.addVerificationCode(verification);
 			emailService.sendTokenEmailToUser(userId,email,token,Tokentype.RESET);
-			return Utils.getSuccessResponse(null, I18NConfig.getMessage("html.resetpassword.resetsent"));
-		}else {
-			return Utils.getErrorObject(ErrorCodes.EMAIL_NOT_EXISTS, I18NConfig.getMessage("html.resetpassword.email_not_exists"));
 		}
 	}
 	
 	@Override
 	public String getUserEmailForResetToken(String token) {
-		return userDAO.getUserEmailForToken(token, Tokentype.RESET);
+		String email=userDAO.getUserEmailForToken(token, Tokentype.RESET);
+		if(email==null) {
+			throw new APIRequestException(I18NConfig.getMessage("html.resetpassword.linkexpiredmessage"));
+		}
+		return email;
 	}
 	
 	@Override
-	public JSONObject updatePassword(String token, String password) {
+	public void updatePassword(String token, String password) {
 		Verification verification=userDAO.getVerificationCode(token,Constants.Tokentype.RESET);
-		if(verification!=null && verification.getCreationtime()+Constants.EXPIRATIONINTERVAL>System.currentTimeMillis()) {
+		if(verification==null || verification.getCreationtime()+Constants.EXPIRATIONINTERVAL<System.currentTimeMillis()) {
+			if(verification!=null) {
+				userDAO.deleteVerificationCode(verification);
+			}
+			throw new APIRequestException(I18NConfig.getMessage("error.user.reset"));
+		}else {
 			userDAO.deleteVerificationCode(verification);
 			userDAO.updatePassword(verification.getUserid(), passwordEncoder.encode(password));
-			return Utils.getSuccessResponse(null, I18NConfig.getMessage("html.resetpassword.success"));
 		}
-		if(verification!=null) {
-			userDAO.deleteVerificationCode(verification);
-		}
-		return Utils.getErrorObject(ErrorCodes.LINK_EXPIRED, I18NConfig.getMessage("error.user.reset"));
 	}
 	
 	@Override

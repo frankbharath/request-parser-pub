@@ -3,14 +3,15 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<link rel="icon" href="/resources/images/favicon.svg">
-	<meta id="_csrf" th:content="${_csrf.token}"/>
-	<meta id="_csrf_header" th:content="${_csrf.headerName}"/>
+	<!--meta id="_csrf" th:content="${_csrf.token}"/>
+	<meta id="_csrf_header" th:content="${_csrf.headerName}"/-->
 	<title th:utext="#{html.home.title}"></title>
 	<!--link rel="stylesheet" href="D:\projects\rm\rm\src\main\resources\static\css\main.css"-->
 	<link rel="stylesheet" href="/resources/css/main.css">
 	<!--link rel="stylesheet" href="/resources/css/main.css"-->
 </head>
 <body ng-controller="MainController as main" ng-cloak>
+	<div class="progress-line-bg" ng-hide="!main.loading" ng-show="main.loading"><div class="progress-line"></div></div>
 	<div>
 		<div class="db-World-sideNavContainer">
 			<div>
@@ -151,12 +152,22 @@
 			<div ui-view="main-view"></div>
 		</div>
 	</div>
+	<div class="generalmsg" ng-class="{'show':main.showMessage}">
+		<div class="generalmsgcenter" ng-class="main.isErrorMessage?'error':'success'">
+			<div>
+				<span class="Text-color--white Text-fontSize--14 Text-fontWeight--medium" ng-bind="main.errorMessage"></span>
+			</div>
+		</div>
+	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.28/angular-ui-router.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.3/angular-translate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.18.3/angular-translate-loader-static-files.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.8.0/angular-resource.js"></script>
 	<script src="/resources/js/app.js"></script>
 	<script src="/resources/js/property.js"></script>
 	<script src="/resources/js/domainobjects/propertyfactory.js"></script>
+	<script src="/resources/js/dataservice/propertydataservice.js"></script>
 </body>
 </html>

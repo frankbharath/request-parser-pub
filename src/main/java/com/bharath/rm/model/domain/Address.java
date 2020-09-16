@@ -14,17 +14,17 @@ public class Address {
 	/** The propertyid. */
 	private Long propertyid;
 	
-	/** The address 1. */
-	private String address_1;
+	/** The line 1. */
+	private String line_1;
 	
-	/** The address 2. */
-	private String address_2;
+	/** The line 2. */
+	private String line_2;
 	
-	/** The ville. */
-	private String ville;
+	/** The city. */
+	private String city;
 	
-	/** The postal. */
-	private Long postal;
+	/** The postalcode. */
+	private Long postalcode;
 	
 	/**
 	 * Gets the propertyid.
@@ -43,76 +43,76 @@ public class Address {
 	public void setPropertyid(Long propertyid) {
 		this.propertyid = propertyid;
 	}
-	
+
 	/**
-	 * Gets the address 1.
+	 * Gets the line 1.
 	 *
-	 * @return the address_1
+	 * @return the line 1
 	 */
-	public String getAddress_1() {
-		return address_1;
+	public String getLine_1() {
+		return line_1;
 	}
-	
+
 	/**
-	 * Sets the address 1.
+	 * Sets the line 1.
 	 *
-	 * @param address_1 the address_1 to set
+	 * @param line_1 the new line 1
 	 */
-	public void setAddress_1(String address_1) {
-		this.address_1 = address_1;
+	public void setLine_1(String line_1) {
+		this.line_1 = line_1;
 	}
-	
+
 	/**
-	 * Gets the address 2.
+	 * Gets the line 2.
 	 *
-	 * @return the address_2
+	 * @return the line 2
 	 */
-	public String getAddress_2() {
-		return address_2;
+	public String getLine_2() {
+		return line_2;
 	}
-	
+
 	/**
-	 * Sets the address 2.
+	 * Sets the line 2.
 	 *
-	 * @param address_2 the address_2 to set
+	 * @param line_2 the new line 2
 	 */
-	public void setAddress_2(String address_2) {
-		this.address_2 = address_2;
+	public void setLine_2(String line_2) {
+		this.line_2 = line_2;
 	}
-	
+
 	/**
-	 * Gets the ville.
+	 * Gets the city.
 	 *
-	 * @return the ville
+	 * @return the city
 	 */
-	public String getVille() {
-		return ville;
+	public String getCity() {
+		return city;
 	}
-	
+
 	/**
-	 * Sets the ville.
+	 * Sets the city.
 	 *
-	 * @param ville the ville to set
+	 * @param city the new city
 	 */
-	public void setVille(String ville) {
-		this.ville = ville;
+	public void setCity(String city) {
+		this.city = city;
 	}
-	
+
 	/**
-	 * Gets the postal.
+	 * Gets the postalcode.
 	 *
-	 * @return the postal
+	 * @return the postalcode
 	 */
-	public Long getPostal() {
-		return postal;
+	public Long getPostalcode() {
+		return postalcode;
 	}
-	
+
 	/**
-	 * Sets the postal.
+	 * Sets the postalcode.
 	 *
-	 * @param postal the postal to set
+	 * @param postalcode the new postalcode
 	 */
-	public void setPostal(Long postal) {
-		this.postal = postal;
+	public void setPostalcode(Long postalcode) {
+		this.postalcode = postalcode;
 	}
 }

@@ -14,10 +14,11 @@
 		var unknownError=[[${unkown_issue}]];  
 		/*]]>*/
 		function validateRegisterForm(element, eventtype){
+			let error=false;
 			const form=document.forms.register;
 			const emailregex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 			const passwordregex=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,64}$/;
-			let error=false;
+			
 			if(form.email.value.length!=0 && !emailregex.test(form.email.value)){
 				form.email.parentNode.querySelector(".error").style.display = "";
 				error=true;
@@ -56,35 +57,32 @@
 			data.append('email', form.email.value);
 			data.append('password', form.password.value);
 			data.append('confirmpassword', form.confirmpassword.value);
-			data.append('type', form.type.value);
+			data.append('usertype.type', form.type.value);
 			form.submit.classList.add("button_opacity");
 			form.submit.setAttribute("disabled","disabled");
 			let response=await fetch("/register", {
 			    method: 'POST',
 			    headers: {
 			      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+			      'X-Requested-With': 'XMLHttpRequest',
 			      [document.getElementById("_csrf_header").getAttribute("content")]: document.getElementById("_csrf").getAttribute("content")
 			    },
 			    body: data
 			});
 			if(response.ok) {
 				let result = await response.json();
-				if(result.STATUS=="SUCCESS"){
-					document.getElementById("formDiv").style.display = "none";
-					document.getElementById("successDiv").style.display = "";
-					document.getElementById("sucspan").innerText=result.MESSAGE;
-				}else{
-					document.querySelector(".serverror span").innerText=result.MESSAGE;
-					document.querySelector(".serverror").style.display = "";
-				}
-			}else if(response.status === 422 ||  response.status === 401){
-				let result = await response.json();
-				document.querySelector(".serverror span").innerText=result.MESSAGE;
-				document.querySelector(".serverror").style.display = "";
+				document.getElementById("formDiv").style.display = "none";
+				document.getElementById("successDiv").style.display = "";
+				document.getElementById("sucspan").innerText=result.message;
 			}else{
-				document.querySelector(".serverror span").innerText=unknownError;
+				let result = await response.json();
+				if(result.message!=undefined){
+					document.querySelector(".serverror span").innerText=result.message;
+				}else{
+					document.querySelector(".serverror span").innerText=unknownError;
+				}
 				document.querySelector(".serverror").style.display = "";
-			}	
+			}
 			form.submit.classList.remove("button_opacity");
 			form.submit.removeAttribute("disabled");
 		}

@@ -1,74 +1,118 @@
 package com.bharath.rm.dto;
+
+import com.bharath.rm.model.domain.UserType;
+
 /**
 	* @author bharath
  	* @version 1.0
-	* Creation time: Jul 11, 2020 1:49:31 AM
+	* Creation time: Sep 15, 2020 12:18:39 AM
  	* Class Description
 */
 public class UserDTO {
+	/** The userid. */
 	private Long userid;
+	
+	/** The email. */
 	private String email;
+	
+	/** The creationtime. */
 	private String creationtime;
-	private String type;
+	
+	/** The verified. */
 	private boolean verified;
+	
+	/** The user type. */
+	private String usertype;
+	
 	/**
+	 * Gets the userid.
+	 *
 	 * @return the userid
 	 */
 	public Long getUserid() {
 		return userid;
 	}
+	
 	/**
+	 * Sets the userid.
+	 *
 	 * @param userid the userid to set
 	 */
 	public void setUserid(Long userid) {
 		this.userid = userid;
 	}
+	
 	/**
+	 * Gets the email.
+	 *
 	 * @return the email
 	 */
 	public String getEmail() {
 		return email;
 	}
+	
 	/**
+	 * Sets the email.
+	 *
 	 * @param email the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	
 	/**
+	 * Gets the creationtime.
+	 *
 	 * @return the creationtime
 	 */
 	public String getCreationtime() {
 		return creationtime;
 	}
+	
 	/**
+	 * Sets the creationtime.
+	 *
 	 * @param creationtime the creationtime to set
 	 */
 	public void setCreationtime(String creationtime) {
 		this.creationtime = creationtime;
 	}
+	
+	
 	/**
-	 * @return the type
+	 * Gets the usertype.
+	 *
+	 * @return the usertype
 	 */
-	public String getType() {
-		return type;
+	public String getUsertype() {
+		return usertype;
 	}
+
 	/**
-	 * @param type the type to set
+	 * Sets the usertype.
+	 *
+	 * @param usertype the new usertype
 	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setUsertype(String usertype) {
+		this.usertype = usertype;
 	}
+
 	/**
-	 * @return the verified
+	 * Checks if is verified.
+	 *
+	 * @return true, if is verified
 	 */
 	public boolean isVerified() {
 		return verified;
 	}
+	
 	/**
-	 * @param verified the verified to set
+	 * Sets the verified.
+	 *
+	 * @param verified the new verified
 	 */
 	public void setVerified(boolean verified) {
 		this.verified = verified;
-	}
+	}	
 }

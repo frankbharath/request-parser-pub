@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 
 import org.json.JSONObject;
 
+import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.domain.User;
 import com.bharath.rm.model.domain.Verification;
 
@@ -17,12 +18,12 @@ import com.bharath.rm.model.domain.Verification;
  	* Class Description
 */
 public interface UserService {
-	public JSONObject addUser(User user) throws MessagingException;
-	public JSONObject verifyAccountForUser(String token);
-	public JSONObject sendVerificationLinkToUser(long userid, String email) throws MessagingException;
-	public JSONObject resetPassword(String email) throws MessagingException;
+	public UserDTO addUser(User user) throws MessagingException;
+	public void verifyAccountForUser(String token);
+	public void sendVerificationLinkToUser(long userid, String email) throws MessagingException;
+	public void resetPassword(String email) throws MessagingException;
 	public String getUserEmailForResetToken(String token);
-	public JSONObject updatePassword(String token, String password);
+	public void updatePassword(String token, String password);
 	public Boolean userVerificationStatus(long userId);
 	public Boolean userCreatedStripeAccount();
 	public String getUserType();

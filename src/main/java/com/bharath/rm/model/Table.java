@@ -14,6 +14,7 @@ public class Table {
 	private List<Column> columns;
 	private List<String> primaryKeys;
 	private List<ForeignKey> foreignKeys;
+	private List<String> inheritTables;
 	
 	public String getTableName() {
 		return tableName;
@@ -30,6 +31,10 @@ public class Table {
 	public List<ForeignKey> getForeignKeys() {
 		return foreignKeys;
 	}
+	
+	public List<String> getInheritTables() {
+		return inheritTables;
+	}
 
 	private Table(TableBuilder tableBuilder) {
 		String error=null;
@@ -45,6 +50,7 @@ public class Table {
 		this.columns=tableBuilder.getColumns();
 		this.primaryKeys=tableBuilder.getPrimaryKeys();
 		this.foreignKeys=tableBuilder.getForeignKeys();
+		this.inheritTables=tableBuilder.getInheritTables();
 	}
 	public static class TableBuilder {
 		
@@ -60,6 +66,8 @@ public class Table {
 		/** Holds all the foreign keys, if any. */
 		private List<ForeignKey> foreignKeys;
 		
+		/** Hold all the tables needs to be inherited*/
+		private List<String> inheritTables;
 		/**
 		 * Gets the table name.
 		 *
@@ -140,6 +148,20 @@ public class Table {
 			return this;
 		}
 		
+		/**
+		 * @return the inheritTables
+		 */
+		public List<String> getInheritTables() {
+			return inheritTables;
+		}
+
+		/**
+		 * @param inheritTables the inheritTables to set
+		 */
+		public void setInheritTables(List<String> inheritTables) {
+			this.inheritTables = inheritTables;
+		}
+
 		/**
 		 * Builds the.
 		 *

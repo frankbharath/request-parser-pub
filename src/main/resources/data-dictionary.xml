@@ -67,9 +67,9 @@
 				<column name="rent" type="float(2)" null="false"/>
 			</columns>
 		</table>
-		<table name="rm_appartmentpropertydetails" description="Stores appartment such as door number and floor number">
+		<table name="rm_appartmentpropertydetails" description="Stores appartment such as door number and floor number" inherits="rm_propertydetails">
 			<columns>
-				<column name="propertydetailsid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_propertydetails" reference-column="propertydetailsid" delete-cascade="true"/>
+				<column name="propertyid" type="bigint" null="false" foreign-key="true" reference-table="rm_property" reference-column="propertyid" delete-cascade="true"/>
 				<column name="doorno" type="varchar(8)" null="false"/>
 				<column name="floorno" type="int" null="false"/>
 			</columns>

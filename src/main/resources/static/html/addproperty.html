@@ -1,6 +1,7 @@
 <div class="overlay-bg">
-	<div class="add-property-slider">
-		<form name="addproperty.form" spellcheck="false" novalidate rp-form-submit ng-submit="addproperty.submit()">
+<div>
+	<form name="addproperty.form" spellcheck="false" class="add-property-form" novalidate rp-form-submit ng-submit="addproperty.submit()">
+		<div class="add-property-slider">
 			<div class="modal-panel-header clearfix bg-gray">
 	            <span class="Text-color--dark Text-fontSize--16 Text-fontWeight--medium">
 	            	<span translate="properties.addproperty"></span>
@@ -67,8 +68,9 @@
 					<button class="btn btn-md m-r-5 bgcolorlightgrey" translate="cancel" ng-click="addproperty.closeTemplate()"></button>
 				</div>
 	        </div>
-		</form>
-	</div>
+		</div>
+	</form>
+</div>
  </div>
 <script type="text/ng-template" id="HOUSE">
 <div style="margin-top: 20px;height: auto">
@@ -76,7 +78,7 @@
 		<span class="Text-fontWeight--medium" translate="properties.area"></span><br>
 		<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form.area.$error.required}">
 			<input value="5" rp-number rp-limit-length="10" name="area" ng-model="addproperty.area" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">m<sup>2</sup></span>
-			<div style="margin-top:5px" ng-show="addproperty.form.$submitted">
+			<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form.area.$error.required">
 				<span ng-show="addproperty.form.area.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.area.required"></span>
 			</div>
 		</div>
@@ -85,7 +87,7 @@
 		<span class="Text-fontWeight--medium" translate="properties.rent"></span><br>
 		<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form.rent.$error.required}">
 			<input value="6" rp-number rp-limit-length="10" name="rent" ng-model="addproperty.rent" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">&euro;/{{"properties.rent.person" | translate}}</span>
-			<div style="margin-top:5px" ng-show="addproperty.form.$submitted">
+			<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form.rent.$error.required">
 				<span ng-show="addproperty.form.rent.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.rent.required"></span>
 			</div>
 		</div>
@@ -96,7 +98,7 @@
 	<span class="Text-fontWeight--medium" translate="properties.capacity"></span><br>
 	<div class="PressableCore-base" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form.capacity.$error.required}">
 		<input value="10" rp-number rp-limit-length="6" ng-model="addproperty.capacity" name="capacity" class="inputbox" placeholder='{{"properties.capacity.placeholder" | translate}}' style="width: 100%;" required>
-		<div style="margin-top:5px" ng-show="addproperty.form.$submitted">
+		<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form.capacity.$error.required">
 			<span ng-show="addproperty.form.capacity.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.capacity.required"></span>
 		</div>
 	</div>
@@ -109,8 +111,8 @@
 			<div style="width: 50%;position: relative;float: left;">
 				<span class="Text-fontWeight--medium" translate="properties.door"></span><br>
 				<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form['door_' + $index].$error.required}">
-					<input type="text" name="door_{{$index}}" ng-model="door" rp-number rp-limit-length="4" class="inputbox" style="width: 66%;" required>
-					<div style="margin-top:5px" ng-show="addproperty.form.$submitted || addproperty.form['door_' + $index].$error.pattern">
+					<input type="text" name="door_{{$index}}" ng-model="entry.door" rp-alpha-number rp-limit-length="4" class="inputbox" style="width: 66%;" required>
+					<div style="margin-top:5px" ng-show="(addproperty.form.$submitted && addproperty.form['door_' + $index].$error.required) || addproperty.form['door_' + $index].$error.pattern">
 						<span ng-show="addproperty.form['door_' + $index].$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.door.required"></span>
 					</div>
 				</div>
@@ -118,13 +120,13 @@
 			<div style="width: 50%;position: relative;float: left;">
 				<span class="Text-fontWeight--medium" translate="properties.floor"></span><br>
 				<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form['floor_' + $index].$error.required}">
-					<input type="text" name="floor_{{$index}}" ng-model="floor" rp-number rp-limit-length="4" class="inputbox" style="width: 66%;" required>
-					<div style="margin-top:5px" ng-show="addproperty.form.$submitted || addproperty.form['floor_' + $index].$error.pattern">
+					<input type="text" name="floor_{{$index}}" ng-model="entry.floor" rp-whole-number rp-limit-length="4" class="inputbox" style="width: 66%;" required>
+					<div style="margin-top:5px" ng-show="(addproperty.form.$submitted && addproperty.form['floor_' + $index].$error.required) || addproperty.form['floor_' + $index].$error.pattern">
 						<span ng-show="addproperty.form['floor_' + $index].$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.floor.required"></span>
 					</div>
 				</div>
 			</div>
-			<div class="closeicon">
+			<div class="closeicon" ng-show="addproperty.units.length>1">
 				<a ng-click="addproperty.removeUnit($index)"><img src="/resources/images/close.svg" height="14px"></img></a>
 			</div>
 			<div style="clear:both;"></div>
@@ -133,8 +135,8 @@
 			<div style="width: 50%;position: relative;float: left;">
 				<span class="Text-fontWeight--medium" translate="properties.area"></span><br>
 				<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form['area_' + $index].$error.required}">
-					<input rp-number rp-limit-length="10" name="area_{{$index}}" ng-model="area" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">m<sup>2</sup></span>
-					<div style="margin-top:5px" ng-show="addproperty.form.$submitted">
+					<input rp-number rp-limit-length="10" name="area_{{$index}}" ng-model="entry.area" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">m<sup>2</sup></span>
+					<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form['area_' + $index].$error.required">
 						<span ng-show="addproperty.form['area_' + $index].$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.area.required"></span>
 					</div>
 				</div>
@@ -142,8 +144,8 @@
 			<div style="width: 50%;position: relative;float: left;">
 				<span class="Text-fontWeight--medium" translate="properties.rent"></span><br>
 				<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form['rent_' + $index].$error.required}">
-					<input rp-number rp-limit-length="10" name="rent_{{$index}}" ng-model="rent" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">&euro;/{{"properties.rent.person" | translate}}</span>
-					<div style="margin-top:5px" ng-show="addproperty.form.$submitted">
+					<input rp-number rp-limit-length="10" name="rent_{{$index}}" ng-model="entry.rent" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">&euro;/{{"properties.rent.person" | translate}}</span>
+					<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form['area_' + $index].$error.required">
 						<span ng-show="addproperty.form['rent_' + $index].$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.rent.required"></span>
 					</div>
 				</div>
@@ -153,8 +155,8 @@
 		<div style="margin-top: 20px;">
 			<span class="Text-fontWeight--medium" translate="properties.capacity"></span><br>
 			<div class="PressableCore-base" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form['capacity_' + $index].$error.required}">
-				<input rp-number rp-limit-length="6" ng-model="capacity" name="capacity_{{$index}}" class="inputbox" placeholder='{{"properties.capacity.placeholder" | translate}}' style="width: 100%;" required>
-				<div style="margin-top:5px" ng-show="addproperty.form.$submitted">
+				<input rp-number rp-limit-length="6" ng-model="entry.capacity" name="capacity_{{$index}}" class="inputbox" placeholder='{{"properties.capacity.placeholder" | translate}}' style="width: 100%;" required>
+				<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form['capacity_' + $index].$error.required">
 					<span ng-show="addproperty.form['capacity_' + $index].$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.capacity.required"></span>
 				</div>
 			</div>

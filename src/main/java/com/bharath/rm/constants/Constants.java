@@ -11,13 +11,13 @@ package com.bharath.rm.constants;
 public class Constants {
 	
 	/** The Constant STATUS. */
-	public static final String STATUS="STATUS";
+	public static final String STATUS="status";
 	
 	/** The Constant SUCCESS. */
-	public static final String SUCCESS="SUCCESS";
+	public static final String SUCCESS="success";
 	
 	/** The Constant FAILED. */
-	public static final String FAILED="FAILED ";
+	public static final String FAILED="failed ";
 	
 	/** The Constant MESSAGE. */
 	public static final String MESSAGE="MESSAGE";

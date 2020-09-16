@@ -1,18 +1,36 @@
 package com.bharath.rm.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bharath.rm.common.Utils;
+import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.Constants;
+import com.bharath.rm.dto.APIRequestResponse;
 import com.bharath.rm.model.domain.Address;
+import com.bharath.rm.model.domain.Appartment;
+import com.bharath.rm.model.domain.AppartmentPropertyDetails;
 import com.bharath.rm.model.domain.House;
+import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
 import com.bharath.rm.model.domain.PropertyType;
 import com.bharath.rm.service.interfaces.PropertyService;
+
+
 
 /**
 	* @author bharath
@@ -32,26 +50,14 @@ public class PropertyController {
 	}
 
 	@RequestMapping(value = "/house", method = RequestMethod.POST)
+	public ResponseEntity<Object> addHouse(House house) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addHouse(house));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/appartment", method = RequestMethod.POST)
 	@ResponseBody
-	public String addHouse() {
-		House house=new House();
-		house.setUserid(1l);
-		house.setName("Maison Alfort");
-		house.setCreationtime(System.currentTimeMillis());
-		Address address=new Address();
-		address.setAddress_1("10 Bis");
-		address.setAddress_2("Place des Martrys De La Deportation");
-		address.setPostal(94400l);
-		address.setVille("Vitry Sur Seine");
-		house.setAddress(address);
-		PropertyType type=new PropertyType();
-		type.setPropertytype(Constants.PropertyType.HOUSE.toString());
-		house.setType(type);
-		PropertyDetails details=new PropertyDetails();
-		details.setArea(10);
-		details.setCapacity(10);
-		details.setRent(50.0f);
-		house.setPropertydetails(details);
-		return propertyService.addHouse(house).toString();
+	public String addAppartment(Appartment appartment) {
+		return propertyService.addAppartment(appartment).toString();
 	}
 }

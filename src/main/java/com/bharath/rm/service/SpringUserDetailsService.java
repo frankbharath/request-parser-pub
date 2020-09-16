@@ -36,22 +36,10 @@ public class SpringUserDetailsService implements UserDetailsService {
 		User user=UserDAO.getUser(email);
 		if(user!=null) {
 			SpringUserDetails userDetails = new SpringUserDetails(user.getEmail(), user.getPassword());
+			userDetails.setEnabled(user.isVerified());
 			userDetails.setUserId(user.getUserid());
 			return userDetails;
 		}
 		throw new UsernameNotFoundException(I18NConfig.getMessage("error.user.no_account"));
-	}
-	
-	public boolean isAuthenticated() {
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    if (authentication == null || AnonymousAuthenticationToken.class.
-	      isAssignableFrom(authentication.getClass())) {
-	        return false;
-	    }
-	    return authentication.isAuthenticated();
-	}
-	
-	public SpringUserDetails getLoggedInUserDetails() {
-		return (SpringUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

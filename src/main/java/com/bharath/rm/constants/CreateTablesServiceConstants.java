@@ -54,5 +54,5 @@ public class CreateTablesServiceConstants {
 	
 	public static final String DEFAULTROW="default-row";
 	
-	
+	public static final String INHERITS="inherits";
 }

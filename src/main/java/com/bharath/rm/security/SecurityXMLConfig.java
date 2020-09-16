@@ -64,6 +64,8 @@ public final class SecurityXMLConfig {
 	
 	private static final HashSet<String> NOAUTHURL= new HashSet<>();
 	
+	private static final HashSet<String> AUTHURL= new HashSet<>();
+	
 	/** XMLInputFactory instance. */
 	private final XMLInputFactory factory = XMLInputFactory.newInstance();
 	
@@ -370,6 +372,8 @@ public final class SecurityXMLConfig {
 						URL url=builder.build();
 						if(!url.isAuthentication() && !NOAUTHURL.contains(url.getUrl())) {
 							NOAUTHURL.add(url.getUrl());
+						}else if(url.isAuthentication() && !AUTHURL.contains(url.getUrl())) {
+							AUTHURL.add(url.getUrl());
 						}
 						String[] split=url.getUrl().split("/");
 						createURLNodeTree(URLNODES,url,split,1);
@@ -552,8 +556,22 @@ public final class SecurityXMLConfig {
 		return noAuthUrls;
 	}
 	
+	public static String[] getAuthReqUrl() {
+		String[] authUrls=new String[AUTHURL.size()];
+		Iterator<String> iterator=AUTHURL.iterator();
+		int i=0;
+		while(iterator.hasNext()) {
+			authUrls[i++]=iterator.next();
+		}
+		return authUrls;
+	}
+	
 	public static boolean  isNoAuthUrl(String url) {
 		 return NOAUTHURL.contains(url);
+	}
+	
+	public static boolean isAuthUrl(String url) {
+		return AUTHURL.contains(url);
 	}
 	public static URL getURL(HttpServletRequest request) {
 		return getUrl(SecurityXMLConfig.URLNODES, request.getRequestURI().split("/"), 1, request.getMethod().toLowerCase());

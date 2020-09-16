@@ -32,5 +32,4 @@ public class PropertyType {
 	public void setPropertytype(String propertytype) {
 		this.propertytype = propertytype;
 	}
-	
 }

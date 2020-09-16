@@ -39,6 +39,6 @@
 	"properties.rent.person":"Person",
 	"properties.appartment.units":"Units",
 	"properties.appartment.units.placeholder":"How many units are there in this appartment?",
-	"properties.appartment.units.add":"+ Add unit"
-	
+	"properties.appartment.units.add":"+ Add unit",
+	"error.unabletoprocessrequest":"Unable to process your request"
 }

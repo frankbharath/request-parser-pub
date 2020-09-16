@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -73,6 +74,9 @@ public final class CreateTableConfig extends DefaultHandler{
 			log.info("Creating table object for "+attributes.getValue(CreateTablesServiceConstants.NAME));
 			tableBuilder=new Table.TableBuilder();
 			tableBuilder.setTableName(attributes.getValue(CreateTablesServiceConstants.NAME));
+			if(attributes.getValue(CreateTablesServiceConstants.INHERITS)!=null) {
+				tableBuilder.setInheritTables(Arrays.asList(attributes.getValue(CreateTablesServiceConstants.INHERITS).split(",")));
+			}
 		}else if(CreateTablesServiceConstants.COLUMNS.equals(qName)) {
 			columns=new ArrayList<>();
 			primaryKeys=new ArrayList<>();
@@ -157,7 +161,6 @@ public final class CreateTableConfig extends DefaultHandler{
 	        	final String[] createStatements=getCreateStatementforTables(tables);
 	        	CreateTablesDAO dao=new CreateTablesDAO();
 	        	dao.addTablestoDB(createStatements);
-	        	System.out.println(handler.insertDefaultValues);
 	        	dao.insertDefaultValuestoTable(handler.insertDefaultValues);
 	        	dao.close();
 	        	log.info("Finised updating tables to the database");
@@ -216,6 +219,9 @@ public final class CreateTableConfig extends DefaultHandler{
 				}
 			}
 			builder.append(")");
+			if(table.getInheritTables()!=null && !table.getInheritTables().isEmpty()) {
+				builder.append(" INHERITS(").append(String.join(",", table.getInheritTables())).append(")");
+			}
 			statements[c]=builder.toString();
 			c++;
 		}
