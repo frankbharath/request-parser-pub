@@ -6,6 +6,7 @@ public class Column {
 	private boolean isNull;
 	private boolean isUnique;
 	private String allowedValues;
+	private String defaultValue; 
 	
 	public String getColumnName() {
 		return columnName;
@@ -27,6 +28,20 @@ public class Column {
 		return isUnique;
 	}
 
+	/**
+	 * @return the defaultValue
+	 */
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	/**
+	 * @param defaultValue the defaultValue to set
+	 */
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
 	private Column(ColumnBuilder columnBuilder) {
 		String error=null;
 		if(columnBuilder.getColumnName()==null) {
@@ -42,6 +57,7 @@ public class Column {
 		this.isNull=columnBuilder.getIsNull();
 		this.allowedValues=columnBuilder.getAllowedValues();
 		this.isUnique=columnBuilder.isUnique();
+		this.defaultValue=columnBuilder.getDefaultValue();
 	}
 
 	public static class ColumnBuilder {
@@ -59,6 +75,8 @@ public class Column {
 		private String allowedValues;
 		
 		private boolean isUnique;
+		
+		private String defaultValue; 
 		
 		/**
 		 * Gets the column name.
@@ -147,6 +165,20 @@ public class Column {
 
 		public void setUnique(boolean isUnique) {
 			this.isUnique = isUnique;
+		}
+
+		/**
+		 * @return the defaultValue
+		 */
+		public String getDefaultValue() {
+			return defaultValue;
+		}
+
+		/**
+		 * @param defaultValue the defaultValue to set
+		 */
+		public void setDefaultValue(String defaultValue) {
+			this.defaultValue = defaultValue;
 		}
 
 		/**

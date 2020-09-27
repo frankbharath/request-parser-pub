@@ -1,5 +1,6 @@
 package com.bharath.rm.constants.tables;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class RM_Property.
  *
@@ -20,11 +21,26 @@ public class RM_Property {
 	public static final String PROPERTYNAME="propertyname";
 	
 	/** The Constant PROPERTYTYPEID. */
-	public static final String PROPERTYTYPEID="propertytypeid";
+	public static final String PROPERTYTYPE="propertytype";
 	
 	/** The Constant USERID. */
 	public static final String USERID="userid";
 	
 	/** The Constant CREATIONTIME. */
 	public static final String CREATIONTIME="creationtime";
+	
+	/** The Constant ADDRESSLINE_1. */
+	public static final String ADDRESSLINE_1="addressline_1";
+	
+	/** The Constant ADDRESSLINE_2. */
+	public static final String ADDRESSLINE_2="addressline_2";
+	
+	/** The Constant CITY. */
+	public static final String CITY="city";
+	
+	/** The Constant POSTAL. */
+	public static final String POSTAL="postal";
+	
+	/** The Constant POSTAL. */
+	public static final String PROPERTYSEARCH_TSV="propertysearch_tsv";
 }

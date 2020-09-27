@@ -35,14 +35,14 @@
 						</div>
 					</div>
 					<div class="PressableCore-base" ng-class="{'invalid': addproperty.form.postalcode.$error.pattern || (addproperty.form.$submitted && addproperty.form.postalcode.$error.required)}">
-						<input value="94400" type="text" rp-number rp-limit-length="5" name="postalcode" ng-model="addproperty.postalcode" class="inputbox" style="width: 100%;" placeholder='{{"properties.address.postalcode" | translate}}' ng-pattern="addproperty.constants.REGEX.POSTALCODE" required>
+						<input type="text" rp-number rp-limit-length="5" name="postalcode" ng-model="addproperty.postalcode" class="inputbox" style="width: 100%;" placeholder='{{"properties.address.postalcode" | translate}}' ng-pattern="addproperty.constants.REGEX.POSTALCODE" required>
 						<div style="margin-top:5px" ng-show="addproperty.form.$submitted || addproperty.form.postalcode.$error.pattern">
 							<span ng-show="addproperty.form.postalcode.$error.pattern" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.address.postalcodeerror"></span>
 							<span ng-show="addproperty.form.postalcode.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.address.postalcoderequired"></span>
 						</div>
 					</div>
 					<div class="PressableCore-base" ng-class="{'invalid': addproperty.form.city.$error.pattern || (addproperty.form.$submitted && addproperty.form.city.$error.required)}">
-						<input value="Vitry Sur Seine" type="text" rp-limit-length="64" name="city" ng-model="addproperty.city" class="inputbox" style="width: 100%;" placeholder='{{"properties.address.city" | translate}}' ng-pattern="addproperty.constants.REGEX.NOTALLOWEDCHARSANDNUMS" required>
+						<input type="text" rp-limit-length="64" name="city" ng-model="addproperty.city" class="inputbox" style="width: 100%;" placeholder='{{"properties.address.city" | translate}}' ng-pattern="addproperty.constants.REGEX.NOTALLOWEDCHARSANDNUMS" required>
 						<div style="margin-top:5px" ng-show="addproperty.form.$submitted || addproperty.form.city.$error.pattern">
 							<span ng-show="addproperty.form.city.$error.pattern" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.address.cityerror"></span>
 							<span ng-show="addproperty.form.city.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.address.cityrequired"></span>
@@ -145,7 +145,7 @@
 				<span class="Text-fontWeight--medium" translate="properties.rent"></span><br>
 				<div class="PressableCore-base" style="width:100%" ng-class="{'invalid': addproperty.form.$submitted && addproperty.form['rent_' + $index].$error.required}">
 					<input rp-number rp-limit-length="10" name="rent_{{$index}}" ng-model="entry.rent" class="inputbox" style="width: 66%;" required><span style="margin-left: 6px;" class="Text-fontSize--13">&euro;/{{"properties.rent.person" | translate}}</span>
-					<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form['area_' + $index].$error.required">
+					<div style="margin-top:5px" ng-show="addproperty.form.$submitted && addproperty.form['rent_' + $index].$error.required">
 						<span ng-show="addproperty.form['rent_' + $index].$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="properties.rent.required"></span>
 					</div>
 				</div>

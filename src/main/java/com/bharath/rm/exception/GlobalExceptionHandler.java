@@ -59,6 +59,7 @@ public class GlobalExceptionHandler {
 		}else {
 			request.setAttribute("message", I18NConfig.getMessage("error.unkown_issue"));
 			RequestDispatcher rd = request.getRequestDispatcher("/error");
+			
 			rd.forward(request, response);
 		}
 	}

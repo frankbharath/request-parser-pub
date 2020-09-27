@@ -1,0 +1,117 @@
+<div class="overlay-bg">
+<div>
+	<form name="addtenant.form" spellcheck="false" class="add-property-form" novalidate rp-form-submit ng-submit="addtenant.submit()" style="top:14%">
+		<div class="add-property-slider">
+			<div class="modal-panel-header clearfix bg-gray">
+	            <span class="Text-color--dark Text-fontSize--16 Text-fontWeight--medium">
+	            	<span translate="tenants.addtenant"></span>
+	            </span>
+	        </div>
+	         <div class="Box-background--offset">
+	         	<div>
+					<span class="Text-fontWeight--medium" translate="tenants.firstname"></span><br>
+					<div class="PressableCore-base" ng-class="{'invalid': addtenant.form.firstname.$error.pattern || (addtenant.form.$submitted && addtenant.form.firstname.$error.required)}">
+						<input type="text" rp-limit-length="64" name="firstname" ng-model="addtenant.firstname" ng-pattern="addtenant.constants.REGEX.ALPHAWITHSPACE" class="inputbox" placeholder='{{"tenants.firstname" | translate}}' style="width: 100%;" required/>
+						<div style="margin-top:5px" ng-show="(addtenant.form.$submitted && addtenant.form.firstname.$error.required) || addtenant.form.firstname.$error.pattern">
+							<span ng-show="addtenant.form.firstname.$error.pattern" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.firstnameerror"></span>
+							<span ng-show="addtenant.form.firstname.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.firstnamerequired"></span>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 20px;">
+					<span class="Text-fontWeight--medium" translate="tenants.lastname"></span><br>
+					<div class="PressableCore-base" ng-class="{'invalid': addtenant.form.lastname.$error.pattern || (addtenant.form.$submitted && addtenant.form.lastname.$error.required)}">
+						<input type="text" rp-limit-length="64" name="lastname" ng-model="addtenant.lastname" ng-pattern="addtenant.constants.REGEX.ALPHAWITHSPACE" class="inputbox" placeholder='{{"tenants.lastname" | translate}}' style="width: 100%;" required/>
+						<div style="margin-top:5px" ng-show="(addtenant.form.$submitted && addtenant.form.lastname.$error.required) || addtenant.form.lastname.$error.pattern">
+							<span ng-show="addtenant.form.lastname.$error.pattern" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.lastnameerror"></span>
+							<span ng-show="addtenant.form.lastname.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.lastnamerequired"></span>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 20px;">
+					<span class="Text-fontWeight--medium" translate="tenants.email"></span><br>
+					<div class="PressableCore-base" ng-class="{'invalid': addtenant.form.email.$error.pattern || (addtenant.form.$submitted && addtenant.form.email.$error.required)}">
+						<input type="text" rp-limit-length="64" name="email" ng-model="addtenant.email" ng-pattern="addtenant.constants.REGEX.EMAIL" class="inputbox" placeholder='{{"tenants.email" | translate}}' style="width: 100%;" required/>
+						<div style="margin-top:5px" ng-show="(addtenant.form.$submitted && addtenant.form.email.$error.required) || addtenant.form.email.$error.pattern">
+							<span ng-show="addtenant.form.email.$error.pattern" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.emailerror"></span>
+							<span ng-show="addtenant.form.email.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.emailrequired"></span>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 20px;">
+					<span class="Text-fontWeight--medium" translate="tenants.dob"></span><br>
+					<div class="PressableCore-base">
+						<md-datepicker name="dob" ng-model="addtenant.dob" md-placeholder="{{'tenants.dob' | translate}}"  md-min-date="addtenant.mindate" md-max-date="addtenant.maxdate" md-current-view="year" required></md-datepicker>
+						<div style="margin-top:5px" ng-show="(addtenant.form.$submitted && addtenant.form.dob.$error.required)">
+							<span ng-show="addtenant.form.dob.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.dobrequired"></span>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 20px;">
+					<span class="Text-fontWeight--medium" translate="tenants.nationality"></span><br>
+					<div class="PressableCore-base">
+						<select ng-model="addtenant.nationality" name="nationality" class="inputbox" style="width:100%;background-color: #f7fafc;" required>
+							<option value="{{key}}" ng-repeat="(key, value) in tenant.countries">{{value}}</option>
+						</select>
+						<div style="margin-top:5px" ng-show="(addtenant.form.$submitted && addtenant.form.nationality.$error.required)">
+							<span ng-show="addtenant.form.nationality.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.nationalityrequired"></span>
+						</div>
+					</div>
+				</div>
+				<!--div style="margin-top: 20px;">
+					<span class="Text-fontWeight--medium" translate="tenants.selectproperty"></span><br>
+					<div class="PressableCore-base">
+						<select ng-model="addtenant.selectedPropertyIndex" name="property" class="inputbox" style="width:100%;background-color: #f7fafc;"  ng-change="addtenant.propertyChange()" required>
+							<option value="{{$index}}" data-ng-repeat="entry in addtenant.properties">{{entry.propertyname}}</option>
+						</select>
+						<div style="margin-top:5px" ng-show="addtenant.form.$submitted || addtenant.propertyNotAvailable">
+							<span ng-show="addtenant.form.property.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.propertyrequired"></span>
+							<span ng-show="addtenant.propertyNotAvailable" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.propertynotavailable"></span>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 20px;" ng-show="addtenant.showSelectUnit">
+					<span class="Text-fontWeight--medium" translate="tenants.selectunit"></span><br>
+					<div class="PressableCore-base">
+						<select ng-model="addtenant.unitIndex" name="unit" class="inputbox" required ng-change="addtenant.unitChange()">
+							<option value="{{$index}}" data-ng-repeat="entry in addtenant.selectedUnits">{{"tenants.unitdesc" | translate:{doorno:entry.doorno, floorno:entry.floorno} }}</option>
+						</select>
+						<div style="margin-top:5px" ng-show="addtenant.form.$submitted || addtenant.unitNotAvailable">
+							<span ng-show="addtenant.form.unit.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.unitrequired"></span>
+							<span ng-show="addtenant.unitNotAvailable" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.unitnotavailable"></span>
+						</div>
+					</div>
+				</div>
+				<div ng-show="addtenant.showLeaseInfo">
+					<div style="margin-top: 20px;">
+						<span class="Text-fontWeight--medium" translate="tenants.leaseperiod"></span><br>
+						<div class="PressableCore-base">
+							<md-datepicker name="movein" ng-model="addtenant.moveindate" md-placeholder="{{'tenants.movein' | translate}}" md-min-date="addtenant.moveinmindate" ng-change="addtenant.moveinchange()" required></md-datepicker>
+							<md-datepicker name="moveout" ng-model="addtenant.moveoutdate" md-placeholder="{{'tenants.moveout' | translate}}" md-min-date="addtenant.moveoutmindate" required></md-datepicker>
+							<div style="margin-top:5px" ng-show="addtenant.form.$submitted">
+								<span ng-show="addtenant.form.movein.$error.required || addtenant.form.moveout.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.leasedaterequired"></span>
+							</div>
+						</div>
+					</div>
+					<div style="margin-top: 20px;">
+						<span class="Text-fontWeight--medium" translate="tenants.occupants"></span><br>
+						<div class="PressableCore-base" ng-class="{'invalid': addtenant.form.occupants.$error.max || (addtenant.form.$submitted && addtenant.form.occupants.$error.required)}">
+							<input type="number" name="occupants" ng-model="addtenant.occupants" placeholder="{{'tenants.numberoftenants' | translate}}" rp-number class="inputbox" style="width: 100%;" max="{{addtenant.maxtenants}}" required>
+							<div style="margin-top:5px" ng-show="addtenant.form.$submitted || addtenant.form.occupants.$error.max">
+								<span ng-show="addtenant.form.occupants.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.occupantsrequired"></span>
+								<span ng-show="addtenant.form.occupants.$error.max" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium">{{"tenants.maxstay" | translate:{people:addtenant.maxtenants} }}</span>
+							</div>
+						</div>
+					</div>
+				</div-->
+	         </div>
+	          <div class="modal-panel-footer clearfix bg-gray">
+	        	<div align="center">
+					<button class="btn btn-md bgcolorgreen m-r-5 Text-color--white" translate="save" type="submit"></button>
+					<button class="btn btn-md m-r-5 bgcolorlightgrey" translate="cancel" ng-click="addtenant.closeTemplate()"></button>
+				</div>
+	        </div>
+		</div>
+	</form>
+</div>
+</div>

@@ -91,12 +91,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http/*.csrf().disable()*/
-		.exceptionHandling().authenticationEntryPoint(authenticationEntryPointHandler())
+		http.csrf().disable()
+		/*.exceptionHandling().authenticationEntryPoint(authenticationEntryPointHandler())
 		.accessDeniedHandler(accessDeniedHandler())
 		.and().csrf()
 		.csrfTokenRepository(csrfTokenRepository())
-        .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+        .and()*/.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
         .authorizeRequests()
         	.antMatchers(new String[] {"/resources/**","/favicon.ico"})
         	.permitAll()

@@ -91,10 +91,14 @@ public final class CreateTableConfig extends DefaultHandler{
 			if(attributes.getValue(CreateTablesServiceConstants.UNIQUEKEY)!=null) {
 				builder.setUnique(Boolean.parseBoolean(attributes.getValue(CreateTablesServiceConstants.UNIQUEKEY)));
 			}
+			if(attributes.getValue(CreateTablesServiceConstants.DEFAULTVALUE)!=null) {
+				builder.setDefaultValue(attributes.getValue(CreateTablesServiceConstants.DEFAULTVALUE));
+			}
 			columns.add(builder.build());
 			if(attributes.getValue(CreateTablesServiceConstants.PRIMARYKEY)!=null) {
 				primaryKeys.add(attributes.getValue(CreateTablesServiceConstants.NAME));
 			}
+			
 			
 			if(attributes.getValue(CreateTablesServiceConstants.FOREIGNKEY)!=null) {
 				ForeignKey.ForeignKeyBuilder foreignKeyBuilder=new ForeignKey.ForeignKeyBuilder().setColumnName(attributes.getValue(CreateTablesServiceConstants.NAME))
@@ -183,6 +187,9 @@ public final class CreateTableConfig extends DefaultHandler{
 				builder.append(column.getColumnName()).append(" ").append(column.getType());
 				if(!column.isNull()) {
 					builder.append(" NOT NULL");
+				}
+				if(column.getDefaultValue()!=null) {
+					builder.append(" DEFAULT ").append(column.getDefaultValue());
 				}
 				if(column.getAllowedValues()!=null) {
 					String[] values=column.getAllowedValues().split(",");

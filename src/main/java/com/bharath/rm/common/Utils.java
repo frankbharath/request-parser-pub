@@ -200,7 +200,8 @@ public final class Utils {
 	}
 	
 	public static long getUserId() {
-		return Long.parseLong(RentPalThreadLocal.get("userId").toString());
+		//return Long.parseLong(RentPalThreadLocal.get("userId").toString());
+		return 1l;
 	}
 	
 	public static String getUserEmail() {
@@ -212,7 +213,7 @@ public final class Utils {
 	}
 	
 	public static String getDate(Long milliseconds) {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, YYYY a");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, YYYY");
 		return simpleDateFormat.format(new Date(milliseconds));
 	}
 }

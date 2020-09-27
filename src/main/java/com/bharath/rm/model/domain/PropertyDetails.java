@@ -45,7 +45,7 @@ public class PropertyDetails {
 	/**
 	 * @param area the area to set
 	 */
-	public void setArea(int area) {
+	public void setArea(float area) {
 		this.area = area;
 	}
 	/**
@@ -71,11 +71,6 @@ public class PropertyDetails {
 	 */
 	public void setRent(float rent) {
 		this.rent = rent;
-	}
-	@Override
-	public String toString() {
-		return "PropertyDetails [propertyid=" + propertyid + ", propertydetailsid=" + propertydetailsid + ", area="
-				+ area + ", capacity=" + capacity + ", rent=" + rent + "]";
 	}
 	
 }

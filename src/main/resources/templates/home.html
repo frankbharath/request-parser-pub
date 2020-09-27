@@ -8,6 +8,7 @@
 	<title th:utext="#{html.home.title}"></title>
 	<!--link rel="stylesheet" href="D:\projects\rm\rm\src\main\resources\static\css\main.css"-->
 	<link rel="stylesheet" href="/resources/css/main.css">
+	<link rel="stylesheet" href="https://material.angularjs.org/latest/angular-material.min.css">
 	<!--link rel="stylesheet" href="/resources/css/main.css"-->
 </head>
 <body ng-controller="MainController as main" ng-cloak>
@@ -19,7 +20,7 @@
 					<ul>
 						<li>
 							<div class="Padding-left--20 Padding-vertical--5 selected-tab" ng-class="{'selected-tab':main.selectedTab === 'home'}" ng-click="main.toggleClass('home')">
-								<a class="db-SideNav-link" href="/test/dashboard">
+								<a>
 									<div class="NavItem Box-root  Padding-horizontal--4 Padding-vertical--8">
 										<div class="Box-root Flex-flex Flex-alignItems--flexStart">
 											<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center" style="margin-top: 1px;">
@@ -39,21 +40,21 @@
 							</div>
 						</li>
 						<li style="margin-top: 10px;">
-							<div class="Padding-left--20 Padding-vertical--5" ng-class="{'selected-tab':main.selectedTab === 'property'}" ng-click="main.toggleClass('property')">
-								<a href="/properties">
+							<div class="Padding-left--20 Padding-vertical--5" ng-class="{'selected-tab':main.selectedTab === 'properties'}" ng-click="main.toggleClass('properties');">
+								<a>
 									<div class="NavItem Box-root Padding-horizontal--4 Padding-vertical--8">
 										<div class="Box-root Flex-flex Flex-alignItems--flexStart">
 											<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center" style="margin-top: 1px;">
 												<div>
 													<svg style="width: 16px;height: 16px;" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
 														<g transform="scale(0.0184375 0.0184375)">
-															<path d="M810 640v-86h-84v86h84zM810 810v-84h-84v84h84zM640 298v-84h-86v84h86zM640 470v-86h-86v86h86zM640 640v-86h-86v86h86zM470 298v-84h-86v84h86zM470 470v-86h-86v86h86zM470 640v-86h-86v86h86zM298 470v-86h-84v86h84zM298 640v-86h-84v86h84zM298 810v-84h-84v84h84zM726 470h170v426h-342v-170h-84v170h-342v-598h170v-170h428v342z" fill="#4F566B" ng-class="{'db-SideNav-iconFill--primary':main.selectedTab !== 'property'}" class="db-SideNav-iconFill--primary"></path>
+															<path d="M810 640v-86h-84v86h84zM810 810v-84h-84v84h84zM640 298v-84h-86v84h86zM640 470v-86h-86v86h86zM640 640v-86h-86v86h86zM470 298v-84h-86v84h86zM470 470v-86h-86v86h86zM470 640v-86h-86v86h86zM298 470v-86h-84v86h84zM298 640v-86h-84v86h84zM298 810v-84h-84v84h84zM726 470h170v426h-342v-170h-84v170h-342v-598h170v-170h428v342z" fill="#4F566B" ng-class="{'db-SideNav-iconFill--primary':main.selectedTab !== 'properties'}" class="db-SideNav-iconFill--primary"></path>
 														</g>
 													</svg>
 												</div>
 											</div>
 											<span class="Text-color--white Text-fontSize--15 Text-fontWeight--medium Text-lineHeight--20 Text-numericSpacing--proportional Text-typeface--base Text-wrap--wrap Text-display--inline">
-												<span translate="tab.properties" ng-class="{'Text-color--dark':main.selectedTab === 'property'}" class="ng-scope">Properties</span>
+												<span translate="tab.properties" ng-class="{'Text-color--dark':main.selectedTab === 'properties'}" class="ng-scope">Properties</span>
 											</span>
 										</div>
 									</div>
@@ -62,7 +63,7 @@
 						</li>
 						<li style="margin-top: 10px;">
 							<div class="Padding-left--20 Padding-vertical--5" ng-class="{'selected-tab':main.selectedTab === 'tenants'}" ng-click="main.toggleClass('tenants')">
-								<a href="/settings">
+								<a>
 									<div class="NavItem Box-root Padding-horizontal--4 Padding-vertical--8">
 										<div class="Box-root Flex-flex Flex-alignItems--flexStart">
 											<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center" style="margin-top: 1px;">
@@ -88,7 +89,7 @@
 						</li>
 						<li style="margin-top: 10px;">
 							<div class="Padding-left--20 Padding-vertical--5" ng-class="{'selected-tab':main.selectedTab === 'settings'}" ng-click="main.toggleClass('settings')">
-								<a href="/settings">
+								<a>
 									<div class="NavItem Box-root Padding-horizontal--4 Padding-vertical--8">
 										<div class="Box-root Flex-flex Flex-alignItems--flexStart">
 											<div class="Box-root Margin-right--12 Padding-all--2 Flex-flex Flex-alignItems--center" style="margin-top: 1px;">
@@ -124,7 +125,9 @@
 									</div>
 								</div>
 							</div>
-							<input class="db-SuggestionInput-input" placeholder="Search" autocorrect="false" spellcheck="false" type="text" value="">
+							<form name="main.searchform" ng-submit="main.search()">
+								<input class="db-SuggestionInput-input" ng-model='main.searchQuery' placeholder="Search" autocorrect="false" spellcheck="false" type="text" value="">
+							</form>
 						</div>
 					</div>
 					<div class="icons">
@@ -161,13 +164,18 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.28/angular-ui-router.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.3/angular-translate.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.18.3/angular-translate-loader-static-files.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.8.0/angular-resource.js"></script>
 	<script src="/resources/js/app.js"></script>
 	<script src="/resources/js/property.js"></script>
+	<script src="/resources/js/tenants.js"></script>
 	<script src="/resources/js/domainobjects/propertyfactory.js"></script>
 	<script src="/resources/js/dataservice/propertydataservice.js"></script>
+	<script src="/resources/js/dataservice/tenantdataservice.js"></script>
 </body>
 </html>

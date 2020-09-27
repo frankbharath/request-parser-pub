@@ -1,36 +1,27 @@
 package com.bharath.rm.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
-import com.bharath.rm.constants.Constants;
 import com.bharath.rm.dto.APIRequestResponse;
-import com.bharath.rm.model.domain.Address;
 import com.bharath.rm.model.domain.Appartment;
-import com.bharath.rm.model.domain.AppartmentPropertyDetails;
 import com.bharath.rm.model.domain.House;
-import com.bharath.rm.model.domain.Property;
-import com.bharath.rm.model.domain.PropertyDetails;
-import com.bharath.rm.model.domain.PropertyType;
 import com.bharath.rm.service.interfaces.PropertyService;
-
-
 
 /**
 	* @author bharath
@@ -49,15 +40,62 @@ public class PropertyController {
 		this.propertyService=propertyService;
 	}
 
+	@DeleteMapping
+	public ResponseEntity<Object> deleteProperties(@RequestParam List<Long> propertyIds) {
+		propertyService.deleteProperty(propertyIds);
+		APIRequestResponse response=Utils.getApiRequestResponse(propertyIds.size()>1?I18NConfig.getMessage("success.properties.deleted_success"):I18NConfig.getMessage("success.property.deleted_success"));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/house", method = RequestMethod.POST)
 	public ResponseEntity<Object> addHouse(House house) {
 		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addHouse(house));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/appartment", method = RequestMethod.POST)
-	@ResponseBody
-	public String addAppartment(Appartment appartment) {
-		return propertyService.addAppartment(appartment).toString();
+	@RequestMapping(value = "/house", method = RequestMethod.PUT)
+	public ResponseEntity<Object> updateHouse(House house) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.updated_success"), propertyService.updateHouse(house));
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/appartment", method = RequestMethod.POST)
+	public ResponseEntity<Object> addAppartment(Appartment appartment) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addAppartment(appartment));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/appartment", method = RequestMethod.PUT)
+	public ResponseEntity<Object> updateAppartment(Appartment appartment, @RequestParam Optional<List<Long>> deleteIds) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.updated_success"), propertyService.updateAppartment(appartment, deleteIds.orElse(new ArrayList<>())));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<Object> getProperties(@RequestParam Optional<String> searchQuery, @RequestParam Optional<Integer> pageNo, @RequestParam Optional<Boolean> countRequired, @RequestParam Optional<Boolean> allPropwithMeta) {
+		Map<String, Object> map=new HashMap<>();
+		APIRequestResponse response;
+		if(allPropwithMeta.orElse(false)) {
+			response=Utils.getApiRequestResponse("", propertyService.getAllPropertiesWithMetaData());
+		}else {
+			map.put("propertylist", propertyService.getAllProperties(searchQuery.orElse(null), pageNo.orElse(null)));
+			if(countRequired.orElse(false)) {
+				map.put("count", propertyService.getPropertiesCount(searchQuery.orElse(null)));
+			}
+			response=Utils.getApiRequestResponse("", map);
+		}
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/house/{propertyId}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getHouseDetails(@PathVariable Long propertyId) {
+		APIRequestResponse response=Utils.getApiRequestResponse("", propertyService.getHouseDetails(propertyId));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/appartment/{propertyId}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getAppartmentDetails(@PathVariable Long propertyId) {
+		APIRequestResponse response=Utils.getApiRequestResponse("", propertyService.getApartmentDetails(propertyId));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	} 
 }

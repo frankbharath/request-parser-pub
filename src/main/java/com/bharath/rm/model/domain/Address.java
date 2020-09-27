@@ -11,73 +11,45 @@ package com.bharath.rm.model.domain;
  */
 public class Address {
 	
-	/** The propertyid. */
-	private Long propertyid;
-	
 	/** The line 1. */
-	private String line_1;
+	private String addressline_1;
 	
 	/** The line 2. */
-	private String line_2;
+	private String addressline_2;
 	
 	/** The city. */
 	private String city;
 	
-	/** The postalcode. */
-	private Long postalcode;
+	/** The postal. */
+	private String postal;
+	
 	
 	/**
-	 * Gets the propertyid.
-	 *
-	 * @return the propertyid
+	 * @return the addressline_1
 	 */
-	public Long getPropertyid() {
-		return propertyid;
-	}
-	
-	/**
-	 * Sets the propertyid.
-	 *
-	 * @param propertyid the new propertyid
-	 */
-	public void setPropertyid(Long propertyid) {
-		this.propertyid = propertyid;
+	public String getAddressline_1() {
+		return addressline_1;
 	}
 
 	/**
-	 * Gets the line 1.
-	 *
-	 * @return the line 1
+	 * @param addressline_1 the addressline_1 to set
 	 */
-	public String getLine_1() {
-		return line_1;
+	public void setAddressline_1(String addressline_1) {
+		this.addressline_1 = addressline_1;
 	}
 
 	/**
-	 * Sets the line 1.
-	 *
-	 * @param line_1 the new line 1
+	 * @return the addressline_2
 	 */
-	public void setLine_1(String line_1) {
-		this.line_1 = line_1;
+	public String getAddressline_2() {
+		return addressline_2;
 	}
 
 	/**
-	 * Gets the line 2.
-	 *
-	 * @return the line 2
+	 * @param addressline_2 the addressline_2 to set
 	 */
-	public String getLine_2() {
-		return line_2;
-	}
-
-	/**
-	 * Sets the line 2.
-	 *
-	 * @param line_2 the new line 2
-	 */
-	public void setLine_2(String line_2) {
-		this.line_2 = line_2;
+	public void setAddressline_2(String addressline_2) {
+		this.addressline_2 = addressline_2;
 	}
 
 	/**
@@ -99,20 +71,17 @@ public class Address {
 	}
 
 	/**
-	 * Gets the postalcode.
-	 *
-	 * @return the postalcode
+	 * @return the postal
 	 */
-	public Long getPostalcode() {
-		return postalcode;
+	public String getPostal() {
+		return postal;
 	}
 
 	/**
-	 * Sets the postalcode.
-	 *
-	 * @param postalcode the new postalcode
+	 * @param postal the postal to set
 	 */
-	public void setPostalcode(Long postalcode) {
-		this.postalcode = postalcode;
+	public void setPostal(String postal) {
+		this.postal = postal;
 	}
+
 }

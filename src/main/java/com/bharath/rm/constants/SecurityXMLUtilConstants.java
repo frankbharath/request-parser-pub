@@ -19,6 +19,7 @@ public class SecurityXMLUtilConstants {
 	public static final String REQUIRED="required";
 	public static final String TYPE="type";
 	public static final String OBJECT="object";
+	public static final String LIST="list";
 	public static final String ARRAY="array";
 	public static final String URL="url";
 	public static final String URLS="urls";

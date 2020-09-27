@@ -28,4 +28,7 @@ public class RM_PropertyDetails {
 	
 	/** The Constant RENT. */
 	public static final String RENT="rent";
+	
+	/** The Constant OCCUPIED. */
+	public static final String OCCUPIED="occupied";
 }

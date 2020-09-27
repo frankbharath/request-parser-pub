@@ -16,12 +16,18 @@ body {
 .bgcolorlightgrey {
     background-color: #f3f3f3;
 }
+.imgdisabledfill{
+	fill:#c7c6c6
+}
+.cursordisabled {
+  cursor: not-allowed;
+}
 .basic-drop-shadow {
 	box-shadow: 0 0 10px;
 	height: 350px;
 	width:30%;
 }
-html, body, div, input, span, ul, li, button {
+html, body, div, input, span, ul, li, button, p, tr {
     margin: 0;
     padding: 0;
     border: 0;
@@ -62,6 +68,7 @@ input, select, textarea, button{font-family:inherit;}
 .Padding-horizontal--40{padding-right:40px;padding-left:40px}
 .Padding-vertical--10{padding-top: 10px;padding-bottom: 10px;}
 .Padding-vertical--5{padding-top: 5px;padding-bottom: 5px;}
+.Padding-vertical--15{padding-top: 15px;padding-bottom: 15px;}
 .Padding-bottom--32{padding-bottom:32px}
 .Text-fontSize--20 {font-size: 20px;}
 .Text-color--dark {color: #1a1f36;}
@@ -91,6 +98,10 @@ input, select, textarea, button{font-family:inherit;}
 .PressableCore-base span.errormessage{
 	display:none;
 }
+select.inputbox{
+	width:100%;
+	background-color: #f7fafc;
+}
 .inputbox{
 	border: 0;
 	border-radius: 4px;
@@ -99,7 +110,7 @@ input, select, textarea, button{font-family:inherit;}
 	width: 96%;
 	padding-left: 5px;
 }
-input.inputbox:focus{
+input.inputbox:focus, select.inputbox:focus{
 	box-shadow: 0 0 5px #6994b9;
     border-color: #6994b9;
 }
@@ -349,7 +360,7 @@ html.db-FlatChromeUI .db-TopNav {
     padding: 5px 32px;
     width: 100%;
 }
-.db-SuggestionInput-input:focus{
+.db-SuggestionInput-input:focus, select{
     outline: none;
 }
 .db-SuggestionInput-input::placeholder {
@@ -384,7 +395,7 @@ html.db-FlatChromeUI .db-TopNav {
 .pagination-panel {
     float: right;
     margin-top: 14px;
-    margin-right: 35px;
+    width:200px
 }
 .m-t-3 {
     position: relative;
@@ -404,6 +415,10 @@ html.db-FlatChromeUI .db-TopNav {
 .svg18{
 	height: 18px;
     width: 18px;
+}
+.svg15{
+	height:15px;
+    width: 15px;
 }
 .margintopleft5{
 	margin-top: 5px;
@@ -429,22 +444,22 @@ html.db-FlatChromeUI .db-TopNav {
     font-size: 1.05rem;
     font-weight: bold;
 }
-tr:nth-child(6n+1) .card-view-list-no-image{
+tr:nth-child(6n+1) .card-view-list-no-image, .propertydetailname_0{
 	background-color: #fd9a02;
 }
-tr:nth-child(6n+2) .card-view-list-no-image{
+tr:nth-child(6n+2) .card-view-list-no-image, .propertydetailname_1{
 	background-color: #d0c952;
 }
-tr:nth-child(6n+3) .card-view-list-no-image{
+tr:nth-child(6n+3) .card-view-list-no-image, .propertydetailname_2{
 	background-color: #5ea5e6;
 }
-tr:nth-child(6n+4) .card-view-list-no-image{
+tr:nth-child(6n+4) .card-view-list-no-image, .propertydetailname_3{
 	background-color: #f4657a;
 }
-tr:nth-child(6n+5) .card-view-list-no-image{
+tr:nth-child(6n+5) .card-view-list-no-image, .propertydetailname_4{
 	background-color: #7acc9f;
 }
-tr:nth-child(6n+6) .card-view-list-no-image{
+tr:nth-child(6n+6) .card-view-list-no-image, .propertydetailname_5{
 	background-color: #d27dd7;
 }
 .oversel {
@@ -459,7 +474,12 @@ tr:nth-child(6n+6) .card-view-list-no-image{
 #propertylist .settabrow:hover .propertyicons{
 	 display:block;
 }
-
+.propertylist{
+	float: left;
+	width: 100%;
+	/*overflow-y: scroll;
+	max-height: 74vh;*/
+}
 .propertyicons{
 	float:right;
 	margin-top: 15px;
@@ -489,10 +509,12 @@ tr:nth-child(6n+6) .card-view-list-no-image{
 .property-details-sub-title{
     font-size: 0.75rem;
     margin-top: 1px;
+    display: block;
 }
 .property-detail-page-list-scroll{
 	clear: both;
-	padding-top: 20px;
+	padding: 20px;
+    background-color: white;
 }
 .selected-tab{
 	background-color:#ffffff;
@@ -549,7 +571,7 @@ tr:nth-child(6n+6) .card-view-list-no-image{
     background-color: #f7fafc;
     padding: 30px;
     max-height: 513px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .modal-panel-footer{
 	padding: 10px 15px 10px;
@@ -636,3 +658,36 @@ tr:nth-child(6n+6) .card-view-list-no-image{
     50% { margin-left: 25%; margin-right: 0%; }
     100% { margin-left: 100%; margin-right: 0; }
   }
+  
+.fadeIn.ng-hide-add,
+.fadeIn.ng-hide-remove {
+    -webkit-transition : 1s ease-in-out opacity;
+    -moz-transition    : 1s ease-in-out opacity;
+    -ms-transition     : 1s ease-in-out opacity;
+    -o-transition      : 1s ease-in-out opacity;
+    transition         : 1s ease-in-out opacity;
+    opacity            : 1;
+}
+
+.fadeIn.ng-hide {
+    opacity : 0;
+}
+.unitinfo{
+	float: left;
+	width: 33%;
+}
+.md-calendar-day-header th{
+	padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    height: 0px !important;
+}
+#tenantlist tbody {
+    display:block;
+    height:68vh;
+    overflow:auto;
+}
+#tenantlist thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}

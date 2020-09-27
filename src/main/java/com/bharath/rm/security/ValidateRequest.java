@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.security.SecurityXMLConfig;
+import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.constants.SecurityXMLUtilConstants;
@@ -56,7 +57,11 @@ public class ValidateRequest {
 		Enumeration<String> parameterNames=request.getParameterNames();
 		while (parameterNames.hasMoreElements()) {
 			String paramName = parameterNames.nextElement();
-			data.put(paramName, request.getParameter(paramName));
+			if(request.getParameterValues(paramName).length>1) {
+				data.put(paramName, String.join(",", request.getParameterValues(paramName)));
+			}else {
+				data.put(paramName, request.getParameter(paramName));
+			}
 		}
 		validateParameters(data,url.getParameters());
 	}
@@ -116,7 +121,15 @@ public class ValidateRequest {
 							throw new URLException(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
 					    }
 					}else {
-						validateParam(parameter, data.get(paramName).toString());
+						String value=data.get(paramName).toString();
+						if(SecurityXMLUtilConstants.LIST.equals(parameter.getType())) {
+							String[] splitValues=value.split(",");
+							for(String splitValue:splitValues) {
+								validateParam(parameter, splitValue);
+							}
+						}else {
+							validateParam(parameter, value);
+						}
 					}
 				}
 			}else {

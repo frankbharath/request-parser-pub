@@ -15,7 +15,6 @@ import com.bharath.rm.model.domain.Address;
 import com.bharath.rm.model.domain.Appartment;
 import com.bharath.rm.model.domain.House;
 import com.bharath.rm.model.domain.PropertyDetails;
-import com.bharath.rm.model.domain.PropertyType;
 import com.bharath.rm.model.domain.AppartmentPropertyDetails;
 
 /**
@@ -37,39 +36,49 @@ public class PropertyArgumentResolver implements HandlerMethodArgumentResolver {
 		
 		JSONObject addressDetail=new JSONObject(webRequest.getParameter("address"));
 		Address address=new Address();
-		address.setLine_1(addressDetail.getString("line_1"));
-		address.setLine_2(addressDetail.getString("line_2"));
+		address.setAddressline_1(addressDetail.getString("line_1"));
+		address.setAddressline_2(addressDetail.getString("line_2"));
 		address.setCity(addressDetail.getString("city"));
-		address.setPostalcode(addressDetail.getLong("postalcode"));
-		PropertyType type=new PropertyType();
-		type.setPropertytype(webRequest.getParameter("propertytype"));
+		address.setPostal(addressDetail.getString("postalcode"));
 		
 		if(parameter.getParameterType().equals(House.class)) {
 			House house=new House();
 			house.setUserid(1l);
-			house.setName(webRequest.getParameter("name"));
-			house.setCreationtime(System.currentTimeMillis());
+			house.setPropertyname(webRequest.getParameter("name"));
 			house.setAddress(address);
-			house.setType(type);
+			house.setPropertytype(webRequest.getParameter("propertytype"));
 			JSONObject propertyDetail=new JSONObject(webRequest.getParameter("propertydetails"));
 			PropertyDetails details=new PropertyDetails();
 			details.setArea(propertyDetail.getInt("area"));
 			details.setCapacity(propertyDetail.getInt("capacity"));
 			details.setRent(propertyDetail.getInt("rent"));
 			house.setPropertydetails(details);
+			if(webRequest.getParameter("propertyid")!=null) {
+				house.setPropertyid(Long.parseLong(webRequest.getParameter("propertyid")));
+				details.setPropertydetailsid(propertyDetail.getLong("propertydetailsid"));
+			}else {
+				house.setCreationtime(System.currentTimeMillis());
+			}			
 			return house;
 		}else {
 			Appartment appartment=new Appartment();
 			appartment.setUserid(1l);
-			appartment.setName(webRequest.getParameter("name"));
-			appartment.setCreationtime(System.currentTimeMillis());
+			appartment.setPropertyname(webRequest.getParameter("name"));
+			if(webRequest.getParameter("propertyid")!=null) {
+				appartment.setPropertyid(Long.parseLong(webRequest.getParameter("propertyid")));
+			}else {
+				appartment.setCreationtime(System.currentTimeMillis());
+			}			
 			appartment.setAddress(address);
-			appartment.setType(type);
+			appartment.setPropertytype(webRequest.getParameter("propertytype"));
 			JSONArray units=new JSONArray(webRequest.getParameter("units"));
 			List<AppartmentPropertyDetails> unitList=new ArrayList<>();
 			for(int i=0;i<units.length();i++) {
 				JSONObject unitObject=new JSONObject(units.get(i).toString());
 				AppartmentPropertyDetails details=new AppartmentPropertyDetails();
+				if(unitObject.has("propertydetailsid")) {
+					details.setPropertydetailsid(unitObject.getLong("propertydetailsid"));
+				}
 				details.setDoorno(unitObject.getString("doorno"));
 				details.setFloorno(unitObject.getInt("floorno"));
 				details.setArea(unitObject.getInt("area"));

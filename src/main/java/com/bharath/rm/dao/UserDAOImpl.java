@@ -41,7 +41,7 @@ import com.bharath.rm.model.domain.Verification;
 
 public class UserDAOImpl implements UserDAO {
 
-	JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired
 	public UserDAOImpl(JdbcTemplate template) {
@@ -213,4 +213,6 @@ public class UserDAOImpl implements UserDAO {
 				.append(" WHERE ").append(RM_Users.Columns.USERID.getColumnName()).append("=?");
 		return DataAccessUtils.singleResult(jdbcTemplate.queryForList(query.toString(), new Object[]{userId}, String.class));
 	}
+	
+	
 }

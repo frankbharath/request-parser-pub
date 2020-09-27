@@ -10,7 +10,7 @@
 		<table name="rm_users" description="Stores user information">
 			<columns>
 				<column name="userid" type="bigserial" null="false" primary-key="true"/>
-				<column name="email" type="varchar(64)" null="false"/>
+				<column name="email" type="citext" null="false"/>
 				<column name="password" type="varchar(1024)" null="false"/>
 				<column name="creationtime" type="bigint" null="false"/>
 				<column name="verified" type="boolean" null="false"/>
@@ -25,37 +25,18 @@
 				<column name="creationtime" type="bigint" null="false"/>
 			</columns>
 		</table>
-		<table name="rm_stripeusers" description="Stores stripe accouns for an user">
-			<columns>
-				<column name="userid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
-				<column name="stripeid" type="bigint" null="false" unique-key="true"/>
-				<column name="refreshtoken" type="varchar(64)" null="false"/>
-				<column name="accesstoken" type="varchar(64)" null="false"/>
-				<column name="publishablekey" type="varchar(64)" null="false"/>
-			</columns>
-		</table>
-		<table name="rm_propertytype" description="There are two types of properties as of now i) Home ii) Appartment">
-			<columns>
-				<column name="propertytypeid" type="bigserial" null="false" primary-key="true"/>
-				<column name="propertytype" type="varchar(16)" null="false" unique-key="true"/>
-			</columns>
-		</table>
-		<table name="rm_property" description="Stores information about property details such as property name, type">
+		<table name="rm_property" description="Stores information about property details such as property name, type, address">
 			<columns>
 				<column name="propertyid" type="bigserial" null="false" primary-key="true"/>
-				<column name="propertyname" type="varchar(256)" null="false"/>
-				<column name="propertytypeid" type="bigint" null="false" foreign-key="true" reference-table="rm_propertytype" reference-column="propertytypeid"/>
+				<column name="propertyname" type="citext" null="false"/>
+				<column name="propertytype" type="varchar(16)" null="false" allowed-values="HOUSE,APPARTMENT"/>
 				<column name="userid" type="bigint" null="false" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
 				<column name="creationtime" type="bigint" null="false"/>
-			</columns>
-		</table>
-		<table name="rm_propertyaddress" description="Stores address information of each property">
-			<columns>
-				<column name="propertyid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="rm_property" reference-column="propertyid" delete-cascade="true"/>
-				<column name="address_1" type="varchar(128)" null="false"/>
-				<column name="address_2" type="varchar(128)" null="false"/>
-				<column name="ville" type="varchar(64)" null="false"/>
-				<column name="postal" type="bigint" null="false"/>
+				<column name="addressline_1" type="varchar(128)" null="false"/>
+				<column name="addressline_2" type="varchar(128)" null="false"/>
+				<column name="city" type="varchar(64)" null="false"/>
+				<column name="postal" type="varchar(16)" null="false"/>
+				<column name="propertysearch_tsv" type="tsvector" null="true"/>
 			</columns>
 		</table>
 		<table name="rm_propertydetails" description="Stores property information such as area, rent, capacity and so on">
@@ -65,6 +46,7 @@
 				<column name="capacity" type="int" null="false"/>
 				<column name="area" type="float(2)" null="false"/>
 				<column name="rent" type="float(2)" null="false"/>
+				<column name="occupied" type="int" default-value="0"/>
 			</columns>
 		</table>
 		<table name="rm_appartmentpropertydetails" description="Stores appartment such as door number and floor number" inherits="rm_propertydetails">
@@ -72,6 +54,27 @@
 				<column name="propertyid" type="bigint" null="false" foreign-key="true" reference-table="rm_property" reference-column="propertyid" delete-cascade="true"/>
 				<column name="doorno" type="varchar(8)" null="false"/>
 				<column name="floorno" type="int" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_tenant" description="Stores tenants information">
+			<columns>
+				<column name="tenantuserid" type="bigint" null="false" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
+				<column name="tenantid" type="bigserial" null="false" primary-key="true"/>
+				<column name="firstname" type="citext" null="false"/>
+				<column name="lastname" type="citext" null="false"/>
+				<column name="email" type="citext" null="false"/>
+				<column name="dob" type="varchar(64)" null="false"/>
+				<column name="nationality" type="char(3)" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_lease" description="Stores lease information">
+			<columns>
+				<column name="leaseid" type="bigserial" null="false" primary-key="true"/>
+				<column name="leasetenantid" type="bigserial" null="false" foreign-key="true" reference-table="rm_tenant" reference-column="tenantid" delete-cascade="true"/>
+				<column name="tenantspropertydetailid" type="bigint" null="false" foreign-key="true" reference-table="rm_propertydetails" reference-column="propertydetailsid" delete-cascade="true"/>
+				<column name="movein" type="bigint" null="false"/>
+				<column name="moveout" type="bigint" null="false"/>
+				<column name="occupants" type="int" null="false"/>
 			</columns>
 		</table>
 		<!-- table name="bq_group" description="This table helps to group similar question and can be easily used to create a quiz">
@@ -183,10 +186,6 @@
 		<default-value table="rm_usertype">
 			<default-row type="TENANT"/>
 			<default-row type="OWNER"/>
-		</default-value>
-		<default-value table="rm_propertytype">
-			<default-row propertytype="HOUSE"/>
-			<default-row propertytype="APPARTMENT"/>
 		</default-value>
 	</default-values>
 </data-dictionary>
