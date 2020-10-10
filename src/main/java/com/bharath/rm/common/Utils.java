@@ -2,11 +2,12 @@ package com.bharath.rm.common;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -205,7 +206,8 @@ public final class Utils {
 	}
 	
 	public static String getUserEmail() {
-		return RentPalThreadLocal.get("email").toString();
+		//return RentPalThreadLocal.get("email").toString();
+		return "barathkumaras@gmail.com";
 	}
 	
 	public static boolean isAjaxRequest(HttpServletRequest request) {
@@ -213,7 +215,22 @@ public final class Utils {
 	}
 	
 	public static String getDate(Long milliseconds) {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, YYYY");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
 		return simpleDateFormat.format(new Date(milliseconds));
+	}
+	
+	public static Long parseDateToMilliseconds(String date) throws ParseException{
+		return parseDateToMilliseconds(date, "MMM d, yyyy");
+	}
+	
+	public static Long parseDateToMilliseconds(String dateStr, String format) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		sdf.setLenient(false);
+		Date date = sdf.parse(dateStr);
+		return date.getTime();
+	}
+	
+	public static int diffDays(Long startMilliseconds, Long endMilliseconds) {
+		return (int) ((endMilliseconds-startMilliseconds) / (1000*60*60*24));
 	}
 }

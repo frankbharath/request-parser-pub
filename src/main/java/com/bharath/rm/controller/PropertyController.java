@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.dto.APIRequestResponse;
-import com.bharath.rm.model.domain.Appartment;
-import com.bharath.rm.model.domain.House;
+import com.bharath.rm.dto.ApartmentDTO;
+import com.bharath.rm.dto.HouseDTO;
 import com.bharath.rm.service.interfaces.PropertyService;
 
 /**
@@ -48,26 +48,26 @@ public class PropertyController {
 	}
 	
 	@RequestMapping(value = "/house", method = RequestMethod.POST)
-	public ResponseEntity<Object> addHouse(House house) {
-		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addHouse(house));
+	public ResponseEntity<Object> addHouse(HouseDTO houseDTO) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addHouse(houseDTO));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/house", method = RequestMethod.PUT)
-	public ResponseEntity<Object> updateHouse(House house) {
-		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.updated_success"), propertyService.updateHouse(house));
+	public ResponseEntity<Object> updateHouse(HouseDTO houseDTO) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.updated_success"), propertyService.updateHouse(houseDTO));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/appartment", method = RequestMethod.POST)
-	public ResponseEntity<Object> addAppartment(Appartment appartment) {
-		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addAppartment(appartment));
+	public ResponseEntity<Object> addAppartment(ApartmentDTO apartmentDTO) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.added_success"), propertyService.addAppartment(apartmentDTO));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/appartment", method = RequestMethod.PUT)
-	public ResponseEntity<Object> updateAppartment(Appartment appartment, @RequestParam Optional<List<Long>> deleteIds) {
-		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.updated_success"), propertyService.updateAppartment(appartment, deleteIds.orElse(new ArrayList<>())));
+	public ResponseEntity<Object> updateAppartment(ApartmentDTO apartmentDTO, @RequestParam Optional<List<Long>> deleteIds) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.property.updated_success"), propertyService.updateAppartment(apartmentDTO, deleteIds.orElse(new ArrayList<>())));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

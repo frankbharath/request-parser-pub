@@ -1,5 +1,4 @@
 package com.bharath.rm.dto;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class PropertyDetailsDTO.
@@ -18,16 +17,16 @@ public class PropertyDetailsDTO {
 	private Long propertydetailsid;
 	
 	/** The area. */
-	private float area;
+	private Float area;
 	
 	/** The capacity. */
-	private int capacity;
+	private Integer capacity;
 	
 	/** The rent. */
-	private float rent;
+	private Float rent;
 	
 	/** The occupied. */
-	private int occupied;
+	private Integer occupied;
 	
 	/**
 	 * Gets the propertyid.
@@ -79,7 +78,7 @@ public class PropertyDetailsDTO {
 	 *
 	 * @param area the area to set
 	 */
-	public void setArea(float area) {
+	public void setArea(Float area) {
 		this.area = area;
 	}
 	
@@ -97,7 +96,7 @@ public class PropertyDetailsDTO {
 	 *
 	 * @param capacity the capacity to set
 	 */
-	public void setCapacity(int capacity) {
+	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
 	
@@ -115,22 +114,30 @@ public class PropertyDetailsDTO {
 	 *
 	 * @param rent the rent to set
 	 */
-	public void setRent(float rent) {
+	public void setRent(Float rent) {
 		this.rent = rent;
 	}
 
 	/**
 	 * @return the occupied
 	 */
-	public int getOccupied() {
+	public Integer getOccupied() {
 		return occupied;
 	}
 
 	/**
 	 * @param occupied the occupied to set
 	 */
-	public void setOccupied(int occupied) {
+	public void setOccupied(Integer occupied) {
 		this.occupied = occupied;
 	}
+
+	@Override
+	public String toString() {
+		return "PropertyDetailsDTO [propertyid=" + propertyid + ", propertydetailsid=" + propertydetailsid + ", area="
+				+ area + ", capacity=" + capacity + ", rent=" + rent + ", occupied=" + occupied + "]";
+	}
+	
+	
 
 }

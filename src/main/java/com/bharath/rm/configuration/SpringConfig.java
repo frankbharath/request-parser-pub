@@ -27,6 +27,7 @@ import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import com.bharath.rm.dao.UserDAOImpl;
 import com.bharath.rm.dao.interfaces.UserDAO;
+import com.bharath.rm.model.OAuthDetails;
 import com.bharath.rm.payment.StripePayment;
 
 
@@ -67,6 +68,12 @@ public class SpringConfig  {
 	@ConfigurationProperties("spring.datasource")
 	public DataSourceProperties getDatasourceProperties() {
 	    return new DataSourceProperties();
+	}
+	
+	@Bean
+	@ConfigurationProperties("spring.security.oauth2")
+	public OAuthDetails getOAuthDetails() {
+	    return new OAuthDetails();
 	}
 	
 	/**

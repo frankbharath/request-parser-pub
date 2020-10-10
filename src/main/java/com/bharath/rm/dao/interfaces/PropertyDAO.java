@@ -3,15 +3,13 @@ package com.bharath.rm.dao.interfaces;
 import java.util.HashMap;
 import java.util.List;
 
-import com.bharath.rm.dto.ApartmentDTO;
-import com.bharath.rm.dto.ApartmentPropertyDetailDTO;
-import com.bharath.rm.dto.HouseDTO;
-import com.bharath.rm.dto.PropertyDTO;
-import com.bharath.rm.dto.PropertyDetailsDTO;
-import com.bharath.rm.model.domain.AppartmentPropertyDetails;
+import com.bharath.rm.model.domain.Apartment;
+import com.bharath.rm.model.domain.ApartmentPropertyDetails;
+import com.bharath.rm.model.domain.House;
 import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface PropertyDAO.
  *
@@ -61,7 +59,7 @@ public interface PropertyDAO {
 	 *
 	 * @param appartmentPropertyDetails the appartment property details
 	 */
-	public void addAppartmentDetailsToProperty(List<AppartmentPropertyDetails> appartmentPropertyDetails);
+	public void addAppartmentDetailsToProperty(List<ApartmentPropertyDetails> appartmentPropertyDetails, Long propertyId);
 	
 	/**
 	 * Gets the house.
@@ -70,7 +68,7 @@ public interface PropertyDAO {
 	 * @param propertyId the property id
 	 * @return the house
 	 */
-	public HouseDTO getHouse(Long userId, Long propertyId);
+	public House getHouse(Long userId, Long propertyId);
 	
 	/**
 	 * Gets the all properties.
@@ -80,7 +78,7 @@ public interface PropertyDAO {
 	 * @param pageNo the page no
 	 * @return the all properties
 	 */
-	public List<PropertyDTO> getAllProperties(Long userId, String searchQuery, Integer pageNo);
+	public List<Property> getAllProperties(Long userId, String searchQuery, Integer pageNo);
 	
 	/**
 	 * Gets the all properties.
@@ -91,7 +89,7 @@ public interface PropertyDAO {
 	 * @param allProperties the all properties
 	 * @return the all properties
 	 */
-	public List<PropertyDTO> getAllProperties(Long userId, String searchQuery, Integer pageNo, boolean allProperties);
+	public List<Property> getAllProperties(Long userId, String searchQuery, Integer pageNo, boolean allProperties);
 	
 	/**
 	 * Gets the properties count.
@@ -109,7 +107,7 @@ public interface PropertyDAO {
 	 * @param propertyId the property id
 	 * @return the appartment
 	 */
-	public ApartmentDTO getAppartment(Long userId, Long propertyId);
+	public Apartment getAppartment(Long userId, Long propertyId);
 	
 	/**
 	 * Gets the apartment units.
@@ -117,7 +115,7 @@ public interface PropertyDAO {
 	 * @param propertyId the property id
 	 * @return the apartment units
 	 */
-	public List<ApartmentPropertyDetailDTO> getApartmentUnits(Long propertyId);
+	public List<ApartmentPropertyDetails> getApartmentUnits(Long propertyId);
 	
 	/**
 	 * Delete property.
@@ -154,7 +152,7 @@ public interface PropertyDAO {
 	 *
 	 * @param appartmentPropertyDetails the appartment property details
 	 */
-	public void updateAppartmentDetailsToProperty(List<AppartmentPropertyDetails> appartmentPropertyDetails);
+	public void updateAppartmentDetailsToProperty(List<ApartmentPropertyDetails> appartmentPropertyDetails, Long propertyId);
 	
 	/**
 	 * Property exists.
@@ -191,7 +189,7 @@ public interface PropertyDAO {
 	 * @param propertyIds the property ids
 	 * @return the house details
 	 */
-	public HashMap<Long, PropertyDetailsDTO> getHouseDetails(List<Long> propertyIds);
+	public HashMap<Long, PropertyDetails> getHouseDetails(List<Long> propertyIds);
 	
 	/**
 	 * Gets the apartment units.
@@ -199,7 +197,7 @@ public interface PropertyDAO {
 	 * @param propertyIds the property ids
 	 * @return the apartment units
 	 */
-	public HashMap<Long, List<ApartmentPropertyDetailDTO>> getApartmentUnits(List<Long> propertyIds);
+	public HashMap<Long, List<ApartmentPropertyDetails>> getApartmentUnits(List<Long> propertyIds);
 	
 	/**
 	 * Gets the property details.
@@ -207,7 +205,7 @@ public interface PropertyDAO {
 	 * @param propertyDetailsId the property details id
 	 * @return the property details
 	 */
-	public PropertyDetailsDTO getPropertyDetails(Long propertyDetailsId);
+	public PropertyDetails getPropertyDetails(Long propertyDetailsId);
 	
 	/**
 	 * Update property occupancy.
@@ -216,4 +214,26 @@ public interface PropertyDAO {
 	 * @param occupants the occupants
 	 */
 	public void updatePropertyOccupancy(Long propertyDetailsId, int occupants);
+
+	/**
+	 * Gets the property.
+	 *
+	 * @param userId the user id
+	 * @param propertyId the property id
+	 * @return the property
+	 */
+	public Property getProperty(Long userId, Long propertyId);
+
+	/**
+	 * Gets the apartment unit.
+	 *
+	 * @param propertyId the property id
+	 * @param propertyDetailId the property detail id
+	 * @return the apartment unit
+	 */
+	public ApartmentPropertyDetails getApartmentUnit(Long propertyId, Long propertyDetailId);
+
+	public HashMap<Long, Property> getAllPropertiesForPropertyDetails(Long userId, List<Long> propertyDetailsId);
+
+	
 }

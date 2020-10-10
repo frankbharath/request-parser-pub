@@ -10,7 +10,7 @@
 		<table name="rm_users" description="Stores user information">
 			<columns>
 				<column name="userid" type="bigserial" null="false" primary-key="true"/>
-				<column name="email" type="citext" null="false"/>
+				<column name="email" type="varchar(256)" null="false"/>
 				<column name="password" type="varchar(1024)" null="false"/>
 				<column name="creationtime" type="bigint" null="false"/>
 				<column name="verified" type="boolean" null="false"/>
@@ -28,7 +28,7 @@
 		<table name="rm_property" description="Stores information about property details such as property name, type, address">
 			<columns>
 				<column name="propertyid" type="bigserial" null="false" primary-key="true"/>
-				<column name="propertyname" type="citext" null="false"/>
+				<column name="propertyname" type="varchar(64)" null="false"/>
 				<column name="propertytype" type="varchar(16)" null="false" allowed-values="HOUSE,APPARTMENT"/>
 				<column name="userid" type="bigint" null="false" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
 				<column name="creationtime" type="bigint" null="false"/>
@@ -49,9 +49,9 @@
 				<column name="occupied" type="int" default-value="0"/>
 			</columns>
 		</table>
-		<table name="rm_appartmentpropertydetails" description="Stores appartment such as door number and floor number" inherits="rm_propertydetails">
+		<table name="rm_apartmentpropertydetails" description="Stores apartment such as door number and floor number">
 			<columns>
-				<column name="propertyid" type="bigint" null="false" foreign-key="true" reference-table="rm_property" reference-column="propertyid" delete-cascade="true"/>
+				<column name="apartmentpropertydetailsid" type="bigint" null="false" unique-key="true" foreign-key="true" reference-table="rm_propertydetails" reference-column="propertydetailsid" delete-cascade="true"/>
 				<column name="doorno" type="varchar(8)" null="false"/>
 				<column name="floorno" type="int" null="false"/>
 			</columns>
@@ -60,11 +60,17 @@
 			<columns>
 				<column name="tenantuserid" type="bigint" null="false" foreign-key="true" reference-table="rm_users" reference-column="userid" delete-cascade="true"/>
 				<column name="tenantid" type="bigserial" null="false" primary-key="true"/>
-				<column name="firstname" type="citext" null="false"/>
-				<column name="lastname" type="citext" null="false"/>
-				<column name="email" type="citext" null="false"/>
+				<column name="firstname" type="varchar(128)" null="false"/>
+				<column name="lastname" type="varchar(128)" null="false"/>
+				<column name="email" type="varchar(128)" null="false"/>
 				<column name="dob" type="varchar(64)" null="false"/>
 				<column name="nationality" type="char(3)" null="false"/>
+			</columns>
+		</table>
+		<table name="rm_contractstatus" description="Stores contract status i) NOCONTRACT, ii) INITIATED, iii) OWNERSIGNED, iv) TENANTSIGNED, v) TERMINATED">
+			<columns>
+				<column name="contractstatusid" type="bigserial" null="false" primary-key="true"/>
+				<column name="contractstatus" type="varchar(16)" null="false" unique-key="true"/>
 			</columns>
 		</table>
 		<table name="rm_lease" description="Stores lease information">
@@ -75,8 +81,26 @@
 				<column name="movein" type="bigint" null="false"/>
 				<column name="moveout" type="bigint" null="false"/>
 				<column name="occupants" type="int" null="false"/>
+				<column name="rent" type="float(2)" null="false"/>
+				<column name="contractid" type="varchar(32)" null="true"/>
+				<column name="statusid" type="bigint" foreign-key="true" reference-table="rm_contractstatus" reference-column="contractstatusid" delete-cascade="true" null="false"/>
 			</columns>
 		</table>
+		<!--table name="rm_leaseaudit" description="Stores past lease information">
+			<columns>
+				<column name="rm_leaseaudit" type="bigserial" null="false" primary-key="true"/>
+				<column name="firstname" type="varchar(128)" null="false"/>
+				<column name="lastname" type="varchar(128)" null="false"/>
+				<column name="email" type="varchar(128)" null="false"/>
+				<column name="dob" type="varchar(64)" null="false"/>
+				<column name="nationality" type="char(3)" null="false"/>
+				<column name="addressline_1" type="varchar(128)" null="false"/>
+				<column name="addressline_2" type="varchar(128)" null="false"/>
+				<column name="city" type="varchar(64)" null="false"/>
+				<column name="postal" type="varchar(16)" null="false"/>
+				<column name="contractid" type="bigint"/>
+			</columns>
+		</table-->
 		<!-- table name="bq_group" description="This table helps to group similar question and can be easily used to create a quiz">
 			<columns>
 				<column name="groupid" type="bigserial" null="false" primary-key="true"/>
@@ -186,6 +210,13 @@
 		<default-value table="rm_usertype">
 			<default-row type="TENANT"/>
 			<default-row type="OWNER"/>
+		</default-value>
+		<default-value table="rm_contractstatus">
+			<default-row contractstatus="NOCONTRACT"/>
+			<default-row contractstatus="INITIATED"/>
+			<default-row contractstatus="OWNERSIGNED"/>
+			<default-row contractstatus="TENANTSIGNED"/>
+			<default-row contractstatus="TERMINATED"/>
 		</default-value>
 	</default-values>
 </data-dictionary>

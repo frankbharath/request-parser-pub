@@ -27,7 +27,16 @@ public class Lease {
 	private Long moveout;
 	
 	/** The occupants. */
-	private int occupants;
+	private Integer occupants;
+	
+	/** The rent. */
+	private float rent;
+	
+	/** The contractid. */
+	private String contractid;
+	
+	/** The status. */
+	private ContractStatus contractstatus;
 	
 	/**
 	 * Gets the leaseid.
@@ -136,4 +145,56 @@ public class Lease {
 	public void setOccupants(int occupants) {
 		this.occupants = occupants;
 	}
+
+	/**
+	 * @return the rent
+	 */
+	public float getRent() {
+		return rent;
+	}
+
+	/**
+	 * @param rent the rent to set
+	 */
+	public void setRent(float rent) {
+		this.rent = rent;
+	}
+
+	/**
+	 * Gets the contractid.
+	 *
+	 * @return the contractid
+	 */
+	public String getContractid() {
+		return contractid;
+	}
+
+	/**
+	 * Sets the contractid.
+	 *
+	 * @param contractid the contractid to set
+	 */
+	public void setContractid(String contractid) {
+		this.contractid = contractid;
+	}
+
+	/**
+	 * Gets the contractstatus.
+	 *
+	 * @return the contractstatus
+	 */
+	public ContractStatus getContractstatus() {
+		return contractstatus;
+	}
+
+	/**
+	 * Sets the contractstatus.
+	 *
+	 * @param contractstatus the contractstatus to set
+	 */
+	public void setContractstatus(ContractStatus contractstatus) {
+		this.contractstatus = contractstatus;
+	}
+
+	
 }

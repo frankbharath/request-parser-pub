@@ -4,7 +4,7 @@
 	var stateParams={
 		totalProperties:0
 	}
-	app.controller("PropertyCtrl", ["$state", "resolvedProperties", "$stateParams", "PropertyDataServiceFactory","constants",'$cacheFactory', function($state, resolvedProperties, $stateParams, PropertyDataServiceFactory, constants, $cacheFactory) {
+	app.controller("PropertyCtrl", ["$state", "resolvedProperties", "$stateParams", "PropertyDataServiceFactory","constants", function($state, resolvedProperties, $stateParams, PropertyDataServiceFactory, constants) {
 		var vm = this;
 		vm.properties=[];
 		vm.hideAddProperty = true;
@@ -92,7 +92,6 @@
 		vm.deleteProperty=function(index){
 			PropertyDataServiceFactory.delete({"propertyIds":vm.properties[index].propertyid}).$promise
 			.then(function(res) {
-				$cacheFactory.get('property').remove('/api/property?allPropwithMeta=true');
 				$state.go("properties", {"countRequired":true}, {reload: true});
 			}).catch(angular.noop);
 		}
@@ -110,7 +109,6 @@
 						vm.currentPage--;
 					}
 				}
-				$cacheFactory.get('property').remove('/api/property?allPropwithMeta=true');
 				$state.go("properties", {"countRequired":true, "pageNo":vm.currentPage}, {reload: true});
 			}).catch(angular.noop);
 		}
@@ -139,7 +137,7 @@
 		}
 	}]);
 
-	app.controller("AddPropertyCtrl", ["$state", "constants", "PropertyDataServiceFactory",'$cacheFactory', function($state, constants, PropertyDataServiceFactory, $cacheFactory) {
+	app.controller("AddPropertyCtrl", ["$state", "constants", "PropertyDataServiceFactory", function($state, constants, PropertyDataServiceFactory) {
 		var vm = this;
 		vm.constants = constants;
 		vm.type = constants.HOUSETYPE.HOUSE;
@@ -186,13 +184,11 @@
 		vm.submit = function() {
 			if (vm.form.$valid) {
 				var payload = new FormData();
-				payload.append("name", vm.propertyname);
-				var address={};
-				address.line_1=vm.address_1;
-				address.line_2=vm.address_2;
-				address.postalcode=vm.postalcode;
-				address.city=vm.city;
-				payload.append("address", JSON.stringify(address));
+				payload.append("propertyname", vm.propertyname);
+				payload.append("addressline_1", vm.address_1);
+				payload.append("addressline_2", vm.address_2);
+				payload.append("postal", vm.postalcode);
+				payload.append("city", vm.city);
 				payload.append("propertytype", vm.type);
 				if (vm.type === constants.HOUSETYPE.APPARTMENT) {
 					var units = [];
@@ -208,7 +204,6 @@
 					payload.append("units", JSON.stringify(units));
 					PropertyDataServiceFactory.create({ type: 'appartment' }, payload).$promise
 					.then(function(res) {
-						$cacheFactory.get('property').remove('/api/property?allPropwithMeta=true');
 						$state.go("properties", {"countRequired":true}, {reload: true});
 					}).catch(angular.noop);
 				} else {
@@ -219,14 +214,13 @@
 					payload.append("propertydetails", JSON.stringify(propertyDetails));
 					PropertyDataServiceFactory.create({ type: 'house' }, payload).$promise
 					.then(function(res) {
-						$cacheFactory.get('property').remove('/api/property?allPropwithMeta=true');
 						$state.go("properties", {"countRequired":true}, {reload: true});
 					}).catch(angular.noop);
 				}
 			}
 		}
 	}]);
-	app.controller("EditPropertyCtrl", ["$state","resolvedProperty", "constants", "PropertyDataServiceFactory",'$cacheFactory', function($state, resolvedProperty, constants, PropertyDataServiceFactory, $cacheFactory) {
+	app.controller("EditPropertyCtrl", ["$state","resolvedProperty", "constants", "PropertyDataServiceFactory", function($state, resolvedProperty, constants, PropertyDataServiceFactory) {
 		var vm=this;
 		vm.constants = constants;
 		vm.property={};
@@ -252,14 +246,12 @@
 		}
 		vm.submit = function() {
 			var payload = new FormData();
-			payload.append("name", vm.property.propertyname);
-			var address={};
-			address.line_1=vm.property.address.addressline_1;
-			address.line_2=vm.property.address.addressline_2;
-			address.postalcode=vm.property.address.postal;
-			address.city=vm.property.address.city;
+			payload.append("propertyname", vm.property.propertyname);
 			payload.append("propertyid", vm.property.propertyid);
-			payload.append("address", JSON.stringify(address));
+			payload.append("addressline_1", vm.property.addressline_1);
+			payload.append("addressline_2", vm.property.addressline_2);
+			payload.append("postal", vm.property.postal);
+			payload.append("city", vm.property.city);
 			payload.append("propertytype", vm.property.propertytype);
 			if (vm.form.$valid) {
 				if (vm.property.propertytype === constants.HOUSETYPE.APPARTMENT) {
@@ -280,7 +272,6 @@
 					}
 					PropertyDataServiceFactory.update({ type: 'appartment' }, payload).$promise
 					.then(function(res) {
-						$cacheFactory.get('property').remove('/api/property?allPropwithMeta=true');
 						$state.go("properties", {"countRequired":true}, {reload: true});
 					}).catch(angular.noop);
 				}else{
@@ -292,7 +283,6 @@
 					payload.append("propertydetails", JSON.stringify(propertyDetails));
 					PropertyDataServiceFactory.update({ type: 'house' }, payload).$promise
 					.then(function(res) {
-						$cacheFactory.get('property').remove('/api/property?allPropwithMeta=true');
 						$state.go("properties", {"countRequired":true}, {reload: true});
 					}).catch(angular.noop);
 				}

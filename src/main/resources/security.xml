@@ -99,6 +99,12 @@
 				<parameter name="confirmpassword" regex="password" required="true"/>
 			</parameters>
 		</url>
+		<url value="/api/settings" method="put" authentication="false">
+			<parameters>
+				<parameter name="password" regex="password" required="true"/>
+				<parameter name="confirmpassword" regex="password" required="true"/>
+			</parameters>
+		</url>
 		<url value="/api/property" method="get" authentication="false">
 			<parameters>
 				<parameter name="searchQuery" regex="notallowedchars"/>
@@ -109,8 +115,11 @@
 		</url>
 		<url value="/api/property/house" method="post" authentication="false">
 			<parameters>
-				<parameter name="name" regex="notallowedchars" max-length="64" required="true"/>
-				<parameter name="address" type="object" template="addresstemp" required="true"/>
+				<parameter name="propertyname" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_1" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_2" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="postal" regex="postalcode" required="true"/>
+				<parameter name="city" regex="notallowedcharsandnums" max-length="64" required="true"/>
 				<parameter name="propertytype" regex="HOUSE" required="true"/>
 				<parameter name="propertydetails" type="object" template="propertydetailtemp" required="true"/>
 			</parameters>
@@ -118,8 +127,11 @@
 		<url value="/api/property/house" method="put" authentication="false">
 			<parameters>
 				<parameter name="propertyid" regex="naturalnumber" required="true"/>
-				<parameter name="name" regex="notallowedchars" max-length="64" required="true"/>
-				<parameter name="address" type="object" template="addresstemp" required="true"/>
+				<parameter name="propertyname" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_1" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_2" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="postal" regex="postalcode" required="true"/>
+				<parameter name="city" regex="notallowedcharsandnums" max-length="64" required="true"/>
 				<parameter name="propertytype" regex="HOUSE" required="true"/>
 				<parameter name="propertydetails" type="object" template="propertydetailtemp" required="true"/>
 			</parameters>
@@ -127,20 +139,26 @@
 		<url value="/api/property/house/^[0-9]+$" method="get" authentication="false"/>
 		<url value="/api/property/appartment" method="post" authentication="false">
 			<parameters>
-				<parameter name="name" regex="notallowedchars" max-length="64" required="true"/>
-				<parameter name="address" type="object" template="addresstemp" required="true"/>
+				<parameter name="propertyname" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_1" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_2" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="postal" regex="postalcode" required="true"/>
+				<parameter name="city" regex="notallowedcharsandnums" max-length="64" required="true"/>
 				<parameter name="propertytype" regex="APPARTMENT" required="true"/>
 				<parameter name="units" type="array" template="unittemp" required="true"/>
-				<parameter name="deleteIds" type="list" regex="naturalnumber"/>
 			</parameters>
 		</url>
 		<url value="/api/property/appartment" method="put" authentication="false">
 			<parameters>
 				<parameter name="propertyid" regex="naturalnumber" required="true"/>
-				<parameter name="name" regex="notallowedchars" max-length="64" required="true"/>
-				<parameter name="address" type="object" template="addresstemp" required="true"/>
+				<parameter name="propertyname" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_1" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="addressline_2" regex="notallowedchars" max-length="64" required="true"/>
+				<parameter name="postal" regex="postalcode" required="true"/>
+				<parameter name="city" regex="notallowedcharsandnums" max-length="64" required="true"/>
 				<parameter name="propertytype" regex="APPARTMENT" required="true"/>
 				<parameter name="units" type="array" template="unittemp" required="true"/>
+				<parameter name="deleteIds" type="list" regex="naturalnumber"/>
 			</parameters>
 		</url>
 		<url value="/api/property/appartment/^[0-9]+$" method="get" authentication="false"/>
@@ -182,5 +200,32 @@
 			</parameters>
 		</url>
 		<url value="/api/tenant/^[0-9]+$" method="get" authentication="false"/>
+		<url value="/api/tenant/lease/^[0-9]+$" method="get" authentication="false"/>
+		<url value="/api/tenant/lease" method="post" authentication="false">
+			<parameters>
+				<parameter name="leasetenantid" regex="naturalnumber" required="true"/>
+				<parameter name="tenantspropertydetailid" regex="naturalnumber" required="true"/>
+				<parameter name="movein" regex="date" required="true"/>
+				<parameter name="moveout" regex="date" required="true"/>
+				<parameter name="occupants" regex="naturalnumber" required="true"/>
+				<parameter name="propertyType" regex="propertytype" required="true"/>
+				<parameter name="propertyId" regex="naturalnumber" required="true"/>
+				<parameter name="contractReq" regex="boolean"/>
+			</parameters>
+		</url>
+		<url value="/api/tenant/lease" method="put" authentication="false">
+			<parameters>
+				<parameter name="leaseid" regex="naturalnumber" required="true"/>
+				<parameter name="leasetenantid" regex="naturalnumber" required="true"/>
+				<parameter name="tenantspropertydetailid" regex="naturalnumber" required="true"/>
+				<parameter name="movein" regex="date" required="true"/>
+				<parameter name="moveout" regex="date" required="true"/>
+				<parameter name="occupants" regex="naturalnumber" required="true"/>
+				<parameter name="propertyType" regex="propertytype" required="true"/>
+				<parameter name="propertyId" regex="naturalnumber" required="true"/>
+				<parameter name="contractReq" regex="boolean"/>
+			</parameters>
+		</url>
+		<url value="/api/tenant/lease/^[0-9]+$" method="delete" authentication="false"/>
 	</urls>
 </security>

@@ -2,7 +2,7 @@
 	"use strict";
 	var app=angular.module('rentpal');
 	app.factory('TenantDataServiceFactory', ["$resource", function($resource) {
-		return $resource('/api/tenant/:id', {id: "@id" }, {
+		return $resource('/api/tenant/:lease/:id', {id: "@id", lease:"@lease"}, {
 	        save: {
 	            method: "POST",
 	            transformRequest: angular.identity,

@@ -1,6 +1,6 @@
 package com.bharath.rm.constants.tables;
-// TODO: Auto-generated Javadoc
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class RM_Lease.
  *
@@ -31,4 +31,13 @@ public class RM_Lease {
 	
 	/** The Constant OCCUPANTS. */
 	public static final String OCCUPANTS="occupants";
+	
+	/** The Constant CONTRACTID. */
+	public static final String CONTRACTID="contractid";
+	
+	/** The Constant STATUS. */
+	public static final String STATUSID="statusid";
+	
+	/** The Constant RENT. */
+	public static final String RENT="rent";
 }

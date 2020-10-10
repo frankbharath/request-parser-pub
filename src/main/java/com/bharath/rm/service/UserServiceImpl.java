@@ -1,12 +1,8 @@
 package com.bharath.rm.service;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.mail.MessagingException;
 
-import org.apache.commons.lang3.Validate;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,14 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.Constants;
-import com.bharath.rm.constants.ErrorCodes;
-import com.bharath.rm.constants.SuccessCode;
 import com.bharath.rm.constants.Constants.Tokentype;
 import com.bharath.rm.dao.interfaces.UserDAO;
 import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.exception.APIRequestException;
-import com.bharath.rm.model.Mail;
-import com.bharath.rm.model.domain.UserType;
 import com.bharath.rm.model.domain.User;
 import com.bharath.rm.model.domain.Verification;
 import com.bharath.rm.service.interfaces.UserService;
@@ -132,7 +124,10 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void updatePassword(String token, String password) {
+	public void updatePassword(String token, String password, String confirmPassword) {
+		if(!password.equals(confirmPassword)) {
+			throw new APIRequestException(I18NConfig.getMessage("error.register.password_mismatch"));
+		}
 		Verification verification=userDAO.getVerificationCode(token,Constants.Tokentype.RESET);
 		if(verification==null || verification.getCreationtime()+Constants.EXPIRATIONINTERVAL<System.currentTimeMillis()) {
 			if(verification!=null) {
@@ -143,6 +138,14 @@ public class UserServiceImpl implements UserService {
 			userDAO.deleteVerificationCode(verification);
 			userDAO.updatePassword(verification.getUserid(), passwordEncoder.encode(password));
 		}
+	}
+	
+	@Override
+	public void changePassword(String password, String confirmPassword) {
+		if(!password.equals(confirmPassword)) {
+			throw new APIRequestException(I18NConfig.getMessage("error.register.password_mismatch"));
+		}
+		userDAO.updatePassword(Utils.getUserId(), passwordEncoder.encode(password));
 	}
 	
 	@Override

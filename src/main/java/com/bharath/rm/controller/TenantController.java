@@ -1,6 +1,5 @@
 package com.bharath.rm.controller;
 
-import java.lang.StackWalker.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.dto.APIRequestResponse;
+import com.bharath.rm.dto.LeaseDTO;
 import com.bharath.rm.model.domain.Tenant;
 import com.bharath.rm.service.interfaces.TenantService;
 
@@ -83,6 +84,36 @@ public class TenantController {
 	@GetMapping(value="/{tenantId}")
 	public ResponseEntity<Object> getTenantDetails(@PathVariable Long tenantId) {
 		APIRequestResponse response=Utils.getApiRequestResponse("", tenantService.getTenantInfo(tenantId));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(value="/lease")
+	@ResponseBody
+	public ResponseEntity<Object> createLease(LeaseDTO leaseDTO, @RequestParam String propertyType, @RequestParam Long propertyId, Optional<Boolean> contractReq) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.tenant.lease_added_success"), tenantService.addLease(leaseDTO, propertyType, propertyId, contractReq.orElse(false)));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/lease")
+	@ResponseBody
+	public ResponseEntity<Object> updateLease(LeaseDTO leaseDTO, @RequestParam String propertyType, @RequestParam Long propertyId, Optional<Boolean> contractReq) {
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.tenant.lease_updated_success"), tenantService.updateLease(leaseDTO, propertyType, propertyId, contractReq.orElse(false)));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/lease/{tenantId}")
+	@ResponseBody
+	public ResponseEntity<Object> getAllLeases(@PathVariable Long tenantId){
+		APIRequestResponse response=Utils.getApiRequestResponse("", tenantService.getAllLeasesForTenant(tenantId));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value="/lease/{leaseId}")
+	@ResponseBody
+	public ResponseEntity<Object> deleteLease(@PathVariable Long leaseId){
+		tenantService.deleteLease(leaseId);
+		APIRequestResponse response=Utils.getApiRequestResponse(I18NConfig.getMessage("success.tenant.lease_deleted_success"));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

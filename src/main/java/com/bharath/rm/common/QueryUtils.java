@@ -11,90 +11,104 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.bharath.rm.constants.tables.RM_AppartmentPropertyDetails;
+import com.bharath.rm.constants.tables.RM_ApartmentPropertyDetails;
+import com.bharath.rm.constants.tables.RM_Lease;
 import com.bharath.rm.constants.tables.RM_Property;
 import com.bharath.rm.constants.tables.RM_PropertyDetails;
-import com.bharath.rm.constants.tables.RM_Tenant;
-import com.bharath.rm.dto.ApartmentDTO;
-import com.bharath.rm.dto.ApartmentPropertyDetailDTO;
-import com.bharath.rm.dto.HouseDTO;
-import com.bharath.rm.dto.PropertyDTO;
-import com.bharath.rm.dto.PropertyDetailsDTO;
-import com.bharath.rm.model.domain.Address;
+import com.bharath.rm.model.domain.Apartment;
+import com.bharath.rm.model.domain.ApartmentPropertyDetails;
+import com.bharath.rm.model.domain.ContractStatus;
+import com.bharath.rm.model.domain.House;
+import com.bharath.rm.model.domain.Lease;
+import com.bharath.rm.model.domain.Property;
+import com.bharath.rm.model.domain.PropertyDetails;
 
 public class QueryUtils {
 	
-	public static PropertyDetailsDTO gePropertyDetailsDTO(ResultSet rs) throws SQLException {
-		PropertyDetailsDTO detailsDTO=new PropertyDetailsDTO();
-		detailsDTO.setPropertyid(rs.getLong(RM_PropertyDetails.PROPERTYID));
-		detailsDTO.setPropertydetailsid(rs.getLong(RM_PropertyDetails.PROPERTYDETAILSID));
-		detailsDTO.setArea(rs.getFloat(RM_PropertyDetails.AREA));
-		detailsDTO.setCapacity(rs.getInt(RM_PropertyDetails.CAPACITY));
-		detailsDTO.setRent(rs.getFloat(RM_PropertyDetails.RENT));
-		detailsDTO.setRent(rs.getFloat(RM_PropertyDetails.OCCUPIED));
-		return detailsDTO;
+	public static PropertyDetails getPropertyDetails(ResultSet rs) throws SQLException {
+		PropertyDetails details=new PropertyDetails();
+		details.setPropertyid(rs.getLong(RM_PropertyDetails.PROPERTYID));
+		details.setPropertydetailsid(rs.getLong(RM_PropertyDetails.PROPERTYDETAILSID));
+		details.setArea(rs.getFloat(RM_PropertyDetails.AREA));
+		details.setCapacity(rs.getInt(RM_PropertyDetails.CAPACITY));
+		details.setRent(rs.getFloat(RM_PropertyDetails.RENT));
+		details.setOccupied(rs.getInt(RM_PropertyDetails.OCCUPIED));
+		return details;
 	}
 	
-	public static PropertyDTO getPropertyDTO(ResultSet rs) throws SQLException {
-		PropertyDTO propertyDTO = new PropertyDTO();
-		propertyDTO.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
-		propertyDTO.setPropertyname(rs.getString(RM_Property.PROPERTYNAME));
-		propertyDTO.setUserid(rs.getLong(RM_Property.USERID));
-		propertyDTO.setPropertytype(rs.getString(RM_Property.PROPERTYTYPE));
-		propertyDTO.setCreationtime(Utils.getDate(rs.getLong(RM_Property.CREATIONTIME)));
-		Address address=new Address();
-		address.setAddressline_1(rs.getString(RM_Property.ADDRESSLINE_1));
-		address.setAddressline_2(rs.getString(RM_Property.ADDRESSLINE_2));
-		address.setCity(rs.getString(RM_Property.CITY));
-		address.setPostal(rs.getString(RM_Property.POSTAL));
-		propertyDTO.setAddress(address);
-        return propertyDTO;
+	public static Property getProperty(ResultSet rs) throws SQLException {
+		Property property=new Property();
+		property.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
+		property.setPropertyname(rs.getString(RM_Property.PROPERTYNAME));
+		property.setUserid(rs.getLong(RM_Property.USERID));
+		property.setPropertytype(rs.getString(RM_Property.PROPERTYTYPE));
+		property.setCreationtime(rs.getLong(RM_Property.CREATIONTIME));
+		property.setAddressline_1(rs.getString(RM_Property.ADDRESSLINE_1));
+		property.setAddressline_2(rs.getString(RM_Property.ADDRESSLINE_2));
+		property.setCity(rs.getString(RM_Property.CITY));
+		property.setPostal(rs.getString(RM_Property.POSTAL));
+        return property;
 	}
 	
-	public static HouseDTO getHouseDTO(ResultSet rs) throws SQLException {
-		HouseDTO houseDTO=new HouseDTO();
-		houseDTO.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
-		houseDTO.setPropertyname(rs.getString(RM_Property.PROPERTYNAME));
-		houseDTO.setUserid(rs.getLong(RM_Property.USERID));
-		houseDTO.setPropertytype(rs.getString(RM_Property.PROPERTYTYPE));
-		houseDTO.setCreationtime(Utils.getDate(rs.getLong(RM_Property.CREATIONTIME)));
-		Address address=new Address();
-		address.setAddressline_1(rs.getString(RM_Property.ADDRESSLINE_1));
-		address.setAddressline_2(rs.getString(RM_Property.ADDRESSLINE_2));
-		address.setCity(rs.getString(RM_Property.CITY));
-		address.setPostal(rs.getString(RM_Property.POSTAL));
-		houseDTO.setAddress(address);
-		houseDTO.setDetailsDTO(gePropertyDetailsDTO(rs));
-		return houseDTO;
+	public static House getHouse(ResultSet rs) throws SQLException {
+		House house=new House();
+		house.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
+		house.setPropertyname(rs.getString(RM_Property.PROPERTYNAME));
+		house.setUserid(rs.getLong(RM_Property.USERID));
+		house.setPropertytype(rs.getString(RM_Property.PROPERTYTYPE));
+		house.setCreationtime(rs.getLong(RM_Property.CREATIONTIME));
+		house.setAddressline_1(rs.getString(RM_Property.ADDRESSLINE_1));
+		house.setAddressline_2(rs.getString(RM_Property.ADDRESSLINE_2));
+		house.setCity(rs.getString(RM_Property.CITY));
+		house.setPostal(rs.getString(RM_Property.POSTAL));
+		house.setPropertydetails(getPropertyDetails(rs));
+		return house;
 	}
 	
-	public static ApartmentDTO getApartmentDTO(ResultSet rs) throws SQLException {
-		ApartmentDTO apartmentDTO=new ApartmentDTO();
-		apartmentDTO.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
-		apartmentDTO.setPropertyname(rs.getString(RM_Property.PROPERTYNAME));
-		apartmentDTO.setUserid(rs.getLong(RM_Property.USERID));
-		apartmentDTO.setPropertytype(rs.getString(RM_Property.PROPERTYTYPE));
-		apartmentDTO.setCreationtime(Utils.getDate(rs.getLong(RM_Property.CREATIONTIME)));
-		Address address=new Address();
-		address.setAddressline_1(rs.getString(RM_Property.ADDRESSLINE_1));
-		address.setAddressline_2(rs.getString(RM_Property.ADDRESSLINE_2));
-		address.setCity(rs.getString(RM_Property.CITY));
-		address.setPostal(rs.getString(RM_Property.POSTAL));
-		apartmentDTO.setAddress(address);
-		return apartmentDTO;
+	public static Apartment getApartment(ResultSet rs) throws SQLException {
+		Apartment apartment=new Apartment();
+		apartment.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
+		apartment.setPropertyname(rs.getString(RM_Property.PROPERTYNAME));
+		apartment.setUserid(rs.getLong(RM_Property.USERID));
+		apartment.setPropertytype(rs.getString(RM_Property.PROPERTYTYPE));
+		apartment.setCreationtime(rs.getLong(RM_Property.CREATIONTIME));
+		apartment.setAddressline_1(rs.getString(RM_Property.ADDRESSLINE_1));
+		apartment.setAddressline_2(rs.getString(RM_Property.ADDRESSLINE_2));
+		apartment.setCity(rs.getString(RM_Property.CITY));
+		apartment.setPostal(rs.getString(RM_Property.POSTAL));
+		return apartment;
 	}
 	
-	public static ApartmentPropertyDetailDTO geApartmentPropertyDetailDTO(ResultSet rs) throws SQLException {
-		ApartmentPropertyDetailDTO detailsDTO=new ApartmentPropertyDetailDTO();
-		detailsDTO.setPropertyid(rs.getLong(RM_AppartmentPropertyDetails.PROPERTYID));
-		detailsDTO.setPropertydetailsid(rs.getLong(RM_AppartmentPropertyDetails.PROPERTYDETAILSID));
-		detailsDTO.setArea(rs.getLong(RM_AppartmentPropertyDetails.AREA));
-		detailsDTO.setCapacity(rs.getInt(RM_AppartmentPropertyDetails.CAPACITY));
-		detailsDTO.setRent(rs.getFloat(RM_AppartmentPropertyDetails.RENT));
-		detailsDTO.setDoorno(rs.getString(RM_AppartmentPropertyDetails.DOORNO));
-		detailsDTO.setFloorno(rs.getInt(RM_AppartmentPropertyDetails.FLOORNO));
-		detailsDTO.setOccupied(rs.getInt(RM_AppartmentPropertyDetails.OCCUPIED));
-		return detailsDTO;
+	public static ApartmentPropertyDetails getApartmentPropertyDetail(ResultSet rs) throws SQLException {
+		ApartmentPropertyDetails details=new ApartmentPropertyDetails();
+		PropertyDetails propertyDetails=new PropertyDetails();
+		propertyDetails.setPropertyid(rs.getLong(RM_PropertyDetails.PROPERTYID));
+		propertyDetails.setPropertydetailsid(rs.getLong(RM_PropertyDetails.PROPERTYDETAILSID));
+		propertyDetails.setArea(rs.getFloat(RM_PropertyDetails.AREA));
+		propertyDetails.setCapacity(rs.getInt(RM_PropertyDetails.CAPACITY));
+		propertyDetails.setRent(rs.getFloat(RM_PropertyDetails.RENT));
+		propertyDetails.setOccupied(rs.getInt(RM_PropertyDetails.OCCUPIED));
+		details.setPropertyDetails(propertyDetails);
+		details.setApartmentpropertydetailsid(rs.getLong(RM_PropertyDetails.PROPERTYDETAILSID));
+		details.setDoorno(rs.getString(RM_ApartmentPropertyDetails.DOORNO));
+		details.setFloorno(rs.getInt(RM_ApartmentPropertyDetails.FLOORNO));
+		return details;
+	}
+	
+	public static Lease getLease(ResultSet rs) throws SQLException {
+		Lease lease=new Lease();
+		lease.setContractid(rs.getString(RM_Lease.CONTRACTID));
+		lease.setLeaseid(rs.getLong(RM_Lease.LEASEID));
+		lease.setLeasetenantid(rs.getLong(RM_Lease.LEASETENANTID));
+		lease.setMovein(rs.getLong(RM_Lease.MOVEIN));
+		lease.setMoveout(rs.getLong(RM_Lease.MOVEOUT));
+		lease.setOccupants(rs.getInt(RM_Lease.OCCUPANTS));
+		lease.setRent(rs.getFloat(RM_Lease.RENT));
+		lease.setTenantspropertydetailid(rs.getLong(RM_Lease.TENANTSPROPERTYDETAILID));
+		ContractStatus contractStatus=new ContractStatus();
+		contractStatus.setContractstatusid(rs.getLong(RM_Lease.STATUSID));
+		lease.setContractstatus(contractStatus);
+		return lease;
 	}
 	
 	public static String getInsertQuery(String tableName, List<String> cols) {

@@ -58,52 +58,6 @@
 						</div>
 					</div>
 				</div>
-				<!--div style="margin-top: 20px;">
-					<span class="Text-fontWeight--medium" translate="tenants.selectproperty"></span><br>
-					<div class="PressableCore-base">
-						<select ng-model="addtenant.selectedPropertyIndex" name="property" class="inputbox" style="width:100%;background-color: #f7fafc;"  ng-change="addtenant.propertyChange()" required>
-							<option value="{{$index}}" data-ng-repeat="entry in addtenant.properties">{{entry.propertyname}}</option>
-						</select>
-						<div style="margin-top:5px" ng-show="addtenant.form.$submitted || addtenant.propertyNotAvailable">
-							<span ng-show="addtenant.form.property.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.propertyrequired"></span>
-							<span ng-show="addtenant.propertyNotAvailable" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.propertynotavailable"></span>
-						</div>
-					</div>
-				</div>
-				<div style="margin-top: 20px;" ng-show="addtenant.showSelectUnit">
-					<span class="Text-fontWeight--medium" translate="tenants.selectunit"></span><br>
-					<div class="PressableCore-base">
-						<select ng-model="addtenant.unitIndex" name="unit" class="inputbox" required ng-change="addtenant.unitChange()">
-							<option value="{{$index}}" data-ng-repeat="entry in addtenant.selectedUnits">{{"tenants.unitdesc" | translate:{doorno:entry.doorno, floorno:entry.floorno} }}</option>
-						</select>
-						<div style="margin-top:5px" ng-show="addtenant.form.$submitted || addtenant.unitNotAvailable">
-							<span ng-show="addtenant.form.unit.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.unitrequired"></span>
-							<span ng-show="addtenant.unitNotAvailable" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.unitnotavailable"></span>
-						</div>
-					</div>
-				</div>
-				<div ng-show="addtenant.showLeaseInfo">
-					<div style="margin-top: 20px;">
-						<span class="Text-fontWeight--medium" translate="tenants.leaseperiod"></span><br>
-						<div class="PressableCore-base">
-							<md-datepicker name="movein" ng-model="addtenant.moveindate" md-placeholder="{{'tenants.movein' | translate}}" md-min-date="addtenant.moveinmindate" ng-change="addtenant.moveinchange()" required></md-datepicker>
-							<md-datepicker name="moveout" ng-model="addtenant.moveoutdate" md-placeholder="{{'tenants.moveout' | translate}}" md-min-date="addtenant.moveoutmindate" required></md-datepicker>
-							<div style="margin-top:5px" ng-show="addtenant.form.$submitted">
-								<span ng-show="addtenant.form.movein.$error.required || addtenant.form.moveout.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.leasedaterequired"></span>
-							</div>
-						</div>
-					</div>
-					<div style="margin-top: 20px;">
-						<span class="Text-fontWeight--medium" translate="tenants.occupants"></span><br>
-						<div class="PressableCore-base" ng-class="{'invalid': addtenant.form.occupants.$error.max || (addtenant.form.$submitted && addtenant.form.occupants.$error.required)}">
-							<input type="number" name="occupants" ng-model="addtenant.occupants" placeholder="{{'tenants.numberoftenants' | translate}}" rp-number class="inputbox" style="width: 100%;" max="{{addtenant.maxtenants}}" required>
-							<div style="margin-top:5px" ng-show="addtenant.form.$submitted || addtenant.form.occupants.$error.max">
-								<span ng-show="addtenant.form.occupants.$error.required" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium" translate="tenants.occupantsrequired"></span>
-								<span ng-show="addtenant.form.occupants.$error.max" class="Text-color--red Text-fontSize--13 Text-fontWeight--medium">{{"tenants.maxstay" | translate:{people:addtenant.maxtenants} }}</span>
-							</div>
-						</div>
-					</div>
-				</div-->
 	         </div>
 	          <div class="modal-panel-footer clearfix bg-gray">
 	        	<div align="center">

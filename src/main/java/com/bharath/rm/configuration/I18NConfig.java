@@ -29,7 +29,7 @@ public class I18NConfig implements WebMvcConfigurer  {
 	@Bean("messageSource")
 	public MessageSource messageSource() {
 	    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-	    messageSource.setBasenames("i18n/messages");
+	    messageSource.setBasenames("i18n/messages","i18n/countries");
 	    messageSource.setDefaultEncoding("UTF-8");
 	    messageResource=messageSource;
 	    return messageSource;

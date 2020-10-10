@@ -23,8 +23,9 @@ public interface UserService {
 	public void sendVerificationLinkToUser(long userid, String email) throws MessagingException;
 	public void resetPassword(String email) throws MessagingException;
 	public String getUserEmailForResetToken(String token);
-	public void updatePassword(String token, String password);
+	public void updatePassword(String token, String password, String confirmPassword);
 	public Boolean userVerificationStatus(long userId);
 	public Boolean userCreatedStripeAccount();
 	public String getUserType();
+	public void changePassword(String password, String confirmPassword);
 }

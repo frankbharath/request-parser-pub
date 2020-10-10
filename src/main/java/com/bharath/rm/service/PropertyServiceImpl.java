@@ -5,25 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.transform.impl.AddPropertyTransformer;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bharath.rm.common.Utils;
+import com.bharath.rm.common.DTOModelMapper;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.Constants;
-import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.dao.interfaces.PropertyDAO;
 import com.bharath.rm.dto.ApartmentDTO;
+import com.bharath.rm.dto.ApartmentPropertyDetailDTO;
 import com.bharath.rm.dto.HouseDTO;
 import com.bharath.rm.dto.PropertyDTO;
+import com.bharath.rm.dto.PropertyDetailsDTO;
 import com.bharath.rm.exception.APIRequestException;
-import com.bharath.rm.model.domain.Address;
-import com.bharath.rm.model.domain.Appartment;
-import com.bharath.rm.model.domain.AppartmentPropertyDetails;
+import com.bharath.rm.model.domain.Apartment;
+import com.bharath.rm.model.domain.ApartmentPropertyDetails;
 import com.bharath.rm.model.domain.House;
 import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
@@ -47,31 +44,51 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
 	@Override
-	public HouseDTO addHouse(House house) {
+	public HouseDTO addHouse(HouseDTO houseDTO) {
+		//adding the property to the database
+		House house=DTOModelMapper.houseDTOModelMapper(houseDTO);
 		Long propertyId=addProperty(house);
+		
+		// updating the property id 
 		house.setPropertyid(propertyId);
+		
+		// updating the property id to property details
 		PropertyDetails propertyDetails = house.getPropertydetails();
 		propertyDetails.setPropertyid(propertyId);
-		propertyDetails.setPropertydetailsid(propertyDAO.addPropertyDetails(propertyDetails));
-		return propertyDAO.getHouse(house.getUserid(), house.getPropertyid());
+		
+		// adding the property details to the database
+		Long propertyDetailsId=propertyDAO.addPropertyDetails(propertyDetails);
+		
+		// updating the property details id to property details
+		propertyDetails.setPropertydetailsid(propertyDetailsId);
+	
+		// convert domain model to DTO
+		return DTOModelMapper.houseModelDTOMapper(house);
 	}
 	
 	@Override
-	public ApartmentDTO addAppartment(Appartment appartment) {
-		Long propertyId=addProperty(appartment);
-		appartment.setPropertyid(propertyId);
-		List<AppartmentPropertyDetails> appartmentDetails=appartment.getList();
-		for(AppartmentPropertyDetails appartmentDetail:appartmentDetails) {
-			appartmentDetail.setPropertyid(propertyId);
-		}
-		propertyDAO.addAppartmentDetailsToProperty(appartmentDetails);
-		ApartmentDTO apartmentDTO=propertyDAO.getAppartment(appartment.getUserid(), appartment.getPropertyid());
-		apartmentDTO.setUnits(propertyDAO.getApartmentUnits(appartment.getPropertyid()));
-		return apartmentDTO;
+	public ApartmentDTO addAppartment(ApartmentDTO apartmentDTO) {
+		//adding the property to the database
+		Apartment apartment=DTOModelMapper.apartmentDTOModelMapper(apartmentDTO);
+		Long propertyId=addProperty(apartment);
+		
+		// updating the property id 
+		apartment.setPropertyid(propertyId);
+		
+		// add apartment details to the database 
+		propertyDAO.addAppartmentDetailsToProperty(apartment.getUnits(), propertyId);
+		
+		// get apartment information
+		Apartment getApartment=propertyDAO.getAppartment(apartment.getUserid(), apartment.getPropertyid());
+		getApartment.setUnits(propertyDAO.getApartmentUnits(getApartment.getPropertyid()));
+		
+		// convert domain model to DTO
+		return DTOModelMapper.apartmentModelDTOMapper(apartment);
 	}
 
 	@Override
 	public Long addProperty(Property property) {
+		//check if property name already exists
 		if(propertyDAO.propertyNameExists(property.getPropertyname())) {
 			throw new APIRequestException(I18NConfig.getMessage("error.property.name_exists"));
 		}
@@ -80,50 +97,75 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 	
 	@Override
-	public HouseDTO updateHouse(House house) {
+	public HouseDTO updateHouse(HouseDTO houseDTO) {
+		//update the property
+		House house=DTOModelMapper.houseDTOModelMapper(houseDTO);
 		updateProperty(house);
+		
+		//update the property id to property details, just in case
 		PropertyDetails propertyDetails = house.getPropertydetails();
 		propertyDetails.setPropertyid(house.getPropertyid());
+		
+		//update the property details to the database
 		propertyDAO.updatePropertyDetails(propertyDetails);
-		return propertyDAO.getHouse(house.getUserid(), house.getPropertyid());
+		
+		// convert domain model to DTO
+		return DTOModelMapper.houseModelDTOMapper(house);
 	}
 
 	@Override
-	public ApartmentDTO updateAppartment(Appartment appartment, List<Long> deleteUnits) {
-		updateProperty(appartment);
-		List<AppartmentPropertyDetails> appartmentDetails=appartment.getList();
-		List<AppartmentPropertyDetails> newUnits=new ArrayList<>();
-		List<AppartmentPropertyDetails> updateUnits=new ArrayList<>();
-		for(AppartmentPropertyDetails detail:appartmentDetails) {
-			detail.setPropertyid(appartment.getPropertyid());
-			if(detail.getPropertydetailsid()==null) {
+	public ApartmentDTO updateAppartment(ApartmentDTO apartmentDTO, List<Long> deleteUnits) {
+		//update the property
+		Apartment apartment=DTOModelMapper.apartmentDTOModelMapper(apartmentDTO);
+		updateProperty(apartment);
+		
+		List<ApartmentPropertyDetails> appartmentDetails=apartment.getUnits();
+		// for new units
+		List<ApartmentPropertyDetails> newUnits=new ArrayList<>();
+		// for old units
+		List<ApartmentPropertyDetails> updateUnits=new ArrayList<>();
+		
+		for(ApartmentPropertyDetails detail:appartmentDetails) {
+			if(detail.getApartmentpropertydetailsid()==null) {
 				newUnits.add(detail);
 			}else {
 				updateUnits.add(detail);
 			}
 		}
+		
+		//delete the units
 		if(!deleteUnits.isEmpty()) {
-			propertyDAO.deleteAppartmentDetailsToProperty(appartment.getUserid(), deleteUnits);
+			propertyDAO.deleteAppartmentDetailsToProperty(apartment.getPropertyid(), deleteUnits);
 		}
+		// at least one unit should be present in the apartment
 		if(newUnits.isEmpty() && updateUnits.isEmpty()) {
 			throw new APIRequestException(I18NConfig.getMessage("error.appartment_property_no_unit"));
 		}
+		// add the new units
 		if(!newUnits.isEmpty()) {
-			propertyDAO.addAppartmentDetailsToProperty(newUnits);
+			propertyDAO.addAppartmentDetailsToProperty(newUnits, apartment.getPropertyid());
 		}
+		// update the old units
 		if(!updateUnits.isEmpty()) {
-			propertyDAO.updateAppartmentDetailsToProperty(updateUnits);
+			propertyDAO.updateAppartmentDetailsToProperty(updateUnits, apartment.getPropertyid());
 		}
-		ApartmentDTO apartmentDTO=propertyDAO.getAppartment(appartment.getUserid(), appartment.getPropertyid());
-		apartmentDTO.setUnits(propertyDAO.getApartmentUnits(appartment.getPropertyid()));
-		return apartmentDTO;
+		
+		// get apartment information
+		Apartment getApartment=propertyDAO.getAppartment(apartment.getUserid(), apartment.getPropertyid());
+		getApartment.setUnits(propertyDAO.getApartmentUnits(apartment.getPropertyid()));
+		
+		// convert domain model to DTO
+		return DTOModelMapper.apartmentModelDTOMapper(getApartment);
 	}
 	
 	@Override
 	public void updateProperty(Property property) {
+		// check if property exists for the user for given type
 		if(!propertyDAO.propertyExists(property.getUserid(), property.getPropertyid(), property.getPropertytype())) {
 			throw new APIRequestException(I18NConfig.getMessage("error.property.not_found"));
 		}
+		
+		// check if there is another property with same name
 		if(propertyDAO.propertyNameExists(property.getPropertyname(), property.getPropertyid())) {
 			throw new APIRequestException(I18NConfig.getMessage("error.property.name_exists"));
 		}
@@ -133,18 +175,27 @@ public class PropertyServiceImpl implements PropertyService {
 	@Override
 	public List<PropertyDTO> getAllProperties(String searchQuery, Integer pageNo) {
 		Long userId=1l;
-		return propertyDAO.getAllProperties(userId, searchQuery, pageNo);
+		List<Property> propertyList=propertyDAO.getAllProperties(userId, searchQuery, pageNo);
+		List<PropertyDTO> propertyDTOList=new ArrayList<>();
+		for(Property property:propertyList) {
+			propertyDTOList.add(DTOModelMapper.propertyModelDTOMapper(property));
+		}
+		return propertyDTOList;
 	}
 	
 	@Override
 	public Map<String, Object> getAllPropertiesWithMetaData() {
 		Long userId=1l;
 		Map<String, Object> map=new HashMap<>();
-		List<PropertyDTO> propertyDTOs=propertyDAO.getAllProperties(userId, null, null, true);
-		map.put("properties", propertyDTOs);
+		List<Property> propertyList=propertyDAO.getAllProperties(userId, null, null, true);
+		List<PropertyDTO> propertyDTOList=new ArrayList<>();
+		for(Property property:propertyList) {
+			propertyDTOList.add(DTOModelMapper.propertyModelDTOMapper(property));
+		}
+		map.put("properties", propertyDTOList);
 		List<Long> houseIds=new ArrayList<>();
 		List<Long> appartmentIds=new ArrayList<>();
-		for(PropertyDTO propertyDTO:propertyDTOs) {
+		for(PropertyDTO propertyDTO:propertyDTOList) {
 			if(Constants.PropertyType.APPARTMENT.toString().equals(propertyDTO.getPropertytype())) {
 				appartmentIds.add(propertyDTO.getPropertyid());
 			}else {
@@ -152,11 +203,28 @@ public class PropertyServiceImpl implements PropertyService {
 			}
 		}
 		if(!houseIds.isEmpty()) {
-			map.put("housedetails",propertyDAO.getHouseDetails(houseIds));
+			HashMap<Long, PropertyDetails> houseDetail=propertyDAO.getHouseDetails(houseIds);
+			HashMap<Long, PropertyDetailsDTO> houseDetailDTO=new HashMap<>();
+			for (Map.Entry<Long, PropertyDetails>  entry : houseDetail.entrySet()) {
+				houseDetailDTO.put(entry.getKey(), DTOModelMapper.propertyDetailModelDTOMapper(entry.getValue()));
+			}
+			map.put("housedetails", houseDetailDTO);
 		}
+		
 		if(!appartmentIds.isEmpty()) {
-			map.put("apartmentdetails",propertyDAO.getApartmentUnits(appartmentIds));
+			HashMap<Long, List<ApartmentPropertyDetails>> apartmentDetails=propertyDAO.getApartmentUnits(appartmentIds);
+			HashMap<Long, List<ApartmentPropertyDetailDTO>> apartmentDetailsDTO= new HashMap<Long, List<ApartmentPropertyDetailDTO>>();
+			for(Map.Entry<Long, List<ApartmentPropertyDetails>>  entry:apartmentDetails.entrySet()) {
+				List<ApartmentPropertyDetails> units=entry.getValue();
+				List<ApartmentPropertyDetailDTO> unitsDTO=new ArrayList<>();
+				for(ApartmentPropertyDetails unit:units) {
+					unitsDTO.add(DTOModelMapper.apartmentPropertyDetailsModelDTOMapper(unit));
+				}
+				apartmentDetailsDTO.put(entry.getKey(), unitsDTO);
+			}
+			map.put("apartmentdetails", apartmentDetailsDTO);
 		}
+		
 		return map;
 	}
 	
@@ -169,22 +237,22 @@ public class PropertyServiceImpl implements PropertyService {
 	@Override
 	public HouseDTO getHouseDetails(Long propertyId) {
 		Long userId=1l;
-		HouseDTO houseDTO=propertyDAO.getHouse(userId, propertyId);
-		if(houseDTO==null) {
+		House house=propertyDAO.getHouse(userId, propertyId);
+		if(house==null) {
 			throw new APIRequestException(I18NConfig.getMessage("error.property.not_found"));
 		}
-		return houseDTO;
+		return DTOModelMapper.houseModelDTOMapper(house);
 	}
 	
 	@Override
 	public ApartmentDTO getApartmentDetails(Long propertyId) {
 		Long userId=1l;
-		ApartmentDTO apartmentDTO=propertyDAO.getAppartment(userId, propertyId);
-		if(apartmentDTO==null) {
+		Apartment apartment=propertyDAO.getAppartment(userId, propertyId);
+		if(apartment==null) {
 			throw new APIRequestException(I18NConfig.getMessage("error.property.not_found"));
 		}
-		apartmentDTO.setUnits(propertyDAO.getApartmentUnits(propertyId));
-		return apartmentDTO;
+		apartment.setUnits(propertyDAO.getApartmentUnits(propertyId));
+		return DTOModelMapper.apartmentModelDTOMapper(apartment);
 	}
 	
 	@Override
@@ -192,4 +260,5 @@ public class PropertyServiceImpl implements PropertyService {
 		Long userId=1l;
 		propertyDAO.deleteProperty(propertyIds, userId);
 	}
+	
 }

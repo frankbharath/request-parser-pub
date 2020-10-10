@@ -1,8 +1,7 @@
 (function(){
 	"use strict";
 	var app=angular.module('rentpal');
-	app.factory('PropertyDataServiceFactory', ["$resource","$cacheFactory", function($resource, $cacheFactory) {
-		var cache = $cacheFactory('property');
+	app.factory('PropertyDataServiceFactory', ["$resource", function($resource) {
 		return $resource('/api/property/:type/:id', {type:"@type", id: "@id" }, {
 	        create: {
 	            method: "POST",
@@ -15,8 +14,7 @@
 			},
 			queryWithMeta:{
 				method:'GET', 
-				isArray:false,
-				cache : cache
+				isArray:false
 			},
 			update: {
 	            method: "PUT",

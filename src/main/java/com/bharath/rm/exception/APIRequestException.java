@@ -7,6 +7,8 @@ package com.bharath.rm.exception;
 */
 public class APIRequestException extends RuntimeException {
 	
+	private static final long serialVersionUID = -2460576406636485507L;
+
 	public APIRequestException(String message) {
 		super(message);
 	}

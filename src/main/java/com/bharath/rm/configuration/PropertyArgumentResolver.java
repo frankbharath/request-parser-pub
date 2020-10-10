@@ -11,11 +11,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.bharath.rm.model.domain.Address;
-import com.bharath.rm.model.domain.Appartment;
-import com.bharath.rm.model.domain.House;
-import com.bharath.rm.model.domain.PropertyDetails;
-import com.bharath.rm.model.domain.AppartmentPropertyDetails;
+import com.bharath.rm.dto.ApartmentDTO;
+import com.bharath.rm.dto.ApartmentPropertyDetailDTO;
+import com.bharath.rm.dto.HouseDTO;
+import com.bharath.rm.dto.PropertyDetailsDTO;
 
 /**
 	* @author bharath
@@ -27,69 +26,65 @@ public class PropertyArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.getParameterType().equals(House.class) || parameter.getParameterType().equals(Appartment.class);
+		return parameter.getParameterType().equals(HouseDTO.class) || parameter.getParameterType().equals(ApartmentDTO.class);
 	}
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		
-		JSONObject addressDetail=new JSONObject(webRequest.getParameter("address"));
-		Address address=new Address();
-		address.setAddressline_1(addressDetail.getString("line_1"));
-		address.setAddressline_2(addressDetail.getString("line_2"));
-		address.setCity(addressDetail.getString("city"));
-		address.setPostal(addressDetail.getString("postalcode"));
 		
-		if(parameter.getParameterType().equals(House.class)) {
-			House house=new House();
-			house.setUserid(1l);
-			house.setPropertyname(webRequest.getParameter("name"));
-			house.setAddress(address);
-			house.setPropertytype(webRequest.getParameter("propertytype"));
+		if(parameter.getParameterType().equals(HouseDTO.class)) {
+			HouseDTO houseDTO=new HouseDTO();
+			houseDTO.setPropertyname(webRequest.getParameter("propertyname"));
+			houseDTO.setAddressline_1(webRequest.getParameter("addressline_1"));
+			houseDTO.setAddressline_2(webRequest.getParameter("addressline_2"));
+			houseDTO.setCity(webRequest.getParameter("city"));
+			houseDTO.setPostal(webRequest.getParameter("postal"));
+			houseDTO.setPropertytype(webRequest.getParameter("propertytype"));
+			
 			JSONObject propertyDetail=new JSONObject(webRequest.getParameter("propertydetails"));
-			PropertyDetails details=new PropertyDetails();
-			details.setArea(propertyDetail.getInt("area"));
-			details.setCapacity(propertyDetail.getInt("capacity"));
-			details.setRent(propertyDetail.getInt("rent"));
-			house.setPropertydetails(details);
+			PropertyDetailsDTO detailsDTO=new PropertyDetailsDTO();
+			detailsDTO.setArea((float) propertyDetail.getInt("area"));
+			detailsDTO.setCapacity(propertyDetail.getInt("capacity"));
+			detailsDTO.setRent((float) propertyDetail.getInt("rent"));
+			houseDTO.setDetailsDTO(detailsDTO);
 			if(webRequest.getParameter("propertyid")!=null) {
-				house.setPropertyid(Long.parseLong(webRequest.getParameter("propertyid")));
-				details.setPropertydetailsid(propertyDetail.getLong("propertydetailsid"));
-			}else {
-				house.setCreationtime(System.currentTimeMillis());
+				houseDTO.setPropertyid(Long.parseLong(webRequest.getParameter("propertyid")));
+				detailsDTO.setPropertydetailsid(propertyDetail.getLong("propertydetailsid"));
 			}			
-			return house;
+			return houseDTO;
 		}else {
-			Appartment appartment=new Appartment();
-			appartment.setUserid(1l);
-			appartment.setPropertyname(webRequest.getParameter("name"));
+			ApartmentDTO apartmentDTO=new ApartmentDTO();
+			apartmentDTO.setPropertyname(webRequest.getParameter("propertyname"));
 			if(webRequest.getParameter("propertyid")!=null) {
-				appartment.setPropertyid(Long.parseLong(webRequest.getParameter("propertyid")));
-			}else {
-				appartment.setCreationtime(System.currentTimeMillis());
-			}			
-			appartment.setAddress(address);
-			appartment.setPropertytype(webRequest.getParameter("propertytype"));
+				apartmentDTO.setPropertyid(Long.parseLong(webRequest.getParameter("propertyid")));
+			}		
+			apartmentDTO.setPropertyname(webRequest.getParameter("propertyname"));
+			apartmentDTO.setAddressline_1(webRequest.getParameter("addressline_1"));
+			apartmentDTO.setAddressline_2(webRequest.getParameter("addressline_2"));
+			apartmentDTO.setCity(webRequest.getParameter("city"));
+			apartmentDTO.setPostal(webRequest.getParameter("postal"));
+			apartmentDTO.setPropertytype(webRequest.getParameter("propertytype"));
+			
 			JSONArray units=new JSONArray(webRequest.getParameter("units"));
-			List<AppartmentPropertyDetails> unitList=new ArrayList<>();
+			List<ApartmentPropertyDetailDTO> unitList=new ArrayList<>();
 			for(int i=0;i<units.length();i++) {
 				JSONObject unitObject=new JSONObject(units.get(i).toString());
-				AppartmentPropertyDetails details=new AppartmentPropertyDetails();
+				ApartmentPropertyDetailDTO detailsDTO=new ApartmentPropertyDetailDTO();
 				if(unitObject.has("propertydetailsid")) {
-					details.setPropertydetailsid(unitObject.getLong("propertydetailsid"));
+					detailsDTO.setPropertydetailsid(unitObject.getLong("propertydetailsid"));
 				}
-				details.setDoorno(unitObject.getString("doorno"));
-				details.setFloorno(unitObject.getInt("floorno"));
-				details.setArea(unitObject.getInt("area"));
-				details.setCapacity(unitObject.getInt("capacity"));
-				details.setRent(unitObject.getInt("rent"));
-				unitList.add(details);
+				detailsDTO.setDoorno(unitObject.getString("doorno"));
+				detailsDTO.setFloorno(unitObject.getInt("floorno"));
+				detailsDTO.setArea((float) unitObject.getInt("area"));
+				detailsDTO.setCapacity(unitObject.getInt("capacity"));
+				detailsDTO.setRent((float) unitObject.getInt("rent"));
+				unitList.add(detailsDTO);
 			}
-			appartment.setList(unitList);
-			return appartment;
+			apartmentDTO.setUnits(unitList);
+			return apartmentDTO;
 		}
-		
 	}
 
 }

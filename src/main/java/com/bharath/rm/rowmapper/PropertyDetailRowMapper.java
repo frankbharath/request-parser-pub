@@ -6,8 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.bharath.rm.common.QueryUtils;
-import com.bharath.rm.dto.ApartmentDTO;
-import com.bharath.rm.dto.PropertyDetailsDTO;
+import com.bharath.rm.model.domain.PropertyDetails;
 
 /**
 	* @author bharath
@@ -15,11 +14,11 @@ import com.bharath.rm.dto.PropertyDetailsDTO;
 	* Creation time: Sep 23, 2020 6:40:29 PM
  	* Class Description
 */
-public class PropertyDetailRowMapper implements RowMapper<PropertyDetailsDTO>{
+public class PropertyDetailRowMapper implements RowMapper<PropertyDetails>{
 
 	@Override
-	public PropertyDetailsDTO mapRow(ResultSet rs, int rowNum) throws SQLException {		
-		return QueryUtils.gePropertyDetailsDTO(rs);
+	public PropertyDetails mapRow(ResultSet rs, int rowNum) throws SQLException {		
+		return QueryUtils.getPropertyDetails(rs);
 	}
 
 }

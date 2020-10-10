@@ -14,12 +14,14 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.bharath.rm.common.QueryUtils;
+import com.bharath.rm.constants.Constants;
+import com.bharath.rm.constants.tables.RM_Contractstatus;
 import com.bharath.rm.constants.tables.RM_Lease;
 import com.bharath.rm.constants.tables.RM_Tenant;
 import com.bharath.rm.dao.interfaces.TenantDAO;
-import com.bharath.rm.dto.TenantDTO;
 import com.bharath.rm.model.domain.Lease;
 import com.bharath.rm.model.domain.Tenant;
+import com.bharath.rm.rowmapper.LeaseRowMapper;
 
 /**
 	* @author bharath
@@ -136,7 +138,7 @@ public class TenantDAOImpl implements TenantDAO {
 	}
 	
 	@Override
-	public TenantDTO getTenantInfo(Long userId, Long tenantId) {
+	public Tenant getTenantInfo(Long userId, Long tenantId) {
 		List<String> cols=new ArrayList<>();
 		cols.add(RM_Tenant.TENANTID);
 		cols.add(RM_Tenant.FIRSTNAME);
@@ -154,11 +156,11 @@ public class TenantDAOImpl implements TenantDAO {
 		namedParameters.addValue(RM_Tenant.TENANTID, tenantId, Types.BIGINT);
 		namedParameters.addValue(RM_Tenant.USERID, userId, Types.BIGINT);
 		
-		return DataAccessUtils.singleResult(namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<TenantDTO>(TenantDTO.class)));
+		return DataAccessUtils.singleResult(namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<Tenant>(Tenant.class)));
 	}
 	
 	@Override
-	public List<TenantDTO> getTenants(Long userId, String searchQuery, Integer pageNo) {
+	public List<Tenant> getTenants(Long userId, String searchQuery, Integer pageNo) {
 		List<String> cols=new ArrayList<>();
 		cols.add(RM_Tenant.TENANTID);
 		cols.add(RM_Tenant.FIRSTNAME);
@@ -187,7 +189,7 @@ public class TenantDAOImpl implements TenantDAO {
 			query.append(" OFFSET ").append(PAGE_LIMIT*(pageNo-1));
 		}
 		
-		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<TenantDTO>(TenantDTO.class));
+		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<Tenant>(Tenant.class));
 	}
 	
 	@Override
@@ -225,23 +227,183 @@ public class TenantDAOImpl implements TenantDAO {
 	@Override
 	public Long addLease(Lease lease) {
 		List<String> cols=new ArrayList<>();
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
 		cols.add(RM_Lease.LEASETENANTID);
 		cols.add(RM_Lease.TENANTSPROPERTYDETAILID);
 		cols.add(RM_Lease.MOVEIN);
 		cols.add(RM_Lease.MOVEOUT);
 		cols.add(RM_Lease.OCCUPANTS);
+		cols.add(RM_Lease.STATUSID);
+		cols.add(RM_Lease.RENT);
 		
-		String query=QueryUtils.getInsertQuery(RM_Lease.TABLENAME, cols);
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
 		namedParameters.addValue(RM_Lease.LEASETENANTID, lease.getLeasetenantid(), Types.BIGINT);
 		namedParameters.addValue(RM_Lease.TENANTSPROPERTYDETAILID, lease.getTenantspropertydetailid(), Types.BIGINT);
 		namedParameters.addValue(RM_Lease.MOVEIN, lease.getMovein(), Types.BIGINT);
 		namedParameters.addValue(RM_Lease.MOVEOUT, lease.getMoveout(), Types.BIGINT);
 		namedParameters.addValue(RM_Lease.OCCUPANTS, lease.getOccupants(), Types.INTEGER);
+		namedParameters.addValue(RM_Lease.STATUSID, lease.getContractstatus().getContractstatusid(), Types.BIGINT);
+		namedParameters.addValue(RM_Lease.RENT, lease.getRent(), Types.FLOAT);
 		
-		namedParameterJdbcTemplate.update(query, namedParameters, keyHolder);
+		String query=QueryUtils.getInsertQuery(RM_Lease.TABLENAME, cols);
+		namedParameterJdbcTemplate.update(query, namedParameters, keyHolder,  new String[] {RM_Lease.LEASEID});
 		return (Long) keyHolder.getKey();
+	}
+	
+	@Override
+	public void updateLease(Lease lease) {
+		List<String> cols=new ArrayList<>();
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+	
+		cols.add(RM_Lease.TENANTSPROPERTYDETAILID);
+		cols.add(RM_Lease.MOVEIN);
+		cols.add(RM_Lease.MOVEOUT);
+		cols.add(RM_Lease.OCCUPANTS);
+		cols.add(RM_Lease.STATUSID);
+		cols.add(RM_Lease.RENT);
+		
+		namedParameters.addValue(RM_Lease.TENANTSPROPERTYDETAILID, lease.getTenantspropertydetailid(), Types.BIGINT);
+		namedParameters.addValue(RM_Lease.MOVEIN, lease.getMovein(), Types.BIGINT);
+		namedParameters.addValue(RM_Lease.MOVEOUT, lease.getMoveout(), Types.BIGINT);
+		namedParameters.addValue(RM_Lease.OCCUPANTS, lease.getOccupants(), Types.INTEGER);
+		namedParameters.addValue(RM_Lease.STATUSID, lease.getContractstatus().getContractstatusid(), Types.BIGINT);
+		namedParameters.addValue(RM_Lease.RENT, lease.getRent(), Types.FLOAT);
+		
+		StringBuilder query=new StringBuilder(QueryUtils.getUpdateQuery(RM_Lease.TABLENAME, cols))
+				.append(" WHERE ").append(RM_Lease.LEASEID).append("=:").append(RM_Lease.LEASEID)
+				.append(" AND ").append(RM_Lease.LEASETENANTID).append("=:").append(RM_Lease.LEASETENANTID);
+		
+		namedParameters.addValue(RM_Lease.LEASEID, lease.getLeaseid(), Types.BIGINT);
+		namedParameters.addValue(RM_Lease.LEASETENANTID, lease.getLeasetenantid(), Types.BIGINT);
+		
+		namedParameterJdbcTemplate.update(query.toString(), namedParameters);
+	}
+	
+	@Override
+	public Boolean leaseExist(Long userId, Long leaseId) {
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		
+		StringBuilder query=new StringBuilder("SELECT EXISTS (SELECT 1 FROM ").append(RM_Tenant.TABLENAME)
+				.append(" INNER JOIN ").append(RM_Lease.TABLENAME).append(" ON ").append(RM_Tenant.TENANTID).append("=").append(RM_Lease.LEASETENANTID)
+				.append(" WHERE ").append(RM_Tenant.USERID).append("=:").append(RM_Tenant.USERID)
+				.append(" AND ").append(RM_Lease.LEASEID).append("=:").append(RM_Lease.LEASEID)
+				.append(")");
+		
+		namedParameters.addValue(RM_Tenant.USERID, userId, Types.BIGINT);
+		namedParameters.addValue(RM_Lease.LEASEID, leaseId, Types.BIGINT);
+		
+		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameters, Boolean.class);
+	}
+	
+	
+	@Override
+	public Lease getLease(Long userId, Long leaseId) {
+		List<String> cols=new ArrayList<>();
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		
+		cols.add(RM_Lease.LEASEID);
+		cols.add(RM_Lease.LEASETENANTID);
+		cols.add(RM_Lease.TENANTSPROPERTYDETAILID);
+		cols.add(RM_Lease.MOVEIN);
+		cols.add(RM_Lease.MOVEOUT);
+		cols.add(RM_Lease.OCCUPANTS);
+		cols.add(RM_Lease.RENT);
+		cols.add(RM_Lease.CONTRACTID);
+		cols.add(RM_Lease.STATUSID);
+		
+		StringBuilder query=new StringBuilder(" SELECT ").append(String.join(",", cols)).append(" FROM ").append(RM_Lease.TABLENAME)
+				.append(" INNER JOIN ").append(RM_Tenant.TABLENAME).append(" ON ").append(RM_Tenant.TENANTID).append("=").append(RM_Lease.LEASETENANTID)
+				.append(" INNER JOIN ").append(RM_Contractstatus.TABLENAME).append(" ON ").append(RM_Contractstatus.CONTRACTSTATUSID).append("=").append(RM_Lease.STATUSID)
+				.append(" WHERE ").append(RM_Tenant.USERID).append("=:").append(RM_Tenant.USERID)
+				.append(" AND ").append(RM_Lease.LEASEID).append("=:").append(RM_Lease.LEASEID);
+
+		namedParameters.addValue(RM_Tenant.USERID, userId, Types.BIGINT);
+		namedParameters.addValue(RM_Lease.LEASEID, leaseId, Types.BIGINT);
+		
+		return DataAccessUtils.singleResult(namedParameterJdbcTemplate.query(query.toString(), namedParameters, new LeaseRowMapper()));
+	}
+
+	@Override
+	public List<Lease> getAllLeaseForTenant(Long userId, Long tenantId) {
+		List<String> cols=new ArrayList<>();
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		
+		cols.add(RM_Lease.LEASEID);
+		cols.add(RM_Lease.LEASETENANTID);
+		cols.add(RM_Lease.TENANTSPROPERTYDETAILID);
+		cols.add(RM_Lease.MOVEIN);
+		cols.add(RM_Lease.MOVEOUT);
+		cols.add(RM_Lease.OCCUPANTS);
+		cols.add(RM_Lease.RENT);
+		cols.add(RM_Lease.CONTRACTID);
+		cols.add(RM_Lease.STATUSID);
+		
+		StringBuilder query=new StringBuilder(" SELECT ").append(String.join(",", cols)).append(" FROM ").append(RM_Lease.TABLENAME)
+				.append(" INNER JOIN ").append(RM_Tenant.TABLENAME).append(" ON ").append(RM_Tenant.TENANTID).append("=").append(RM_Lease.LEASETENANTID)
+				.append(" INNER JOIN ").append(RM_Contractstatus.TABLENAME).append(" ON ").append(RM_Contractstatus.CONTRACTSTATUSID).append("=").append(RM_Lease.STATUSID)
+				.append(" WHERE ").append(RM_Tenant.USERID).append("=:").append(RM_Tenant.USERID)
+				.append(" AND ").append(RM_Lease.LEASETENANTID).append("=:").append(RM_Lease.LEASETENANTID);
+
+		namedParameters.addValue(RM_Tenant.USERID, userId, Types.BIGINT);
+		namedParameters.addValue(RM_Lease.LEASETENANTID, tenantId, Types.BIGINT);
+		
+		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<Lease>(Lease.class));
+	}
+	
+	@Override
+	public String getContractStatus(Long leaseId) {
+		List<String> cols=new ArrayList<>();
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		
+		cols.add(RM_Contractstatus.CONTRACTSTATUS);
+		
+		StringBuilder query=new StringBuilder(" SELECT ").append(String.join(",", cols)).append(" FROM ").append(RM_Lease.TABLENAME)
+				.append(" INNER JOIN ").append(RM_Contractstatus.TABLENAME).append(" ON ").append(RM_Contractstatus.CONTRACTSTATUSID).append("=").append(RM_Lease.STATUSID)
+				.append(" AND ").append(RM_Lease.LEASEID).append("=:").append(RM_Lease.LEASEID);
+		
+		namedParameters.addValue(RM_Lease.LEASEID, leaseId, Types.BIGINT);
+		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameters, String.class);
+	}
+	
+	@Override
+	public Long getContractStatus(Constants.ContractStatus status) {
+		List<String> cols=new ArrayList<>();
+		cols.add(RM_Contractstatus.CONTRACTSTATUSID);
+		
+		StringBuilder query=new StringBuilder("SELECT ").append(RM_Contractstatus.CONTRACTSTATUSID).append(" FROM ").append(RM_Contractstatus.TABLENAME);
+		query.append(" WHERE ").append(RM_Contractstatus.CONTRACTSTATUS).append("=:").append(RM_Contractstatus.CONTRACTSTATUS);
+		
+		MapSqlParameterSource  namedParameter = new MapSqlParameterSource();
+		namedParameter.addValue(RM_Contractstatus.CONTRACTSTATUS, status.toString(), Types.VARCHAR);
+		
+		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameter, Long.class);
+	}
+	
+	@Override
+	public void updateContractId(Long leaseId, String requestId) {
+		List<String> cols=new ArrayList<>();
+		cols.add(RM_Lease.CONTRACTID);
+		
+		StringBuilder query=new StringBuilder(QueryUtils.getUpdateQuery(RM_Lease.TABLENAME, cols))
+				.append(" WHERE ").append(RM_Lease.LEASEID).append("=:").append(RM_Lease.LEASEID);
+		
+		MapSqlParameterSource  namedParameter = new MapSqlParameterSource();
+		namedParameter.addValue(RM_Lease.CONTRACTID, requestId, Types.VARCHAR);
+		namedParameter.addValue(RM_Lease.LEASEID, leaseId, Types.BIGINT);
+		
+		namedParameterJdbcTemplate.update(query.toString(), namedParameter);
+		
+	}
+	
+	@Override
+	public void deleteLease(Long leaseId) {
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		namedParameters.addValue(RM_Lease.LEASEID, leaseId, Types.BIGINT);
+		
+		StringBuilder query=new StringBuilder("DELETE ").append(" FROM ").append(RM_Lease.TABLENAME)
+				.append(" WHERE ").append(RM_Lease.LEASEID).append("= :").append(RM_Lease.LEASEID);
+		
+		namedParameterJdbcTemplate.update(query.toString(), namedParameters);
 	}
 }

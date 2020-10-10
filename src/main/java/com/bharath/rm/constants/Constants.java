@@ -37,6 +37,8 @@ public class Constants {
 	
 	public static final String VERIFY="VERIFY";
 	
+	public static final int MINDAYS=28;
+	
 	public enum Tokentype {
 		VERIFY(1),
 		RESET(2);
@@ -57,5 +59,13 @@ public class Constants {
 	public enum UserType{
 		OWNER,
 		TENANT;
+	}
+	
+	public enum ContractStatus{
+		NOCONTRACT,
+		INITIATED,
+		OWNERSIGNED,
+		TENANTSIGNED,
+		TERMINATED
 	}
 }

@@ -8,9 +8,10 @@ package com.bharath.rm.model.domain;
 public class PropertyDetails {
 	private Long propertyid;
 	private Long propertydetailsid;
-	private float area;
-	private int capacity;
-	private float rent;
+	private Float area;
+	private Integer capacity;
+	private Float rent;
+	private Integer occupied;
 	
 	/**
 	 * @return the propertyid
@@ -39,38 +40,49 @@ public class PropertyDetails {
 	/**
 	 * @return the area
 	 */
-	public float getArea() {
+	public Float getArea() {
 		return area;
 	}
 	/**
 	 * @param area the area to set
 	 */
-	public void setArea(float area) {
+	public void setArea(Float area) {
 		this.area = area;
 	}
 	/**
 	 * @return the capacity
 	 */
-	public int getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
 	/**
 	 * @param capacity the capacity to set
 	 */
-	public void setCapacity(int capacity) {
+	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
 	/**
 	 * @return the rent
 	 */
-	public float getRent() {
+	public Float getRent() {
 		return rent;
 	}
 	/**
 	 * @param rent the rent to set
 	 */
-	public void setRent(float rent) {
+	public void setRent(Float rent) {
 		this.rent = rent;
 	}
-	
+	/**
+	 * @return the occupied
+	 */
+	public Integer getOccupied() {
+		return occupied;
+	}
+	/**
+	 * @param occupied the occupied to set
+	 */
+	public void setOccupied(Integer occupied) {
+		this.occupied = occupied;
+	}
 }

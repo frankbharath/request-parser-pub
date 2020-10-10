@@ -109,11 +109,6 @@
 					controller: "AddTenantCtrl",
 					controllerAs:"addtenant"
 				}
-			},
-			resolve:{
-				resolvedProperties:['PropertyDataServiceFactory', function(PropertyDataServiceFactory){
-					return PropertyDataServiceFactory.queryWithMeta({"allPropwithMeta":true});
-				}]
 			}
 		})
 		.state("tenants.edit",{
@@ -132,6 +127,70 @@
 				resolvedTenant:['TenantDataServiceFactory','$stateParams', function(TenantDataServiceFactory, $stateParams){
 					return TenantDataServiceFactory.get({"id":$stateParams.id});
 				}]
+			}
+		}).
+		state("tenants.addlease",{
+			url:"/add/lease",
+			params:{
+				"tenantid":''
+			},
+			views:{
+				"tenant-view":{
+					templateUrl : "/resources/html/addlease.html",
+					controller: "AddLeaseCtrl",
+					controllerAs:"addlease"
+				}
+			},
+			resolve:{
+				resolvedProperties:['PropertyDataServiceFactory', function(PropertyDataServiceFactory){
+					return PropertyDataServiceFactory.queryWithMeta({"allPropwithMeta":true});
+				}]
+			}
+		}).
+		state("lease",{
+			url:"/leases",
+			params:{
+				"entry":{}
+			},
+			views:{
+				"main-view":{
+					templateUrl : "/resources/html/leases.html",
+					controller: "LeasesCtrl",
+					controllerAs:"leases"
+				}
+			},
+			resolve:{
+				resolvedLeases:['TenantDataServiceFactory','$stateParams', function(TenantDataServiceFactory, $stateParams){
+					return TenantDataServiceFactory.get({"lease":"lease","id":$stateParams.entry.tenantid});
+				}]
+			}
+		}).
+		state("lease.editlease",{
+			url:"/edit",
+			params:{
+				"lease":{}
+			},
+			views:{
+				"lease-view":{
+					templateUrl : "/resources/html/editlease.html",
+					controller: "EditLeaseCtrl",
+					controllerAs:"editlease"
+				}
+			},
+			resolve:{
+				resolvedProperties:['PropertyDataServiceFactory', function(PropertyDataServiceFactory){
+					return PropertyDataServiceFactory.queryWithMeta({"allPropwithMeta":true});
+				}]
+			}
+		}).
+		state("settings",{
+			url:"/settings",
+			views:{
+				"main-view":{
+					templateUrl : "/resources/html/settings.html",
+					controller: "SettingsCtrl",
+					controllerAs:"settings"
+				}
 			}
 		});
 		$locationProvider.html5Mode({enabled: true, requireBase: false});
@@ -256,7 +315,8 @@
 				POSTALCODE:/^[0-9]{5}$/,
 				DIGITAL:/^[1-9][0-9]$/,
 				EMAIL:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-				ALPHAWITHSPACE:/^[a-zA-Z]+(?:[\s]{1}[a-zA-Z]+)*$/
+				ALPHAWITHSPACE:/^[a-zA-Z]+(?:[\s]{1}[a-zA-Z]+)*$/,
+				PASSWORD:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,64}$/
 			})
 		})
 	})());
@@ -351,15 +411,15 @@
 	            element.on('submit', function (e) {
 					try{
 						if (!form.$valid){
-		                var firstInvalid = element[0].querySelector('.ng-invalid');
-		                if (firstInvalid) {
-		                    firstInvalid.focus();
-		                }
-						$animate.addClass(element, 'shake').then(function() {
-							$timeout(function(){
-								$animate.removeClass(element, 'shake');
-							},200);
-						});
+			                var firstInvalid = element[0].querySelector('.ng-invalid');
+			                if (firstInvalid) {
+			                    firstInvalid.focus();
+			                }
+							$animate.addClass(element, 'shake').then(function() {
+								$timeout(function(){
+									$animate.removeClass(element, 'shake');
+								},200);
+							});
 						}
 					}catch(e){
 						console.log(e);
@@ -388,5 +448,22 @@
 				});
 			}
 		};
+	});
+	app.directive('rpCompareTo', function(){
+		return {
+			restrict: 'A',
+			require: "ngModel",
+			scope: {
+		        otherModelValue: "=rpCompareTo"
+			},
+			link: function(scope, element, attributes, ngModel) {
+			    ngModel.$validators.rpCompareTo = function(modelValue) {
+					return modelValue === '' || scope.otherModelValue===undefined || modelValue == scope.otherModelValue;
+			    };
+			    scope.$watch("otherModelValue", function() {
+			      ngModel.$validate();
+			    });
+		  	}
+		}
 	});
 })();
