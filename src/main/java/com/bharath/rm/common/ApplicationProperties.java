@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
  	* Creation time: Jun 10, 2020 11:00:09 AM
  	* The class ApplicationProperties is a singleton class that stores properties from application.properties file
 */
-public final class ApplicationProperties {
+
+public class ApplicationProperties {
 	
 	/** The logger will be used to log information such as exceptions, info or debug. **/
 	private static final Logger log = LoggerFactory.getLogger(ApplicationProperties.class);
@@ -45,7 +46,9 @@ public final class ApplicationProperties {
      */
     public static ApplicationProperties getInstance()  {
         if (SINGLE_INSTANCE == null) {
+        	// To prevent multiple threads from trying to initiate the APPLICATION_PROPERTIES 
             synchronized (ApplicationProperties.class) {
+            	// Once when thread holds access to APPLICATION_PROPERTIES, make sure whether the variable has been initiated or not
                 if (SINGLE_INSTANCE == null) {
                 	log.info("Creating a singleton for ApplicationProperties");
                 	final ClassLoader classLoader = Utils.classloader();

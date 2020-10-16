@@ -27,7 +27,7 @@ public interface PropertyDAO {
 	 * @param name the name
 	 * @return true, if successful
 	 */
-	public boolean propertyNameExists(String name);
+	public boolean propertyNameExists(Long userId, String name);
 	
 	/**
 	 * Property name exists.
@@ -36,7 +36,7 @@ public interface PropertyDAO {
 	 * @param propertyId the property id
 	 * @return true, if successful
 	 */
-	public boolean propertyNameExists(String name, Long propertyId);
+	public boolean propertyNameExists(Long userId, String name, Long propertyId);
 	
 	/**
 	 * Adds the property.
@@ -234,6 +234,14 @@ public interface PropertyDAO {
 	public ApartmentPropertyDetails getApartmentUnit(Long propertyId, Long propertyDetailId);
 
 	public HashMap<Long, Property> getAllPropertiesForPropertyDetails(Long userId, List<Long> propertyDetailsId);
+
+	public HashMap<String, Integer> getPropertiesCountByType(Long userId);
+
+	public List<HashMap<String, Object>> getPropertiesOccupantInfo(Long userId);
+
+	public HashMap<Long, Integer> getOccupantCountsforTenants(Long userId, List<Long> tenantId);
+
+	public void updatePropertiesOccupancy(HashMap<Long, Integer> propertyOccupancy);
 
 	
 }

@@ -27,5 +27,4 @@ public interface TenantService {
 	public List<LeaseDTO> getAllLeasesForTenant(Long tenantId);
 	public void updateContractStatus(Long userId, Lease lease, Long propertyId, String propertyType, PropertyDetails details);
 	public void deleteLease(Long leaseId);
-	void check();
 }

@@ -1,14 +1,21 @@
 (function(){
 	"use strict";
-	var app = angular.module("rentpal",["ui.router","pascalprecht.translate","ngResource","ngAnimate", "ngMaterial"]);
+	var app = angular.module("rentpal",["ui.router","pascalprecht.translate","ngResource","ngAnimate", "ngMaterial", "chart.js"]);
 	app.config(['$stateProvider', '$locationProvider','$translateProvider','$httpProvider', function($stateProvider, $locationProvider, $translateProvider, $httpProvider){
 		$stateProvider
-		.state("home",{
-			url:"/home",
+		.state("dashboard",{
+			url:"/dashboard",
 			views:{
 				"main-view":{
-					template:"<div>home</div>"
+					templateUrl : "/resources/html/home.html",
+					controller: "HomeCtrl",
+					controllerAs: "home"
 				}
+			},
+			resolve:{
+				resolvedStats:['PropertyDataServiceFactory', function(PropertyDataServiceFactory){
+					return PropertyDataServiceFactory.query({"type":"statistics"});
+				}]
 			}
 		})
 		.state("properties",{
@@ -245,11 +252,12 @@
 	        return value + (tail || ' …');
 	    };
 	});
-	app.controller("MainController", ["$scope", "$translate", "$timeout",'$transitions', '$state', 'constants', function($scope, $translate, $timeout, $transitions, $state, constants) {
+	app.controller("MainController", ["$scope", "$translate", "$timeout",'$transitions', '$state', 'constants','$window', function($scope, $translate, $timeout, $transitions, $state, constants, $window) {
 		var vm=this;
 		vm.constants = constants;
 		vm.currentLanguage = $translate.proposedLanguage();
-		vm.selectedTab='home';
+		vm.selectedTab='dashboard';
+		$state.go('dashboard');
 		vm.showMessage=false;
 		vm.loading = false;
 		vm.toggleClass = function(tab) {
@@ -281,7 +289,7 @@
 			vm.selectedTab=tab;
 		}
 		vm.search = function(){
-			if(vm.selectedTab === 'home' || vm.selectedTab === 'settings'){
+			if(vm.selectedTab === 'dashboard' || vm.selectedTab === 'settings'){
 				vm.setSelectedTab("properties");
 				$state.go("properties", {"searchQuery":vm.searchQuery,"countRequired":true, "pageNo":1}, {reload: true});
 			}else{
@@ -301,6 +309,9 @@
 		$transitions.onSuccess({}, function($transition){
 			vm.hideLoading();
 		});
+		vm.logout=function(){
+			$window.location="/logout";
+		}
 	}]);
 
 	app.constant('constants', (() => {

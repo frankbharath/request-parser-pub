@@ -74,6 +74,23 @@
 				 });
 			});
 			document.forms.login.addEventListener("submit", login);
+			var eyeElements=document.getElementsByClassName("eye");
+			for (var i = 0; i < eyeElements.length; i++) {
+				eyeElements[i].addEventListener('click', function(event){
+					event.stopPropagation();
+					var targetElem=event.target;
+					var input=event.target.previousElementSibling;
+					if(targetElem.classList.contains('showeye')){
+						input.type='text';
+						targetElem.classList.remove("showeye");
+						targetElem.classList.add("hideeye");
+					}else{
+						input.type='password';
+						targetElem.classList.remove("hideeye");
+						targetElem.classList.add('showeye');
+					}
+				});
+			}
 		});
 	</script>
 </head>
@@ -107,6 +124,7 @@
 							<br/>
 							<div class="PressableCore-base">
 								<input type="password" name="password" class="inputbox"/>
+								<div class="eye showeye"></div>
 								<div style="position:absolute;display:none;" class="error">
 									<span class="Text-color--red Text-fontSize--12 Text-fontWeight--medium" th:text="#{html.register.invalid_password}"></span>
 								</div>

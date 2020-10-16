@@ -19,8 +19,10 @@ import org.springframework.stereotype.Repository;
 import com.bharath.rm.common.QueryUtils;
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.tables.RM_ApartmentPropertyDetails;
+import com.bharath.rm.constants.tables.RM_Lease;
 import com.bharath.rm.constants.tables.RM_Property;
 import com.bharath.rm.constants.tables.RM_PropertyDetails;
+import com.bharath.rm.constants.tables.RM_Tenant;
 import com.bharath.rm.dao.interfaces.PropertyDAO;
 import com.bharath.rm.model.domain.Apartment;
 import com.bharath.rm.model.domain.ApartmentPropertyDetails;
@@ -53,17 +55,20 @@ public class PropertyDAOImpl implements PropertyDAO {
 	}
 	
 	@Override
-	public boolean propertyNameExists(String name) {
-		return propertyNameExists(name, null);
+	public boolean propertyNameExists(Long userId, String name) {
+		System.out.println("check");
+		return propertyNameExists(userId, name, null);
 	}
 	
 	@Override
-	public boolean propertyNameExists(String name, Long propertyId) {
-		StringBuilder query=new StringBuilder("SELECT EXISTS (SELECT 1 FROM ").append(RM_Property.TABLENAME).append(" WHERE ")
-				.append(RM_Property.PROPERTYNAME).append("=:").append(RM_Property.PROPERTYNAME);
+	public boolean propertyNameExists(Long userId, String name, Long propertyId) {
+		StringBuilder query=new StringBuilder("SELECT EXISTS (SELECT 1 FROM ").append(RM_Property.TABLENAME)
+				.append(" WHERE ").append(RM_Property.PROPERTYNAME).append("=:").append(RM_Property.PROPERTYNAME)
+				.append(" AND ").append(RM_Property.USERID).append("=:").append(RM_Property.USERID);
 		
 		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
 		namedParameters.addValue(RM_Property.PROPERTYNAME, name, Types.VARCHAR);
+		namedParameters.addValue(RM_Property.USERID, userId, Types.BIGINT);
 		if(propertyId!=null) {
 			query.append(" AND ").append(RM_Property.PROPERTYID).append("!=:").append(RM_Property.PROPERTYID);
 			namedParameters.addValue(RM_Property.PROPERTYID, propertyId, Types.BIGINT);
@@ -625,5 +630,104 @@ public class PropertyDAOImpl implements PropertyDAO {
 		namedParameters.addValue(RM_PropertyDetails.PROPERTYDETAILSID, propertyDetailsId, Types.BIGINT);
 		
 		namedParameterJdbcTemplate.update(query.toString(), namedParameters);
+	}
+	
+	@Override
+	public void updatePropertiesOccupancy(HashMap<Long, Integer> propertyOccupancy) {
+		List<String> cols=new ArrayList<>();
+		cols.add(RM_PropertyDetails.OCCUPIED);
+		
+		StringBuilder query=new StringBuilder("UPDATE ").append(RM_PropertyDetails.TABLENAME).append(" SET ")
+				.append(RM_PropertyDetails.OCCUPIED).append("=").append(RM_PropertyDetails.OCCUPIED).append("-:").append(RM_PropertyDetails.OCCUPIED)
+				.append(" WHERE ").append(RM_PropertyDetails.PROPERTYDETAILSID)
+				.append("=:").append(RM_PropertyDetails.PROPERTYDETAILSID);
+		
+		MapSqlParameterSource[] namedParameters=new MapSqlParameterSource[propertyOccupancy.size()];
+		int i=0;
+		for(Map.Entry<Long, Integer> entry:propertyOccupancy.entrySet()) {
+			MapSqlParameterSource  namedParameter = new MapSqlParameterSource();
+			namedParameter.addValue(RM_PropertyDetails.OCCUPIED, entry.getValue(), Types.BIGINT);
+			namedParameter.addValue(RM_PropertyDetails.PROPERTYDETAILSID, entry.getKey(), Types.BIGINT);
+			namedParameters[i++]=namedParameter;
+		}
+	
+		namedParameterJdbcTemplate.batchUpdate(query.toString(), namedParameters);
+		
+	}
+	
+	@Override
+	public HashMap<String, Integer> getPropertiesCountByType(Long userId) {
+		StringBuilder query=new StringBuilder("SELECT ").append(RM_Property.PROPERTYTYPE+", count(*) FROM ").append(RM_Property.TABLENAME)
+				.append(" WHERE ").append(RM_Property.USERID).append("=:").append(RM_Property.USERID)
+				.append(" group by ").append(RM_Property.PROPERTYTYPE);
+		
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		namedParameters.addValue(RM_Property.USERID, userId, Types.BIGINT);
+		
+		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, (ResultSet rs) -> {
+			HashMap<String, Integer> map=new HashMap<>();
+			while(rs.next()) {
+				map.put(rs.getString(RM_Property.PROPERTYTYPE), rs.getInt("count"));
+			}
+			return map;
+		});		
+	}
+	
+	@Override
+	public List<HashMap<String, Object>> getPropertiesOccupantInfo(Long userId) {
+		StringBuilder query=new StringBuilder("SELECT query.propertyname, query.capacity, query.occupied, "
+				+ "TRUNC(query.occupied::DECIMAL/query.capacity,2)*100 as occupancypercentage FROM (");
+		StringBuilder innerQuery=new StringBuilder("SELECT ").append(RM_Property.PROPERTYNAME)
+				.append(", SUM(").append(RM_PropertyDetails.CAPACITY).append(") as capacity")
+				.append(", SUM(").append(RM_PropertyDetails.OCCUPIED).append(") as occupied FROM ").append(RM_Property.TABLENAME)
+				.append(" INNER JOIN ").append(RM_PropertyDetails.TABLENAME).append(" ON ")
+				.append(RM_Property.TABLENAME+"."+RM_Property.PROPERTYID)
+				.append("=").append(RM_PropertyDetails.TABLENAME+"."+RM_PropertyDetails.PROPERTYID)
+				.append(" WHERE ").append(RM_Property.USERID).append("=:").append(RM_Property.USERID)
+				.append(" GROUP BY ").append(RM_Property.TABLENAME+"."+RM_Property.PROPERTYID);
+		query.append(innerQuery.toString());
+		query.append(") as query order by occupancypercentage DESC");
+		
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		namedParameters.addValue(RM_Property.USERID, userId, Types.BIGINT);
+		
+		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, (ResultSet rs) -> {
+			List<HashMap<String, Object>> list=new ArrayList<>();
+			while(rs.next()) {
+				HashMap<String, Object> map=new HashMap<>();
+				map.put(RM_Property.PROPERTYNAME, rs.getString(RM_Property.PROPERTYNAME));
+				map.put(RM_PropertyDetails.CAPACITY, rs.getInt(RM_PropertyDetails.CAPACITY));
+				map.put(RM_PropertyDetails.OCCUPIED, rs.getInt(RM_PropertyDetails.OCCUPIED));
+				map.put("occupancypercentage", rs.getFloat("occupancypercentage"));
+				list.add(map);
+			}
+			return list;
+		});
+	}
+	
+	@Override
+	public HashMap<Long, Integer> getOccupantCountsforTenants(Long userId, List<Long> tenantIds) {
+		StringBuilder query=new StringBuilder("SELECT query.tenantspropertydetailid, query.occupants FROM (");
+		StringBuilder innerQuery=new StringBuilder("SELECT ").append(RM_Lease.TENANTSPROPERTYDETAILID)
+				.append(", SUM(").append(RM_Lease.OCCUPANTS).append(") as occupants FROM ").append(RM_Lease.TABLENAME)
+				.append(" INNER JOIN ").append(RM_Tenant.TABLENAME).append(" ON ")
+				.append(RM_Lease.LEASETENANTID).append("=").append(RM_Tenant.TENANTID)
+				.append(" WHERE ").append(RM_Tenant.USERID).append("=:").append(RM_Tenant.USERID)
+				.append(" AND ").append(RM_Tenant.TENANTID).append(" IN (:").append(RM_Tenant.TENANTID).append(")")
+				.append(" GROUP BY ").append(RM_Lease.TENANTSPROPERTYDETAILID);
+		query.append(innerQuery.toString());
+		query.append(") as query");
+		
+		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
+		namedParameters.addValue(RM_Tenant.USERID, userId, Types.BIGINT);
+		namedParameters.addValue(RM_Tenant.TENANTID, tenantIds);
+		
+		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, (ResultSet rs) -> {
+			HashMap<Long, Integer> map=new HashMap<>();
+			while(rs.next()) {
+				map.put(rs.getLong(RM_Lease.TENANTSPROPERTYDETAILID), rs.getInt(RM_Lease.OCCUPANTS));
+			}
+			return map;
+		});
 	}
 }

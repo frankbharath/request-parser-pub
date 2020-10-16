@@ -15,7 +15,7 @@ public class ApartmentPropertyDetailDTO extends PropertyDetailsDTO{
 	private String doorno;
 	
 	/** The floorno. */
-	private int floorno;
+	private Integer floorno;
 	
 	/**
 	 * Gets the doorno.
@@ -40,7 +40,7 @@ public class ApartmentPropertyDetailDTO extends PropertyDetailsDTO{
 	 *
 	 * @return the floorno
 	 */
-	public int getFloorno() {
+	public Integer getFloorno() {
 		return floorno;
 	}
 	
@@ -49,7 +49,7 @@ public class ApartmentPropertyDetailDTO extends PropertyDetailsDTO{
 	 *
 	 * @param floorno the floorno to set
 	 */
-	public void setFloorno(int floorno) {
+	public void setFloorno(Integer floorno) {
 		this.floorno = floorno;
 	}
 }

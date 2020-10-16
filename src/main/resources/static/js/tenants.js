@@ -187,7 +187,7 @@
 				payload.append("contractReq", vm.contractReq);
 				TenantDataServiceFactory.save({lease:"lease"}, payload).$promise
 				.then(function(res) {
-					$state.go("tenants", {"countRequired":true}, {reload: true});
+					$state.go("tenants");
 				}).catch(angular.noop);
 			}
 		}

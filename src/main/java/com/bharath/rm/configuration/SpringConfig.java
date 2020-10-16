@@ -1,11 +1,10 @@
 package com.bharath.rm.configuration;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -14,22 +13,18 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import com.bharath.rm.dao.UserDAOImpl;
-import com.bharath.rm.dao.interfaces.UserDAO;
+import com.bharath.rm.common.DTOModelMapper;
 import com.bharath.rm.model.OAuthDetails;
-import com.bharath.rm.payment.StripePayment;
-
 
 /**
  * @author bharath
@@ -53,7 +48,7 @@ import com.bharath.rm.payment.StripePayment;
  * Will scan for components mentioned in the below packages, spring will create and maintain the objects for the components class 
  * and can be autowired wherever required
 */
-@ComponentScan("com.bharath.rm.controller,com.bharath.rm.dao,com.bharath.rm.service")
+@ComponentScan("com.bharath.rm.controller,com.bharath.rm.dao,com.bharath.rm.service, com.bharath.rm.configuration")
 
 @ServletComponentScan(basePackages = { 
 	    "com.bharath.rm.filters", 
@@ -61,7 +56,11 @@ import com.bharath.rm.payment.StripePayment;
 	   })
 
 @EnableTransactionManagement
+@PropertySource("classpath:application.properties")
 public class SpringConfig  {
+	
+	@Autowired
+	private Environment env;
 	
 	@Bean
 	@Primary
@@ -82,6 +81,7 @@ public class SpringConfig  {
 	 * @return the data source
 	 */
 	@Bean
+	@Primary
     public DataSource dataSource() {
 		return getDatasourceProperties().initializeDataSourceBuilder().build();
     }
@@ -105,5 +105,27 @@ public class SpringConfig  {
 	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public JavaMailSender mailSender() {
+		JavaMailSenderImpl mailSender= new JavaMailSenderImpl();
+		
+		mailSender.setUsername(env.getProperty("spring.mail.username"));
+		mailSender.setPassword(env.getProperty("spring.mail.password"));
+		mailSender.setHost(env.getProperty("spring.mail.host"));
+		mailSender.setPort(Integer.parseInt(env.getProperty("spring.mail.port")));
+		
+		Properties properties=new Properties();
+		properties.setProperty("spring.mail.properties.mail.smtp.auth", "true");
+		properties.setProperty("spring.mail.properties.mail.smtp.starttls.enable", "true");
+		mailSender.setJavaMailProperties(properties);
+		
+		return mailSender;
+	}
+	
+	@Bean
+	public DTOModelMapper dtoModelMapper() {
+		return new DTOModelMapper();
 	}
 }

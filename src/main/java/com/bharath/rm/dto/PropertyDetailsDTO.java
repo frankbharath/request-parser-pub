@@ -69,7 +69,7 @@ public class PropertyDetailsDTO {
 	 *
 	 * @return the area
 	 */
-	public float getArea() {
+	public Float getArea() {
 		return area;
 	}
 	
@@ -87,7 +87,7 @@ public class PropertyDetailsDTO {
 	 *
 	 * @return the capacity
 	 */
-	public int getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
 	
@@ -105,7 +105,7 @@ public class PropertyDetailsDTO {
 	 *
 	 * @return the rent
 	 */
-	public float getRent() {
+	public Float getRent() {
 		return rent;
 	}
 	
@@ -131,13 +131,4 @@ public class PropertyDetailsDTO {
 	public void setOccupied(Integer occupied) {
 		this.occupied = occupied;
 	}
-
-	@Override
-	public String toString() {
-		return "PropertyDetailsDTO [propertyid=" + propertyid + ", propertydetailsid=" + propertydetailsid + ", area="
-				+ area + ", capacity=" + capacity + ", rent=" + rent + ", occupied=" + occupied + "]";
-	}
-	
-	
-
 }

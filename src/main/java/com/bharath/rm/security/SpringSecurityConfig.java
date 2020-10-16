@@ -2,9 +2,9 @@ package com.bharath.rm.security;
 
 import java.io.IOException;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -50,10 +53,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private final PasswordEncoder passwordEncoder;
 	
+	private final DataSource dataSource;
+	
 	@Autowired
-	public SpringSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+	private PersistentTokenRepository persistenceTokenRepository;
+	
+	private static final Integer REMEMBERMESECONDS=2592000;
+	
+	@Autowired
+	public SpringSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, DataSource dataSource) {
 		this.userDetailsService=userDetailsService;
 		this.passwordEncoder=passwordEncoder;
+		this.dataSource=dataSource;
 	}
 	
 	@Bean
@@ -62,6 +73,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
         authenticationFilter.setAuthenticationFailureHandler(this::loginFailureHandler);
         authenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
         authenticationFilter.setAuthenticationManager(authenticationManagerBean());
+        authenticationFilter.setRememberMeServices(getPersistentTokenBasedRememberMeServices());
         return authenticationFilter;
     }
 	
@@ -89,15 +101,33 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		auth.authenticationProvider(daoAuthenticationProvider());
 	}
 
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
+		db.setDataSource(dataSource);
+		return db;
+	}
+	
+	@Bean
+	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+	    PersistentTokenBasedRememberMeServices persistenceTokenBasedservice = new PersistentTokenBasedRememberMeServices("rememberme", userDetailsService, persistenceTokenRepository);
+	    persistenceTokenBasedservice.setAlwaysRemember(true);
+	    persistenceTokenBasedservice.setTokenValiditySeconds(REMEMBERMESECONDS);
+	    //persistenceTokenBasedservice.setUseSecureCookie(true);
+	    return persistenceTokenBasedservice;
+	  }
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-		/*.exceptionHandling().authenticationEntryPoint(authenticationEntryPointHandler())
-		.accessDeniedHandler(accessDeniedHandler())
-		.and().csrf()
-		.csrfTokenRepository(csrfTokenRepository())
-        .and()*/.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
-        .authorizeRequests()
+		http
+			.exceptionHandling().authenticationEntryPoint(authenticationEntryPointHandler())
+			.accessDeniedHandler(accessDeniedHandler())
+		.and()
+			.csrf()
+			.csrfTokenRepository(csrfTokenRepository())
+        .and()
+        	.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+        	.authorizeRequests()
         	.antMatchers(new String[] {"/resources/**","/favicon.ico"})
         	.permitAll()
         	.antMatchers(SecurityXMLConfig.getNoAuthUrl())
@@ -113,15 +143,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
         	.loginProcessingUrl("/login")
         	.permitAll()
         .and()
-        	.logout()
+        	.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         	.logoutSuccessUrl("/login")
-        	.permitAll();
+        	.permitAll()
+        .and()
+	        .rememberMe()
+	        .rememberMeServices(getPersistentTokenBasedRememberMeServices());
 	}
+	
 	private CsrfTokenRepository csrfTokenRepository() {
 	    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
 	    repository.setHeaderName("X-XSRF-TOKEN");
 	    return repository;
 	}
+	
     private void loginFailureHandler(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
         if(e instanceof BadCredentialsException) {
         	Utils.sendJSONErrorResponse(response, Utils.getApiException(I18NConfig.getMessage("error.user.bad_credentials"), HttpStatus.UNAUTHORIZED, ErrorCodes.INVALID_CREDENTIALS));

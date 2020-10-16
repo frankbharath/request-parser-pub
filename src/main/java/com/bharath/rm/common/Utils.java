@@ -145,11 +145,7 @@ public final class Utils {
 			resp.put(Constants.SUCCESS_CODE, code);
 		}
 		return resp;
-	}
-	
-	/*public static JSONObject getErrorObject(ErrorCodes code) {
-		return getErrorObject(code,null);
-	}*/
+	}	
 	
 	public static JSONObject getErrorObject(ErrorCodes code, String message) {
 		JSONObject resp=new JSONObject();
@@ -197,17 +193,15 @@ public final class Utils {
 	
 	public static String getHostURLWithPort() {
 		ApplicationProperties properties=ApplicationProperties.getInstance();
-		return "http://"+properties.getProperty("server.address")+":"+properties.getProperty("server.port");
+		return properties.getProperty("server.http")+properties.getProperty("server.address")+":"+properties.getProperty("server.port");
 	}
 	
 	public static long getUserId() {
-		//return Long.parseLong(RentPalThreadLocal.get("userId").toString());
-		return 1l;
+		return Long.parseLong(RentPalThreadLocal.get("userId").toString());
 	}
 	
 	public static String getUserEmail() {
-		//return RentPalThreadLocal.get("email").toString();
-		return "barathkumaras@gmail.com";
+		return RentPalThreadLocal.get("email").toString();
 	}
 	
 	public static boolean isAjaxRequest(HttpServletRequest request) {

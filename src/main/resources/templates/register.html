@@ -11,7 +11,7 @@
 	<script th:inline="javascript">
 		"use strict"
 		/*<![CDATA[*/
-		var unknownError=[[${unkown_issue}]];  
+		var unknownError=[[${unkown_issue}]];
 		/*]]>*/
 		function validateRegisterForm(element, eventtype){
 			let error=false;
@@ -57,7 +57,7 @@
 			data.append('email', form.email.value);
 			data.append('password', form.password.value);
 			data.append('confirmpassword', form.confirmpassword.value);
-			data.append('usertype.type', form.type.value);
+			data.append('usertype.type', "OWNER");
 			form.submit.classList.add("button_opacity");
 			form.submit.setAttribute("disabled","disabled");
 			let response=await fetch("/register", {
@@ -103,6 +103,23 @@
 				 validateRegisterForm(e.target,"focusout");
 			});
 			document.forms.register.addEventListener("submit", register);
+			var eyeElements=document.getElementsByClassName("eye");
+			for (var i = 0; i < eyeElements.length; i++) {
+				eyeElements[i].addEventListener('click', function(event){
+					event.stopPropagation();
+					var targetElem=event.target;
+					var input=event.target.previousElementSibling;
+					if(targetElem.classList.contains('showeye')){
+						input.type='text';
+						targetElem.classList.remove("showeye");
+						targetElem.classList.add("hideeye");
+					}else{
+						input.type='password';
+						targetElem.classList.remove("hideeye");
+						targetElem.classList.add('showeye');
+					}
+				});
+			}
 		});
 	</script>
 </head>
@@ -113,7 +130,7 @@
 	</div>
 	<div id="formDiv" align="center">
 		<div class="Padding-top--25 Padding-horizontal--48">
-			<div class="basic-drop-shadow" style="height: 535px;">
+			<div class="basic-drop-shadow" style="height: 475px;">
 				<div align="left" style="padding: 25px 20px 20px 35px;">
 					<div>
 						<span th:text="#{html.login.sigin}" class="Text-fontSize--20 Text-color--dark Text-fontWeight--regular"></span>
@@ -136,6 +153,7 @@
 							<br/>
 							<div class="PressableCore-base">
 								<input type="password" name="password" id="password" class="inputbox"/>
+								<div class="eye showeye"></div>
 								<div style="position:absolute;display:none;" class="error">
 									<span class="Text-color--red Text-fontSize--12 Text-fontWeight--medium" th:text="#{html.register.invalid_password}"></span>
 								</div>
@@ -149,12 +167,13 @@
 							<br/>
 							<div class="PressableCore-base">
 								<input type="password" name="confirmpassword" class="inputbox"/>
+								<div class="eye showeye"></div>
 								<div style="position:absolute;display:none;" class="error">
 									<span class="Text-color--red Text-fontSize--12 Text-fontWeight--medium" th:text="#{html.register.password_mismatch}"></span>
 								</div>
 							</div>
 						</div>
-						<div style="margin-top: 40px;min-height: 40px;">
+						<!--div style="margin-top: 40px;min-height: 40px;">
 							<div style="float:left;"><span th:text="#{html.register.youare}" class="Text-fontWeight--medium"></span></div>
 							<div style="float:left;margin-left: 5px;">
 								<input type="radio" name="type" value="OWNER" checked>
@@ -162,8 +181,8 @@
 								<input type="radio" name="type" value="TENANT">
 								<label th:text="#{html.register.tenant}"></label>
 							</div>
-						</div>
-						<div>
+						</div-->
+						<div style="margin-top: 40px;">
 							<div class="PressableCore-base">
 								<button disabled name="submit" class="button Text-color--white Text-fontWeight--medium button_opacity" th:text="#{html.register.createaccount}"></button>
 							</div>

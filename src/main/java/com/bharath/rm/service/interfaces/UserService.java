@@ -1,14 +1,9 @@
 package com.bharath.rm.service.interfaces;
 
-import java.io.IOException;
-
 import javax.mail.MessagingException;
-
-import org.json.JSONObject;
 
 import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.domain.User;
-import com.bharath.rm.model.domain.Verification;
 
 
 /**
@@ -18,7 +13,7 @@ import com.bharath.rm.model.domain.Verification;
  	* Class Description
 */
 public interface UserService {
-	public UserDTO addUser(User user) throws MessagingException;
+	public UserDTO addUser(User user, String confirmPassword) throws MessagingException;
 	public void verifyAccountForUser(String token);
 	public void sendVerificationLinkToUser(long userid, String email) throws MessagingException;
 	public void resetPassword(String email) throws MessagingException;

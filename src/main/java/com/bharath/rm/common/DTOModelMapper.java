@@ -11,6 +11,7 @@ import com.bharath.rm.dto.LeaseDTO;
 import com.bharath.rm.dto.PropertyDTO;
 import com.bharath.rm.dto.PropertyDetailsDTO;
 import com.bharath.rm.dto.TenantDTO;
+import com.bharath.rm.dto.UserDTO;
 import com.bharath.rm.model.domain.Apartment;
 import com.bharath.rm.model.domain.ApartmentPropertyDetails;
 import com.bharath.rm.model.domain.House;
@@ -18,16 +19,41 @@ import com.bharath.rm.model.domain.Lease;
 import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
 import com.bharath.rm.model.domain.Tenant;
+import com.bharath.rm.model.domain.User;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 29, 2020 5:44:38 PM
- 	* Class Description
-*/
+ * The Class DTOModelMapper.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 29, 2020 5:44:38 PM
+ * This class converts domain model to DTO and vice versa.
+ */
+
 public class DTOModelMapper {
 	
-	public static PropertyDTO propertyModelDTOMapper(Property property) {
+	/**
+	 * Converts user domain model to user DTO.
+	 *
+	 * @param user the user
+	 * @return the user DTO
+	 */
+	public UserDTO userModelDTOMapper(User user) {
+		UserDTO userDTO=new UserDTO();
+		userDTO.setEmail(user.getEmail());
+		userDTO.setUserid(user.getUserid());
+		userDTO.setUsertype(user.getUsertype().getType());
+		userDTO.setCreationtime(Utils.getDate(user.getCreationtime()));
+		return userDTO;
+	}
+	
+	/**
+	 * Convert property domain model to property DTO
+	 *
+	 * @param property the property
+	 * @return the property DTO
+	 */
+	public PropertyDTO propertyModelDTOMapper(Property property) {
 		PropertyDTO propertyDTO=new PropertyDTO();
 		propertyDTO.setUserid(property.getUserid());
 		propertyDTO.setPropertyid(property.getPropertyid());
@@ -41,7 +67,13 @@ public class DTOModelMapper {
 		return propertyDTO;
 	}
 	
-	public static HouseDTO houseModelDTOMapper(House house) {
+	/**
+	 * Converts house DTO to house domain model
+	 *
+	 * @param house the house
+	 * @return the house DTO
+	 */
+	public HouseDTO houseModelDTOMapper(House house) {
 		HouseDTO houseDTO=new HouseDTO();
 		houseDTO.setUserid(house.getUserid());
 		houseDTO.setPropertyid(house.getPropertyid());
@@ -62,11 +94,17 @@ public class DTOModelMapper {
 		detailsDTO.setRent(details.getRent());
 		detailsDTO.setOccupied(details.getOccupied());
 		houseDTO.setDetailsDTO(detailsDTO);
-		
+
 		return houseDTO;
 	}
 	
-	public static House houseDTOModelMapper(HouseDTO houseDTO) {
+	/**
+	 * Converts house domain model to house DTO
+	 *
+	 * @param houseDTO the house DTO
+	 * @return the house
+	 */
+	public House houseDTOModelMapper(HouseDTO houseDTO) {
 		
 		House house=new House();
 		house.setUserid(Utils.getUserId());
@@ -93,7 +131,13 @@ public class DTOModelMapper {
 		
 	}
 
-	public static Apartment apartmentDTOModelMapper(ApartmentDTO apartmentDTO) {
+	/**
+	 * Converts apartment DTO to apartment domain model
+	 *
+	 * @param apartmentDTO the apartment DTO
+	 * @return the apartment
+	 */
+	public Apartment apartmentDTOModelMapper(ApartmentDTO apartmentDTO) {
 		Apartment apartment=new Apartment();
 		apartment.setUserid(Utils.getUserId());
 		apartment.setPropertyid(apartmentDTO.getPropertyid());
@@ -114,7 +158,13 @@ public class DTOModelMapper {
 		return apartment;
 	}
 	
-	public static ApartmentDTO apartmentModelDTOMapper(Apartment apartment) {
+	/**
+	 * Converts apartment domain model to apartment DTO
+	 *
+	 * @param apartment the apartment
+	 * @return the apartment DTO
+	 */
+	public ApartmentDTO apartmentModelDTOMapper(Apartment apartment) {
 		ApartmentDTO apartmentDTO=new ApartmentDTO();
 		apartmentDTO.setUserid(apartment.getUserid());
 		apartmentDTO.setPropertyid(apartment.getPropertyid());
@@ -136,7 +186,13 @@ public class DTOModelMapper {
 		return apartmentDTO;
 	}
 	
-	public static PropertyDetailsDTO propertyDetailModelDTOMapper(PropertyDetails propertyDetails) {
+	/**
+	 * Converts property details domain model to property details DTO
+	 *
+	 * @param propertyDetails the property details
+	 * @return the property details DTO
+	 */
+	public PropertyDetailsDTO propertyDetailModelDTOMapper(PropertyDetails propertyDetails) {
 		PropertyDetailsDTO propertyDetailsDTO=new PropertyDetailsDTO();
 		propertyDetailsDTO.setPropertyid(propertyDetails.getPropertyid());
 		propertyDetailsDTO.setPropertydetailsid(propertyDetails.getPropertydetailsid());
@@ -147,7 +203,13 @@ public class DTOModelMapper {
 		return propertyDetailsDTO;
 	}
 	
-	public static ApartmentPropertyDetailDTO apartmentPropertyDetailsModelDTOMapper(ApartmentPropertyDetails details) {
+	/**
+	 * Converts apartment property details domain model to property details DTO
+	 *
+	 * @param details the details
+	 * @return the apartment property detail DTO
+	 */
+	public ApartmentPropertyDetailDTO apartmentPropertyDetailsModelDTOMapper(ApartmentPropertyDetails details) {
 		ApartmentPropertyDetailDTO unitDTO=new ApartmentPropertyDetailDTO();
 		PropertyDetails propertyDetails=details.getPropertyDetails();
 		unitDTO.setPropertyid(propertyDetails.getPropertyid());
@@ -161,7 +223,13 @@ public class DTOModelMapper {
 		return unitDTO;
 	}
 	
-	public static ApartmentPropertyDetails appartmentPropertyDetails(ApartmentPropertyDetailDTO unitDTO) {
+	/**
+	 * Converts apartment property details DTO to apartment property details domain model
+	 *
+	 * @param unitDTO the unit DTO
+	 * @return the apartment property details
+	 */
+	public ApartmentPropertyDetails appartmentPropertyDetails(ApartmentPropertyDetailDTO unitDTO) {
 		ApartmentPropertyDetails appartmentPropertyDetails=new ApartmentPropertyDetails();
 		PropertyDetails propertyDetails=new PropertyDetails();
 		propertyDetails.setPropertyid(unitDTO.getPropertyid());
@@ -178,7 +246,13 @@ public class DTOModelMapper {
 		return appartmentPropertyDetails;
 	}
 	
-	public static TenantDTO tenantModelDTOMapper(Tenant tenant) {
+	/**
+	 * Converts tenant domain model to tenant DTO
+	 *
+	 * @param tenant the tenant
+	 * @return the tenant DTO
+	 */
+	public TenantDTO tenantModelDTOMapper(Tenant tenant) {
 		TenantDTO tenantDTO=new TenantDTO();
 		tenantDTO.setTenantid(tenant.getTenantid());
 		tenantDTO.setTenantuserid(tenant.getTenantuserid());
@@ -190,7 +264,12 @@ public class DTOModelMapper {
 		return tenantDTO;
 	}
 	
-	public static Tenant tenantDTOModelMapper() {
+	/**
+	 * Converts tenant DTO to tenant domain model
+	 *
+	 * @return the tenant
+	 */
+	public Tenant tenantDTOModelMapper() {
 		Tenant tenant=new Tenant();
 		tenant.setTenantid(tenant.getTenantid());
 		tenant.setTenantuserid(tenant.getTenantuserid());
@@ -202,7 +281,14 @@ public class DTOModelMapper {
 		return tenant;
 	}
 	
-	public static Lease leaseDTOModelMapper(LeaseDTO leaseDTO) throws ParseException {
+	/**
+	 * Converts lease domain model to lease DTO
+	 *
+	 * @param leaseDTO the lease DTO
+	 * @return the lease
+	 * @throws ParseException the parse exception
+	 */
+	public Lease leaseDTOModelMapper(LeaseDTO leaseDTO) throws ParseException {
 		Lease lease=new Lease();
 		lease.setLeaseid(leaseDTO.getLeaseid());
 		lease.setLeasetenantid(leaseDTO.getLeasetenantid());
@@ -213,7 +299,13 @@ public class DTOModelMapper {
 		return lease;
 	}
 	
-	public static LeaseDTO leaseModelDTOMapper(Lease lease) {
+	/**
+	 * Converts lease DTO to lease domain model
+	 *
+	 * @param lease the lease
+	 * @return the lease DTO
+	 */
+	public LeaseDTO leaseModelDTOMapper(Lease lease) {
 		LeaseDTO leaseDTO=new LeaseDTO();
 		leaseDTO.setLeaseid(lease.getLeaseid());
 		leaseDTO.setLeasetenantid(lease.getLeasetenantid());

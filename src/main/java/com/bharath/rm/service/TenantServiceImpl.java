@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.bharath.rm.common.DTOModelMapper;
 import com.bharath.rm.common.Utils;
@@ -35,7 +34,6 @@ import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
 import com.bharath.rm.model.domain.Tenant;
 import com.bharath.rm.service.interfaces.TenantService;
-import com.lowagie.text.DocumentException;
 
 
 /**
@@ -53,16 +51,16 @@ public class TenantServiceImpl implements TenantService {
 	
 	private PropertyDAO propertyDAO;
 	
-	private SpringTemplateEngine templateEngine;
-	
 	private ZohoServiceImp zohoServiceImp;
 	
+	private DTOModelMapper dtoModelMapper;
+	
 	@Autowired
-	public TenantServiceImpl(TenantDAO tenantDAO, PropertyDAO propertyDAO, SpringTemplateEngine templateEngine, ZohoServiceImp zohoServiceImp) {
+	public TenantServiceImpl(TenantDAO tenantDAO, PropertyDAO propertyDAO, ZohoServiceImp zohoServiceImp, DTOModelMapper dtoModelMapper) {
 		this.tenantDAO=tenantDAO;
 		this.propertyDAO=propertyDAO;
-		this.templateEngine=templateEngine;
 		this.zohoServiceImp=zohoServiceImp;
+		this.dtoModelMapper=dtoModelMapper;
 	}
 	
 	@Override
@@ -74,7 +72,7 @@ public class TenantServiceImpl implements TenantService {
 		}
 		Long tenantId=tenantDAO.addTenant(tenant);
 		tenant.setTenantid(tenantId);
-		return DTOModelMapper.tenantModelDTOMapper(tenant);
+		return dtoModelMapper.tenantModelDTOMapper(tenant);
 	}
 	
 	@Override
@@ -88,12 +86,16 @@ public class TenantServiceImpl implements TenantService {
 			throw new APIRequestException(I18NConfig.getMessage("error.tenant_exists"));
 		}
 		tenantDAO.updateTenant(tenant);
-		return DTOModelMapper.tenantModelDTOMapper(tenant);
+		return dtoModelMapper.tenantModelDTOMapper(tenant);
 	}
 	
 	@Override
 	public void deleteTenants(List<Long> tenantIds) {
 		Long userId=Utils.getUserId();
+		HashMap<Long, Integer> propertyOccupancy=propertyDAO.getOccupantCountsforTenants(userId, tenantIds);
+		if(!propertyOccupancy.isEmpty()) {
+			propertyDAO.updatePropertiesOccupancy(propertyOccupancy);
+		}
 		tenantDAO.deleteTenants(userId, tenantIds);
 	}
 	
@@ -103,7 +105,7 @@ public class TenantServiceImpl implements TenantService {
 		List<TenantDTO> tenantListDTO=new ArrayList<>();
 		List<Tenant> tenantList=tenantDAO.getTenants(userId, searchQuery, pageNo);
 		for(Tenant tenant:tenantList) {
-			tenantListDTO.add(DTOModelMapper.tenantModelDTOMapper(tenant));
+			tenantListDTO.add(dtoModelMapper.tenantModelDTOMapper(tenant));
 		}
 		return tenantListDTO;
 	}
@@ -121,14 +123,14 @@ public class TenantServiceImpl implements TenantService {
 		if(tenant==null) {
 			throw new APIRequestException(I18NConfig.getMessage("error.tenant_does_not_exists"));
 		}
-		return DTOModelMapper.tenantModelDTOMapper(tenant);
+		return dtoModelMapper.tenantModelDTOMapper(tenant);
 	}
 	
 	@Override
 	public LeaseDTO addLease(LeaseDTO leaseDTO, String propertyType, Long propertyId, Boolean contractRequired) {
 		try {
 			// convert DTO to domain model
-			Lease lease=DTOModelMapper.leaseDTOModelMapper(leaseDTO);
+			Lease lease=dtoModelMapper.leaseDTOModelMapper(leaseDTO);
 			Long currentDate = Utils.parseDateToMilliseconds(new SimpleDateFormat("MMM d, yyyy").format(new Date()));
 			
 			if(lease.getMovein()<currentDate || Utils.diffDays(lease.getMovein(), lease.getMoveout())<Constants.MINDAYS) {
@@ -173,7 +175,7 @@ public class TenantServiceImpl implements TenantService {
 				updateContractStatus(userId, lease, propertyId, propertyType, details);
 			}
 			
-			return DTOModelMapper.leaseModelDTOMapper(lease);
+			return dtoModelMapper.leaseModelDTOMapper(lease);
 		} catch (ParseException e) {
 			throw new APIRequestException(I18NConfig.getMessage("error.invalid_lease_date"));
 		}
@@ -182,7 +184,7 @@ public class TenantServiceImpl implements TenantService {
 	@Override
 	public LeaseDTO updateLease(LeaseDTO leaseDTO, String propertyType, Long propertyId, Boolean contractRequired) {
 		try {
-			Lease lease = DTOModelMapper.leaseDTOModelMapper(leaseDTO);
+			Lease lease = dtoModelMapper.leaseDTOModelMapper(leaseDTO);
 			Long userId=Utils.getUserId();
 			
 			Long currentDate = Utils.parseDateToMilliseconds(new SimpleDateFormat("MMM d, yyyy").format(new Date()));
@@ -243,7 +245,7 @@ public class TenantServiceImpl implements TenantService {
 			if(contractRequired) {
 				updateContractStatus(userId, lease, propertyId, propertyType, details);
 			}
-			return DTOModelMapper.leaseModelDTOMapper(lease);
+			return dtoModelMapper.leaseModelDTOMapper(lease);
 		} catch (ParseException e) {
 			throw new APIRequestException(I18NConfig.getMessage("error.invalid_lease_date"));
 		}	
@@ -260,7 +262,7 @@ public class TenantServiceImpl implements TenantService {
 		List<LeaseDTO> leaseDTOs=new ArrayList<>();
 		List<Long> propertyDetailsId=new ArrayList<>();
 		for(Lease lease:leases) {
-			leaseDTOs.add(DTOModelMapper.leaseModelDTOMapper(lease));
+			leaseDTOs.add(dtoModelMapper.leaseModelDTOMapper(lease));
 			propertyDetailsId.add(lease.getTenantspropertydetailid());
 		}
 		if(!propertyDetailsId.isEmpty()) {
@@ -311,7 +313,7 @@ public class TenantServiceImpl implements TenantService {
 		}
 	}
 	
-	@Override
+	/*@Override
 	public void check() {
 		String html = this.templateEngine.process("rentalagreement", new Context());
 
@@ -343,5 +345,5 @@ public class TenantServiceImpl implements TenantService {
 		}
 	    
 		
-	}
+	}*/
 }

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bharath.rm.common.DTOModelMapper;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.Constants;
@@ -35,23 +36,21 @@ public class UserServiceImpl implements UserService {
 	
 	private EmailServiceImpl emailService;
 	
+	private DTOModelMapper dtoModelMapper;
+	
 	@Autowired
-	public UserServiceImpl(UserDAO userDAO) {
+	public UserServiceImpl(UserDAO userDAO, DTOModelMapper dtoModelMapper, PasswordEncoder passwordEncoder, EmailServiceImpl emailUtil) {
 		this.userDAO=userDAO;
-	}
-	
-	@Autowired
-	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
-	}
-	
-	@Autowired
-	public void setEmailUtil(EmailServiceImpl emailUtil) {
 		this.emailService = emailUtil;
+		this.dtoModelMapper=dtoModelMapper;
 	}
 	
 	@Override
-	public UserDTO addUser(User user) throws MessagingException {
+	public UserDTO addUser(User user, String confirmPassword) throws MessagingException {
+		if(!user.getPassword().equals(confirmPassword)) {
+			throw new APIRequestException(I18NConfig.getMessage("error.register.password_mismatch"));
+		}
 		if(userDAO.userExist(user.getEmail())) {
 			throw new APIRequestException(I18NConfig.getMessage("error.user.email_exists"));
 		}
@@ -62,12 +61,7 @@ public class UserServiceImpl implements UserService {
 		long userid=userDAO.addUser(user);
 		sendVerificationLinkToUser(userid, user.getEmail());
 		user.setUserid(userid);
-		UserDTO userDTO=new UserDTO();
-		userDTO.setEmail(user.getEmail());
-		userDTO.setUserid(userid);
-		userDTO.setUsertype(user.getUsertype().getType());
-		userDTO.setCreationtime(Utils.getDate(user.getCreationtime()));
-		return userDTO;
+		return dtoModelMapper.userModelDTOMapper(user);
 	}
 	
 	@Override

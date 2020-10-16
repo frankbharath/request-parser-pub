@@ -98,4 +98,10 @@ public class PropertyController {
 		APIRequestResponse response=Utils.getApiRequestResponse("", propertyService.getApartmentDetails(propertyId));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	} 
+	
+	@RequestMapping(value = "/statistics", method = RequestMethod.GET)
+	public ResponseEntity<Object> getPropertiesStatistics() {
+		APIRequestResponse response=Utils.getApiRequestResponse("", propertyService.getStatistics());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

@@ -21,7 +21,7 @@ public class ApartmentPropertyDetails {
 	private String doorno;
 	
 	/** The floorno. */
-	private int floorno;
+	private Integer floorno;
 	
 	/**
 	 * Gets the apartmentpropertydetailsid.
@@ -64,7 +64,7 @@ public class ApartmentPropertyDetails {
 	 *
 	 * @return the floorno
 	 */
-	public int getFloorno() {
+	public Integer getFloorno() {
 		return floorno;
 	}
 	
@@ -73,7 +73,7 @@ public class ApartmentPropertyDetails {
 	 *
 	 * @param floorno the floorno to set
 	 */
-	public void setFloorno(int floorno) {
+	public void setFloorno(Integer floorno) {
 		this.floorno = floorno;
 	}
 

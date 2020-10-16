@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data-dictionary>
 	<tables>
+		<table name="persistent_logins" description="This table remembers the user session">
+			<columns>
+				<column name="username" type="varchar(64)" null="false"/>
+				<column name="series" type="varchar(64)" null="false" primary-key="true"/>
+				<column name="token" type="varchar(64)" null="false"/>
+				<column name="last_used" type="timestamp" null="false"/>
+			</columns>
+		</table>
 		<table name="rm_usertype" description="There are two types of user as of now, i) Tenant, ii) Owner">
 			<columns>
 				<column name="typeid" type="bigserial" null="false" primary-key="true"/>
@@ -86,125 +94,6 @@
 				<column name="statusid" type="bigint" foreign-key="true" reference-table="rm_contractstatus" reference-column="contractstatusid" delete-cascade="true" null="false"/>
 			</columns>
 		</table>
-		<!--table name="rm_leaseaudit" description="Stores past lease information">
-			<columns>
-				<column name="rm_leaseaudit" type="bigserial" null="false" primary-key="true"/>
-				<column name="firstname" type="varchar(128)" null="false"/>
-				<column name="lastname" type="varchar(128)" null="false"/>
-				<column name="email" type="varchar(128)" null="false"/>
-				<column name="dob" type="varchar(64)" null="false"/>
-				<column name="nationality" type="char(3)" null="false"/>
-				<column name="addressline_1" type="varchar(128)" null="false"/>
-				<column name="addressline_2" type="varchar(128)" null="false"/>
-				<column name="city" type="varchar(64)" null="false"/>
-				<column name="postal" type="varchar(16)" null="false"/>
-				<column name="contractid" type="bigint"/>
-			</columns>
-		</table-->
-		<!-- table name="bq_group" description="This table helps to group similar question and can be easily used to create a quiz">
-			<columns>
-				<column name="groupid" type="bigserial" null="false" primary-key="true"/>
-				<column name="groupname" type="varchar(64)" null="false"/>
-				<column name="groupdesc" type="varchar(256)" null="false"/>
-				<column name="groupname_tokens" type="tsvector" null="true"/>
-				<column name="groupdesc_tokens" type="tsvector" null="true"/>
-				<column name="adminid" type="bigint" null="false" foreign-key="true" reference-table="bq_admin" reference-column="adminid" delete-cascade="true"/>
-				<column name="parentid" type="bigint" null="false" foreign-key="true" reference-table="bq_group" reference-column="groupid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_question" description="This table holds all the questions that admin can create">
-			<columns>
-				<column name="questionid" type="bigserial" null="false" primary-key="true"/>
-				<column name="questiontext" type="varchar(2048)" null="false"/>
-				<column name="questiontext_tokens" type="tsvector" null="true"/>
-				<column name="difficulty" type="int" null="false" allowed-values="1,2,3"/>
-				<column name="isdeleted" type="boolean" null="false"/>
-				<column name="adminid" type="bigint" null="false" foreign-key="true" reference-table="bq_admin" reference-column="adminid" delete-cascade="true"/>
-				<column name="groupid" type="bigint" null="false" foreign-key="true" reference-table="bq_group" reference-column="groupid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_option" description="This table holds all the options for the corresponding question">
-			<columns>
-				<column name="optionid" type="bigserial" null="false" primary-key="true"/>
-				<column name="optiontext" type="varchar(256)" null="false"/>
-				<column name="isvalid" type="boolean" null="false"/>
-				<column name="isdeleted" type="boolean" null="false"/>
-				<column name="questionid" type="bigint" null="false" foreign-key="true" reference-table="bq_question" reference-column="questionid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_topic" description="This table holds topics such as Data Structures, OOPS, SQL. This will be helpful to categorize questions">
-			<columns>
-				<column name="topicid" type="bigserial" null="false" primary-key="true"/>
-				<column name="topictext" type="varchar(64)" null="false"/>
-				<column name="topic_tokens" type="tsvector" null="true"/>
-				<column name="adminid" type="bigint" null="false" foreign-key="true" reference-table="bq_admin" reference-column="adminid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_questionTopicMapper" description="This table maps questions to topics and vice-versa. The relationship between BQ_Question and BQ_Topic is many to many, hence separate table">
-			<columns>
-				<column name="questionid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_question" reference-column="questionid" delete-cascade="true"/>
-				<column name="topicid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_topic" reference-column="topicid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_contestant" description="This table holds email addresses of the contestant who are part of quizzes">
-			<columns>
-				<column name="contestantid" type="bigserial" null="false" primary-key="true"/>
-				<column name="email" type="varchar(64)" null="false"/>
-				<column name="adminid" type="bigint" null="false" foreign-key="true" reference-table="bq_Admin" reference-column="adminid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_contestantGroup" description="This table helps to group contestant based on a criteria and admin can send quiz to the contestant group instead of adding each contestant separately">
-			<columns>
-				<column name="contestantgroupid" type="bigserial" null="false" primary-key="true"/>
-				<column name="contestantgroupname" type="varchar(64)" null="false"/>
-				<column name="contestantgroupdesc" type="varchar(512)" null="false"/>
-				<column name="adminid" type="bigint" null="false" foreign-key="true" reference-table="bq_admin" reference-column="adminid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_contestantGroupMapper" description="This table maps BQ_Contestant to BQ_ContestantGroup and vice-versa. The relationship between BQ_Contestant and BQ_ContestantGroup is many to many, hence separate table">
-			<columns>
-				<column name="contestantid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_contestant" reference-column="contestantid" delete-cascade="true"/>
-				<column name="contestantgroupid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_contestantGroup" reference-column="contestantgroupid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_quiz" description="This table represents instances of quizzes that were created by admins">
-			<columns>
-				<column name="quizid" type="bigserial" null="false" primary-key="true"/>
-				<column name="name" type="varchar(64)" null="false"/>
-				<column name="description" type="varchar(64)" null="true"/>
-				<column name="starttime" type="bigint" null="false"/>
-				<column name="duration" type="bigint" null="false"/>
-				<column name="adminid" type="bigint" null="false" foreign-key="true" reference-table="bq_admin" reference-column="adminid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_quizQuestionMapper" description="This table maps BQ_Quiz to BQ_Question and vice-versa. The relationship between BQ_Quiz and BQ_Question is many to many, hence separate table">
-			<columns>
-				<column name="questionid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_question" reference-column="questionid" delete-cascade="true"/>
-				<column name="quizid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_quiz" reference-column="quizid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_quizContestantMapper" description="This table maps BQ_Quiz to BQ_Contestant and vice-versa. The relationship between BQ_Quiz and BQ_Contestant is many to many, hence separate table">
-			<columns>
-				<column name="contestantid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_contestant" reference-column="contestantid" delete-cascade="true"/>
-				<column name="quizid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_quiz" reference-column="quizid" delete-cascade="true"/>
-			</columns>
-		</table>
-		<table name="bq_contestantQuiz" description="This table list the contestant who took part in the quiz">
-			<columns>
-				<column name="contestantquizid" type="bigserial" null="false" primary-key="true"/>
-				<column name="quizid" type="bigint" null="false" foreign-key="true" reference-table="bq_quiz" reference-column="quizid" delete-cascade="true"/>
-				<column name="contestantid" type="bigint" null="false" foreign-key="true" reference-table="bq_contestant" reference-column="contestantid" delete-cascade="true"/>
-				<column name="starttime" type="bigint" null="false"/>
-				<column name="endtime" type="bigint" null="false"/>
-			</columns>
-		</table>
-		<table name="bq_contestantQuizValidate" description="This table contains validation of each question taken by the contestant">
-			<columns>
-				<column name="contestantquizid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_contestantQuiz" reference-column="contestantquizid" delete-cascade="true"/>
-				<column name="questionid" type="bigint" null="false" primary-key="true" foreign-key="true" reference-table="bq_question" reference-column="questionid" delete-cascade="true"/>
-				<column name="isvalid" type="boolean" null="false"/>
-			</columns>
-		</table-->
 	</tables>
 	<default-values>
 		<default-value table="rm_usertype">
