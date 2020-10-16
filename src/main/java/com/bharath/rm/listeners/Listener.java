@@ -10,12 +10,12 @@ import javax.servlet.annotation.WebListener;
 import com.bharath.rm.security.SecurityXMLConfig;
 import com.bharath.rm.configuration.CreateTableConfig;
 
-
 /**
  * @author bharath
  * @version 1.0
  * Creation time: Jun 08, 2020 12:20:14 PM
- * The class Listener will be called when on Tomcat startup. The purpose of this class is to initialize database with tables and to parse the security.xml 
+ * The class Listener will be called when on Tomcat startup. The purpose of this class is to initialize
+ * database with tables and to parse the security.xml 
  * security.xml 
  * 
  */

@@ -1,5 +1,4 @@
 package com.bharath.rm.model;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class OAuthDetails.
@@ -10,12 +9,6 @@ package com.bharath.rm.model;
  * Class Description
  */
 public class OAuthDetails {
-	
-	@Override
-	public String toString() {
-		return "OAuthDetails [clientId=" + clientId + ", clientSecret=" + clientSecret + ", refreshToken="
-				+ refreshToken + ", accessToken=" + accessToken + "]";
-	}
 
 	/** The client id. */
 	public String clientId;

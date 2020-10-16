@@ -1,19 +1,14 @@
 package com.bharath.rm.exception;
-/**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 14, 2020 6:06:52 PM
- 	* Class Description
-*/
-
-import java.sql.Date;
 
 import org.springframework.http.HttpStatus;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class APIException.
- */
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 14, 2020 6:06:52 PM
+ * This class error response object on API exception
+*/
+
 public class APIException {
 	
 	/** The timestamp. */
@@ -24,7 +19,6 @@ public class APIException {
 	
 	/** The http status. */
 	HttpStatus httpStatus;
-	
 	
 	/** The status. */
 	String status;

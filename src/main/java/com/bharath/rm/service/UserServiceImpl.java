@@ -148,11 +148,6 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Boolean userCreatedStripeAccount() {
-		return userDAO.userCreatedStripeAccount(Utils.getUserId());
-	}
-	
-	@Override
 	public String getUserType() {
 		return userDAO.getUserType(Utils.getUserId());
 	}

@@ -1,13 +1,12 @@
 package com.bharath.rm.constants.tables;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RM_Lease.
  *
  * @author bharath
  * @version 1.0
  * Creation time: Sep 25, 2020 3:01:37 PM
- * Class Description
+ * This class represents rm_lease table and its column names
  */
 public class RM_Lease {
 	

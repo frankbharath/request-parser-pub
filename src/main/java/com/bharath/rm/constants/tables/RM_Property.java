@@ -1,13 +1,12 @@
 package com.bharath.rm.constants.tables;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RM_Property.
  *
  * @author bharath
  * @version 1.0
  * Creation time: Sep 2, 2020 8:54:52 PM
- * Class Description
+ * This class represents rm_property table and its column names
  */
 public class RM_Property {
 	

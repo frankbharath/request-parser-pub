@@ -9,7 +9,6 @@ import com.bharath.rm.model.domain.House;
 import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface PropertyDAO.
  *
@@ -24,6 +23,7 @@ public interface PropertyDAO {
 	/**
 	 * Property name exists.
 	 *
+	 * @param userId the user id
 	 * @param name the name
 	 * @return true, if successful
 	 */
@@ -32,6 +32,7 @@ public interface PropertyDAO {
 	/**
 	 * Property name exists.
 	 *
+	 * @param userId the user id
 	 * @param name the name
 	 * @param propertyId the property id
 	 * @return true, if successful
@@ -58,6 +59,7 @@ public interface PropertyDAO {
 	 * Adds the appartment details to property.
 	 *
 	 * @param appartmentPropertyDetails the appartment property details
+	 * @param propertyId the property id
 	 */
 	public void addAppartmentDetailsToProperty(List<ApartmentPropertyDetails> appartmentPropertyDetails, Long propertyId);
 	
@@ -151,6 +153,7 @@ public interface PropertyDAO {
 	 * Update appartment details to property.
 	 *
 	 * @param appartmentPropertyDetails the appartment property details
+	 * @param propertyId the property id
 	 */
 	public void updateAppartmentDetailsToProperty(List<ApartmentPropertyDetails> appartmentPropertyDetails, Long propertyId);
 	
@@ -233,14 +236,45 @@ public interface PropertyDAO {
 	 */
 	public ApartmentPropertyDetails getApartmentUnit(Long propertyId, Long propertyDetailId);
 
+	/**
+	 * Gets the all properties for property details.
+	 *
+	 * @param userId the user id
+	 * @param propertyDetailsId the property details id
+	 * @return the all properties for property details
+	 */
 	public HashMap<Long, Property> getAllPropertiesForPropertyDetails(Long userId, List<Long> propertyDetailsId);
 
+	/**
+	 * Gets the properties count by type.
+	 *
+	 * @param userId the user id
+	 * @return the properties count by type
+	 */
 	public HashMap<String, Integer> getPropertiesCountByType(Long userId);
 
+	/**
+	 * Gets the properties occupant info.
+	 *
+	 * @param userId the user id
+	 * @return the properties occupant info
+	 */
 	public List<HashMap<String, Object>> getPropertiesOccupantInfo(Long userId);
 
+	/**
+	 * Gets the occupant countsfor tenants.
+	 *
+	 * @param userId the user id
+	 * @param tenantId the tenant id
+	 * @return the occupant countsfor tenants
+	 */
 	public HashMap<Long, Integer> getOccupantCountsforTenants(Long userId, List<Long> tenantId);
 
+	/**
+	 * Update properties occupancy.
+	 *
+	 * @param propertyOccupancy the property occupancy
+	 */
 	public void updatePropertiesOccupancy(HashMap<Long, Integer> propertyOccupancy);
 
 	

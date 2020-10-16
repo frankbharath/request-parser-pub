@@ -9,14 +9,21 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Jul 12, 2020 9:52:39 PM
- 	* Class Description
-*/
+ * The Class ThymeleafTemplateConfig.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Jul 12, 2020 9:52:39 PM
+ * This class provides Thymeleaf Template Configuration that generates dynamic HTML from the server side.
+ */
 @Configuration
 public class ThymeleafTemplateConfig {
 	
+	/**
+	 * Spring template engine.
+	 *
+	 * @return the spring template engine
+	 */
 	@Bean
 	public SpringTemplateEngine springTemplateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
@@ -24,6 +31,11 @@ public class ThymeleafTemplateConfig {
         return templateEngine;
     }
     
+    /**
+     * Html template resolver.
+     *
+     * @return the spring resource template resolver
+     */
     @Bean
     public SpringResourceTemplateResolver htmlTemplateResolver(){
         SpringResourceTemplateResolver htmlTemplateResolver = new SpringResourceTemplateResolver();

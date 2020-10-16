@@ -20,7 +20,6 @@ public interface UserService {
 	public String getUserEmailForResetToken(String token);
 	public void updatePassword(String token, String password, String confirmPassword);
 	public Boolean userVerificationStatus(long userId);
-	public Boolean userCreatedStripeAccount();
 	public String getUserType();
 	public void changePassword(String password, String confirmPassword);
 }

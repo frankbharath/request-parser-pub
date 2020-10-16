@@ -26,6 +26,5 @@ public interface UserDAO {
 	public void updatePassword(long userId, String password);
 	public User getUser(String email);
 	public Boolean verificationStatus(long userId);
-	public Boolean userCreatedStripeAccount(long userId);
 	public String getUserType(long userId);
 }

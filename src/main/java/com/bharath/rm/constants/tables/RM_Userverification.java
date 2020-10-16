@@ -3,13 +3,11 @@ package com.bharath.rm.constants.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bharath.rm.constants.tables.RM_Users.Columns;
-
 /**
 	* @author bharath
  	* @version 1.0
 	* Creation time: Jul 12, 2020 7:09:04 PM
- 	* Class Description
+ 	* This class represents rm_userverification table and its column names
 */
 public enum RM_Userverification implements Table {
 

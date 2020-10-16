@@ -17,22 +17,40 @@ import com.bharath.rm.dto.HouseDTO;
 import com.bharath.rm.dto.PropertyDetailsDTO;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 14, 2020 12:28:28 AM
- 	* Class Description
-*/
+ * The Class PropertyArgumentResolver.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 14, 2020 12:28:28 AM
+ * This class parses complex HouseDTO and ApartmentDTO object. The object is consumed PropertyController. 
+ */
+
 public class PropertyArgumentResolver implements HandlerMethodArgumentResolver {
 
+	/**
+	 * Support for HouseDTO or ApartmentDTO.
+	 *
+	 * @param parameter the parameter
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.getParameterType().equals(HouseDTO.class) || parameter.getParameterType().equals(ApartmentDTO.class);
 	}
 
+	/**
+	 * Parses the request and generates the corresponding object according the property type.
+	 *
+	 * @param parameter the parameter
+	 * @param mavContainer the mav container
+	 * @param webRequest the web request
+	 * @param binderFactory the binder factory
+	 * @return the object
+	 * @throws Exception the exception
+	 */
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-		
 		
 		if(parameter.getParameterType().equals(HouseDTO.class)) {
 			HouseDTO houseDTO=new HouseDTO();

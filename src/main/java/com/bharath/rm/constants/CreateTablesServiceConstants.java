@@ -1,7 +1,10 @@
 package com.bharath.rm.constants;
 
-// TODO: Auto-generated Javadoc
 /**
+ * @author bharath
+ * @version 1.0
+ * Creation time: Jul 9, 2020 8:58:19 PM
+ * Class Description
  * The Class CreateTablesServiceConstants.
  */
 public class CreateTablesServiceConstants {
@@ -36,6 +39,7 @@ public class CreateTablesServiceConstants {
 	/** The Constant FOREIGNKEY. */
 	public static final String FOREIGNKEY="foreign-key";
 	
+	/** The Constant UNIQUEKEY. */
 	public static final String UNIQUEKEY="unique-key";
 	
 	/** The Constant REFERENCETABLE. */
@@ -50,9 +54,12 @@ public class CreateTablesServiceConstants {
 	/** The Constant ALLOWEDVALUES. */
 	public static final String ALLOWEDVALUES="allowed-values";
 	
+	/** The Constant DEFAULTVALUE. */
 	public static final String DEFAULTVALUE="default-value";
 	
+	/** The Constant DEFAULTROW. */
 	public static final String DEFAULTROW="default-row";
 	
+	/** The Constant INHERITS. */
 	public static final String INHERITS="inherits";
 }

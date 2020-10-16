@@ -6,7 +6,7 @@ package com.bharath.rm.constants.tables;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 2, 2020 8:51:40 PM
- * Class Description
+ *  This class represents rm_propertytype table and its column names
  */
 public class RM_PropertyType {
 	

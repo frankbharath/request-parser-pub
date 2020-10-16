@@ -1,5 +1,4 @@
 package com.bharath.rm.constants.tables;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class RM_Tenants.
@@ -7,7 +6,7 @@ package com.bharath.rm.constants.tables;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 25, 2020 2:58:50 PM
- * Class Description
+ * This class represents rm_tenant table and its column names
  */
 public class RM_Tenant {
 

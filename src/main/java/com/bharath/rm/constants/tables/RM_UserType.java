@@ -7,7 +7,7 @@ import java.util.List;
 	* @author bharath
  	* @version 1.0
 	* Creation time: Jul 10, 2020 8:29:33 PM
- 	* Class Description
+ 	* This class represents rm_usertype table and its column names
 */
 public enum RM_UserType implements Table{
 	TABLE{

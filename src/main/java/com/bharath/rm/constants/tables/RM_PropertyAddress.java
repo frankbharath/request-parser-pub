@@ -1,5 +1,4 @@
 package com.bharath.rm.constants.tables;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class RM_PropertyAddress.
@@ -7,7 +6,7 @@ package com.bharath.rm.constants.tables;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 2, 2020 8:58:56 PM
- * Class Description
+ * This class represents rm_propertyaddress table and its column names
  */
 public class RM_PropertyAddress {
 	

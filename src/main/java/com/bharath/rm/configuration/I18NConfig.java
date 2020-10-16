@@ -13,18 +13,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
-
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Jun 23, 2020 7:25:31 PM
- 	* Class Description
-*/
+ * The Class I18NConfig.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Jun 23, 2020 7:25:31 PM
+ * This class provides configuration for I18N
+ */
 @Configuration
 public class I18NConfig implements WebMvcConfigurer  {
 	
+	/** The message resource. */
 	private static MessageSource messageResource;
 	
+	/**
+	 * Message source.
+	 *
+	 * @return the message source
+	 */
 	//This bean is used in Utils.java
 	@Bean("messageSource")
 	public MessageSource messageSource() {
@@ -35,6 +42,11 @@ public class I18NConfig implements WebMvcConfigurer  {
 	    return messageSource;
 	}
 	
+	/**
+	 * Locale resolver.
+	 *
+	 * @return the locale resolver
+	 */
 	@Bean(name = "localeResolver")
 	public LocaleResolver localeResolver() {
 		CookieLocaleResolver clr = new CookieLocaleResolver();
@@ -42,6 +54,11 @@ public class I18NConfig implements WebMvcConfigurer  {
 	    return clr;
 	}
 	
+	/**
+	 * Adds the interceptors.
+	 *
+	 * @param registry the registry
+	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -50,9 +67,23 @@ public class I18NConfig implements WebMvcConfigurer  {
 	    registry.addInterceptor(localeChangeInterceptor);
 	 }
 	
+	/**
+	 * Gets the message for given key.
+	 *
+	 * @param key the key
+	 * @return the message
+	 */
 	public static String getMessage(String key) {
 		return getMessage(key,null);
 	}
+	
+	/**
+	 * Gets the message for given key and dynamic values.
+	 *
+	 * @param key the key
+	 * @param objs the objs
+	 * @return the message
+	 */
 	public static String getMessage(String key, Object[] objs) {
 		return messageResource.getMessage(key, objs,LocaleContextHolder.getLocale());
 	}

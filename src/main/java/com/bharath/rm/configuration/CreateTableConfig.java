@@ -1,14 +1,11 @@
 package com.bharath.rm.configuration;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -28,6 +25,8 @@ import com.bharath.rm.model.ForeignKey;
 import com.bharath.rm.model.Table;
 
 /**
+ * The Class CreateTableConfig.
+ *
  * @author bharath
  * @version 1.0
  * Creation time: Jun 10, 2020 12:00:10 AM
@@ -35,7 +34,7 @@ import com.bharath.rm.model.Table;
  */
 public final class CreateTableConfig extends DefaultHandler{
 	
-	/** The logger will be used to log information such as exceptions, info or debug **/
+	/**  The logger will be used to log information such as exceptions, info or debug *. */
 	private static final Logger log = LoggerFactory.getLogger(CreateTableConfig.class);
 
 	/** The data-dictionary.xml is located in the /src/main/resources. */
@@ -56,9 +55,12 @@ public final class CreateTableConfig extends DefaultHandler{
 	/** The foreign keys. */
 	private List<ForeignKey> foreignKeys;
 	
+	/** The insert default values. */
 	final private List<String> insertDefaultValues=new ArrayList<>();
 	
+	/** The insert query. */
 	private StringBuilder insertQuery;
+	
 	/**
 	 * This method will called when XML elements are opened such as <table>, <column>, etc. Make sure to initialize corresponding objects. 
 	 *
@@ -98,8 +100,6 @@ public final class CreateTableConfig extends DefaultHandler{
 			if(attributes.getValue(CreateTablesServiceConstants.PRIMARYKEY)!=null) {
 				primaryKeys.add(attributes.getValue(CreateTablesServiceConstants.NAME));
 			}
-			
-			
 			if(attributes.getValue(CreateTablesServiceConstants.FOREIGNKEY)!=null) {
 				ForeignKey.ForeignKeyBuilder foreignKeyBuilder=new ForeignKey.ForeignKeyBuilder().setColumnName(attributes.getValue(CreateTablesServiceConstants.NAME))
 				.setReferenceTable(attributes.getValue(CreateTablesServiceConstants.REFERENCETABLE))
@@ -134,6 +134,7 @@ public final class CreateTableConfig extends DefaultHandler{
 	 * @param qName the q name
 	 * @throws SAXException the SAX exception
 	 */
+	
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if(CreateTablesServiceConstants.TABLE.equals(qName)) {
@@ -146,11 +147,6 @@ public final class CreateTableConfig extends DefaultHandler{
 	/**
 	 * This method reads the data-dictionary.xml and passes the input stream to CreateTableServiceHandler which will create table
 	 * objects. The XML file is read using SAXparser as it does not load the entire XML file in the memory. 
-	 *
-	 * @throws ParserConfigurationException the parser configuration exception
-	 * @throws SAXException the SAX exception
-	 * @throws SQLException the SQL exception
-	 * @throws IOException 
 	 */
 	public static void init()  {
 		try {
@@ -176,6 +172,12 @@ public final class CreateTableConfig extends DefaultHandler{
 		}
 	}
 	
+	/**
+	 * Generates create tables statement for given list of table object.
+	 *
+	 * @param tables the tables
+	 * @return create statements for tables
+	 */
 	public static String[] getCreateStatementforTables(List<Table> tables) {
 		String[] statements=new String[tables.size()];
 		int c=0;
@@ -234,18 +236,4 @@ public final class CreateTableConfig extends DefaultHandler{
 		}
 		return statements;
 	}
-	
-	/*public static String constructInsertQuery(Table table, List<Column> columnNames) {
-		List<String> cols=columnNames.stream().map(c->c.getColumnName()).collect(Collectors.toList());
-		StringBuilder query = new StringBuilder("INSERT INTO ").append(table.getTableName())
-				.append(" (").append(String.join(",", cols)).append(") VALUES (")
-				.append(Stream.generate(() -> "?").limit(columnNames.size()).collect(Collectors.joining(","))).append(")");
-		return query.toString();
-	}
-	
-	public static String getSelectQuery(Table table, List<Column> columnNames) {
-		List<String> cols=columnNames.stream().map(c->c.getColumnName()).collect(Collectors.toList());
-		StringBuilder query = new StringBuilder("SELECT ").append(String.join(", ", cols)).append(" FROM ").append(table.getTableName());
-		return query.toString();
-	}*/
 }

@@ -27,12 +27,13 @@ import com.bharath.rm.common.DTOModelMapper;
 import com.bharath.rm.model.OAuthDetails;
 
 /**
+ * The Class SpringConfig.
+ *
  * @author bharath
  * @version 1.0
  * Creation time: Jun 15, 2020 10:59:14 PM
- *
- * This class contains spring configuration that are required to run the spring application. 
  * 
+ * This class contains spring configuration that are required to run the spring application. 
  */
 /**
  * This means it is a spring configuration written in java instead of XML. 
@@ -59,9 +60,15 @@ import com.bharath.rm.model.OAuthDetails;
 @PropertySource("classpath:application.properties")
 public class SpringConfig  {
 	
+	/** The Environment variable to read application properties.*/
 	@Autowired
 	private Environment env;
 	
+	/**
+	 * Gets the datasource properties.
+	 *
+	 * @return the datasource properties
+	 */
 	@Bean
 	@Primary
 	@ConfigurationProperties("spring.datasource")
@@ -69,6 +76,11 @@ public class SpringConfig  {
 	    return new DataSourceProperties();
 	}
 	
+	/**
+	 * Gets the oauth details.
+	 *
+	 * @return the oauth details
+	 */
 	@Bean
 	@ConfigurationProperties("spring.security.oauth2")
 	public OAuthDetails getOAuthDetails() {
@@ -97,16 +109,31 @@ public class SpringConfig  {
 		return new JdbcTemplate(dataSource());
 	}
 	
+	/**
+	 * NamedParameterJdbcTemplate is utilized for executing SQL queries.
+	 *
+	 * @return the named parameter jdbc template
+	 */
 	@Bean
 	public NamedParameterJdbcTemplate namedJdbcTemplate() {
 		return new NamedParameterJdbcTemplate(dataSource());
 	}
 	
+	/**
+	 * Used to encode user password.
+	 *
+	 * @return the password encoder
+	 */
 	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
+	/**
+	 * Generates a MailSender Object that will be used to send account verification email, password change email etc.
+	 *
+	 * @return the java mail sender
+	 */
 	@Bean
 	public JavaMailSender mailSender() {
 		JavaMailSenderImpl mailSender= new JavaMailSenderImpl();
@@ -124,6 +151,11 @@ public class SpringConfig  {
 		return mailSender;
 	}
 	
+	/**
+	 * Generates DTOModelMapper object that converts domain object to Data Transfer Object and vice versa.
+	 *
+	 * @return the DTO model mapper
+	 */
 	@Bean
 	public DTOModelMapper dtoModelMapper() {
 		return new DTOModelMapper();

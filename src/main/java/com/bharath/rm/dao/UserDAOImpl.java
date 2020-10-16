@@ -23,7 +23,6 @@ import org.springframework.stereotype.Repository;
 import com.bharath.rm.constants.Constants;
 import com.bharath.rm.constants.Constants.Tokentype;
 import com.bharath.rm.constants.tables.Column;
-import com.bharath.rm.constants.tables.RM_Stripeusers;
 import com.bharath.rm.constants.tables.RM_UserType;
 import com.bharath.rm.constants.tables.RM_Users;
 import com.bharath.rm.constants.tables.RM_Userverification;
@@ -37,6 +36,7 @@ import com.bharath.rm.model.domain.Verification;
 	* Creation time: Jul 9, 2020 8:58:19 PM
  	* Class Description
 */
+
 @Repository
 
 public class UserDAOImpl implements UserDAO {
@@ -196,13 +196,6 @@ public class UserDAOImpl implements UserDAO {
 		StringBuilder query=new StringBuilder("SELECT ").append(RM_Users.Columns.VERIFIED.getColumnName()).append(" FROM ").append(RM_Users.TABLE.getTableName())
 				.append(" WHERE ").append(RM_Users.Columns.USERID.getColumnName()).append("=?");
 		return DataAccessUtils.singleResult(jdbcTemplate.queryForList(query.toString(), new Object[] {userId}, Boolean.class));
-	}
-	
-	@Override
-	public Boolean userCreatedStripeAccount(long userId) {
-		String query=new StringBuilder("SELECT EXISTS (SELECT 1 FROM ").append(RM_Stripeusers.TABLE.getTableName()).append(" WHERE ")
-				.append(RM_Stripeusers.Columns.USERID.getColumnName()).append("=?)").toString();
-		return jdbcTemplate.queryForObject(query, new Object[]{userId}, Boolean.class);
 	}
 	
 	@Override

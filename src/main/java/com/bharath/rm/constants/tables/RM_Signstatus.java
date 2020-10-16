@@ -6,7 +6,7 @@ package com.bharath.rm.constants.tables;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 28, 2020 9:36:35 PM
- * Class Description
+ *  This class represents rm_signstatus table and its column names
  */
 public class RM_Signstatus {
 	

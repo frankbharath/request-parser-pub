@@ -1,10 +1,4 @@
 package com.bharath.rm.common;
-/**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 23, 2020 8:39:39 PM
- 	* Class Description
-*/
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,8 +17,22 @@ import com.bharath.rm.model.domain.Lease;
 import com.bharath.rm.model.domain.Property;
 import com.bharath.rm.model.domain.PropertyDetails;
 
+/**
+	@author bharath
+	@version 1.0
+	Creation time: Sep 23, 2020 8:39:39 PM
+	This class generates insert and update queries, it also converts result set to corresponding domain objects
+*/
+
 public class QueryUtils {
 	
+	/**
+	 * Parses result set to get PropertyDetails object
+	 *
+	 * @param rs the result set
+	 * @return the property details
+	 * @throws SQLException the SQL exception
+	 */
 	public static PropertyDetails getPropertyDetails(ResultSet rs) throws SQLException {
 		PropertyDetails details=new PropertyDetails();
 		details.setPropertyid(rs.getLong(RM_PropertyDetails.PROPERTYID));
@@ -36,6 +44,13 @@ public class QueryUtils {
 		return details;
 	}
 	
+	/**
+	 * Parses result set to get Property object
+	 *
+	 * @param rs the result set
+	 * @return the property
+	 * @throws SQLException the SQL exception
+	 */
 	public static Property getProperty(ResultSet rs) throws SQLException {
 		Property property=new Property();
 		property.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
@@ -50,6 +65,13 @@ public class QueryUtils {
         return property;
 	}
 	
+	/**
+	 * Parses result set to get House object
+	 *
+	 * @param rs the result set
+	 * @return the house
+	 * @throws SQLException the SQL exception
+	 */
 	public static House getHouse(ResultSet rs) throws SQLException {
 		House house=new House();
 		house.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
@@ -65,6 +87,13 @@ public class QueryUtils {
 		return house;
 	}
 	
+	/**
+	 * Parses result set to get Apartment object
+	 *
+	 * @param rs the result set
+	 * @return the apartment
+	 * @throws SQLException the SQL exception
+	 */
 	public static Apartment getApartment(ResultSet rs) throws SQLException {
 		Apartment apartment=new Apartment();
 		apartment.setPropertyid(rs.getLong(RM_Property.PROPERTYID));
@@ -79,6 +108,13 @@ public class QueryUtils {
 		return apartment;
 	}
 	
+	/**
+	 * Parses result set to get ApartmentPropertyDetails object
+	 *
+	 * @param rs the result set
+	 * @return the apartment property detail
+	 * @throws SQLException the SQL exception
+	 */
 	public static ApartmentPropertyDetails getApartmentPropertyDetail(ResultSet rs) throws SQLException {
 		ApartmentPropertyDetails details=new ApartmentPropertyDetails();
 		PropertyDetails propertyDetails=new PropertyDetails();
@@ -95,6 +131,13 @@ public class QueryUtils {
 		return details;
 	}
 	
+	/**
+	 * Parses result set to get Lease object
+	 *
+	 * @param rs the result set
+	 * @return the lease
+	 * @throws SQLException the SQL exception
+	 */
 	public static Lease getLease(ResultSet rs) throws SQLException {
 		Lease lease=new Lease();
 		lease.setContractid(rs.getString(RM_Lease.CONTRACTID));
@@ -111,6 +154,13 @@ public class QueryUtils {
 		return lease;
 	}
 	
+	/**
+	 * Generates insert query for given table and list of columns.
+	 *
+	 * @param tableName the table name
+	 * @param cols the column list
+	 * @return the insert query
+	 */
 	public static String getInsertQuery(String tableName, List<String> cols) {
 		StringBuilder query=new StringBuilder("INSERT INTO ").append(tableName).append("(")
 				.append(String.join(",", cols)).append(") VALUES (")
@@ -118,6 +168,13 @@ public class QueryUtils {
 		return query.toString();
 	}
 	
+	/**
+	 *  Generates update query for given table and list of columns.
+	 *
+	 * @param tableName the table name
+	 * @param cols the column list
+	 * @return the update query
+	 */
 	public static String getUpdateQuery(String tableName, List<String> cols) {
 		StringBuilder query=new StringBuilder("UPDATE ").append(tableName).append(" SET ")
 				.append(String.join(",", cols.stream().map(val -> val.concat("=:").concat(val)).collect(Collectors.toList())));
