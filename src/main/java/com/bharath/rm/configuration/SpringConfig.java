@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,6 +58,7 @@ import com.bharath.rm.model.OAuthDetails;
 	   })
 
 @EnableTransactionManagement
+@EnableConfigurationProperties
 @PropertySource("classpath:application.properties")
 public class SpringConfig  {
 	
@@ -137,17 +139,14 @@ public class SpringConfig  {
 	@Bean
 	public JavaMailSender mailSender() {
 		JavaMailSenderImpl mailSender= new JavaMailSenderImpl();
-		
 		mailSender.setUsername(env.getProperty("spring.mail.username"));
 		mailSender.setPassword(env.getProperty("spring.mail.password"));
 		mailSender.setHost(env.getProperty("spring.mail.host"));
 		mailSender.setPort(Integer.parseInt(env.getProperty("spring.mail.port")));
-		
 		Properties properties=new Properties();
-		properties.setProperty("spring.mail.properties.mail.smtp.auth", "true");
-		properties.setProperty("spring.mail.properties.mail.smtp.starttls.enable", "true");
+		properties.setProperty("mail.smtp.auth", "true");
+		properties.setProperty("mail.smtp.starttls.enable", "true");
 		mailSender.setJavaMailProperties(properties);
-		
 		return mailSender;
 	}
 	

@@ -279,7 +279,7 @@ public final class Utils {
 	 * @return the host URL
 	 */
 	public static String getHostURL() {
-		return ApplicationProperties.getInstance().getProperty("server.address");
+		return ApplicationProperties.getInstance().getProperty("server_address");
 	}
 	
 	/**
@@ -289,7 +289,7 @@ public final class Utils {
 	 */
 	public static String getHostURLWithPort() {
 		ApplicationProperties properties=ApplicationProperties.getInstance();
-		return properties.getProperty("server.http")+properties.getProperty("server.address")+":"+properties.getProperty("server.port");
+		return properties.getProperty("server.http")+properties.getProperty("server_address")+":"+properties.getProperty("server.port");
 	}
 	
 	/**
@@ -366,5 +366,15 @@ public final class Utils {
 	 */
 	public static int diffDays(Long startMilliseconds, Long endMilliseconds) {
 		return (int) ((endMilliseconds-startMilliseconds) / (1000*60*60*24));
+	}
+	
+	/**
+	 * Convert days to milliseconds.
+	 *
+	 * @param days the days
+	 * @return the long
+	 */
+	public static long convertDaysToMilliseconds(int days) {
+		return days*86400000l;
 	}
 }

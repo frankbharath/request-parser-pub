@@ -6,9 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,27 +36,40 @@ import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.filters.CsrfHeaderFilter;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Jun 29, 2020 5:01:07 PM
- 	* Class Description
-*/
+ * The Class SpringSecurityConfig.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Jun 29, 2020 5:01:07 PM
+ */
 
 @EnableWebSecurity
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	
+	/** The user details service. */
 	private final UserDetailsService userDetailsService;
 	
+	/** The password encoder. */
 	private final PasswordEncoder passwordEncoder;
 	
+	/** The data source. */
 	private final DataSource dataSource;
 	
+	/** The persistence token repository. */
 	@Autowired
 	private PersistentTokenRepository persistenceTokenRepository;
 	
+	/** The Constant REMEMBERMESECONDS. */
 	private static final Integer REMEMBERMESECONDS=2592000;
 	
+	/**
+	 * Instantiates a new spring security config.
+	 *
+	 * @param userDetailsService the user details service
+	 * @param passwordEncoder the password encoder
+	 * @param dataSource the data source
+	 */
 	@Autowired
 	public SpringSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, DataSource dataSource) {
 		this.userDetailsService=userDetailsService;
@@ -67,6 +77,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		this.dataSource=dataSource;
 	}
 	
+	/**
+	 * Authentication filter.
+	 *
+	 * @return the ajax authentication filter
+	 * @throws Exception the exception
+	 */
 	@Bean
     public AjaxAuthenticationFilter authenticationFilter() throws Exception {
 		AjaxAuthenticationFilter authenticationFilter = new AjaxAuthenticationFilter();
@@ -77,6 +93,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
         return authenticationFilter;
     }
 	
+	/**
+	 * Dao authentication provider.
+	 *
+	 * @return the dao authentication provider
+	 */
 	@Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -86,21 +107,42 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
         return daoAuthenticationProvider;
     }
 	
+	/**
+	 * Authentication entry point handler.
+	 *
+	 * @return the custom authentication entry point handler
+	 */
 	@Bean
 	public CustomAuthenticationEntryPointHandler authenticationEntryPointHandler() {
 		return new CustomAuthenticationEntryPointHandler();
 	}
 	
+	/**
+	 * Access denied handler.
+	 *
+	 * @return the custom access denied handler
+	 */
 	@Bean
 	public CustomAccessDeniedHandler accessDeniedHandler() {
 		return new CustomAccessDeniedHandler();
 	}
 	
+	/**
+	 * Configure.
+	 *
+	 * @param auth the auth
+	 * @throws Exception the exception
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(daoAuthenticationProvider());
 	}
 
+	/**
+	 * Persistent token repository.
+	 *
+	 * @return the persistent token repository
+	 */
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
@@ -108,6 +150,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		return db;
 	}
 	
+	/**
+	 * Gets the persistent token based remember me services.
+	 *
+	 * @return the persistent token based remember me services
+	 */
 	@Bean
 	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
 	    PersistentTokenBasedRememberMeServices persistenceTokenBasedservice = new PersistentTokenBasedRememberMeServices("rememberme", userDetailsService, persistenceTokenRepository);
@@ -117,6 +164,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	    return persistenceTokenBasedservice;
 	  }
 	
+	/**
+	 * Configure.
+	 *
+	 * @param http the http
+	 * @throws Exception the exception
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -151,12 +204,25 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	        .rememberMeServices(getPersistentTokenBasedRememberMeServices());
 	}
 	
+	/**
+	 * Csrf token repository.
+	 *
+	 * @return the csrf token repository
+	 */
 	private CsrfTokenRepository csrfTokenRepository() {
 	    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
 	    repository.setHeaderName("X-XSRF-TOKEN");
 	    return repository;
 	}
 	
+    /**
+     * Login failure handler.
+     *
+     * @param request the request
+     * @param response the response
+     * @param e the e
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void loginFailureHandler(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
         if(e instanceof BadCredentialsException) {
         	Utils.sendJSONErrorResponse(response, Utils.getApiException(I18NConfig.getMessage("error.user.bad_credentials"), HttpStatus.UNAUTHORIZED, ErrorCodes.INVALID_CREDENTIALS));

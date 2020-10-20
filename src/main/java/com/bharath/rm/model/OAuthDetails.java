@@ -6,7 +6,6 @@ package com.bharath.rm.model;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 28, 2020 11:15:08 PM
- * Class Description
  */
 public class OAuthDetails {
 

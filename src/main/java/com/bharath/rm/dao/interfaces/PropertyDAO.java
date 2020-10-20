@@ -15,13 +15,13 @@ import com.bharath.rm.model.domain.PropertyDetails;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 2, 2020 6:53:42 PM
- * Class Description
+ * This interface contains all mandatory function that should be implemented when class implements.
  */
 
 public interface PropertyDAO {
 	
 	/**
-	 * Property name exists.
+	 * Checks whether property name already exists in the database or not. This function is used while adding new property to the database.
 	 *
 	 * @param userId the user id
 	 * @param name the name
@@ -30,7 +30,7 @@ public interface PropertyDAO {
 	public boolean propertyNameExists(Long userId, String name);
 	
 	/**
-	 * Property name exists.
+	 *  Checks whether property name already exists in the database or not. This function is used while updating new property to the database.
 	 *
 	 * @param userId the user id
 	 * @param name the name
@@ -43,7 +43,7 @@ public interface PropertyDAO {
 	 * Adds the property.
 	 *
 	 * @param property the property
-	 * @return the long
+	 * @return property id
 	 */
 	public Long addProperty(Property property);
 	
@@ -51,12 +51,12 @@ public interface PropertyDAO {
 	 * Adds the property details.
 	 *
 	 * @param propertyDetails the property details
-	 * @return the long
+	 * @return property details id
 	 */
 	public Long addPropertyDetails(PropertyDetails propertyDetails);
 	
 	/**
-	 * Adds the appartment details to property.
+	 * Adds the apartment details to property.
 	 *
 	 * @param appartmentPropertyDetails the appartment property details
 	 * @param propertyId the property id

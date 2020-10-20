@@ -2,7 +2,6 @@ package com.bharath.rm.dto;
 
 import org.springframework.http.HttpStatus;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class APIRequestResponse.
  *

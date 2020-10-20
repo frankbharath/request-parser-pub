@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.bharath.rm.common.Utils;
@@ -17,13 +16,23 @@ import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.ErrorCodes;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 16, 2020 12:11:45 AM
- 	* Class Description
-*/
+ * The Class CustomAccessDeniedHandler.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 16, 2020 12:11:45 AM
+ */
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
+	/**
+	 * Handle.
+	 *
+	 * @param request the request
+	 * @param response the response
+	 * @param accessDeniedException the access denied exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ServletException the servlet exception
+	 */
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {

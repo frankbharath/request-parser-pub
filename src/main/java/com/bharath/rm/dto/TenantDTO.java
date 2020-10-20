@@ -3,8 +3,8 @@ package com.bharath.rm.dto;
 	* @author bharath
  	* @version 1.0
 	* Creation time: Sep 25, 2020 9:02:48 PM
- 	* Class Description
 */
+
 public class TenantDTO {
 	
 	/** The tenantsid. */

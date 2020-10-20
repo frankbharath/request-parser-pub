@@ -6,8 +6,8 @@ package com.bharath.rm.model.domain;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 25, 2020 3:05:25 PM
- * Class Description
  */
+
 public class Tenant {
 	
 	/** The tenantsid. */

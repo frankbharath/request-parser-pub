@@ -1,28 +1,63 @@
 package com.bharath.rm.model;
 
+/**
+ * The Class ForeignKey.
+ */
 public class ForeignKey {
 	
+	/** The column name. */
 	private String columnName;
+	
+	/** The reference table. */
 	private String referenceTable;
+	
+	/** The reference column. */
 	private String referenceColumn;
+	
+	/** The delete cascade. */
 	private boolean deleteCascade;
 	
+	/**
+	 * Gets the column name.
+	 *
+	 * @return the column name
+	 */
 	public String getColumnName() {
 		return columnName;
 	}
 
+	/**
+	 * Gets the reference table.
+	 *
+	 * @return the reference table
+	 */
 	public String getReferenceTable() {
 		return referenceTable;
 	}
 
+	/**
+	 * Gets the reference column.
+	 *
+	 * @return the reference column
+	 */
 	public String getReferenceColumn() {
 		return referenceColumn;
 	}
 
+	/**
+	 * Checks if is delete cascade.
+	 *
+	 * @return true, if is delete cascade
+	 */
 	public boolean isDeleteCascade() {
 		return deleteCascade;
 	}
 
+	/**
+	 * Instantiates a new foreign key.
+	 *
+	 * @param foreignKeyBuilder the foreign key builder
+	 */
 	private ForeignKey(ForeignKeyBuilder foreignKeyBuilder) {
 		String error=null;
 		if(foreignKeyBuilder.getColumnName()==null) {
@@ -41,6 +76,9 @@ public class ForeignKey {
 		this.deleteCascade=foreignKeyBuilder.isDeleteCascade();
 	}
 	
+	/**
+	 * The Class ForeignKeyBuilder.
+	 */
 	public static class ForeignKeyBuilder {
 		
 		/** Holds the column name. */
@@ -52,7 +90,7 @@ public class ForeignKey {
 		/** Holds the reference table column name. */
 		private String referenceColumn;
 		
-		/** boolean value that dictates whether the child row should be deleted when parent row is deleted */
+		/**  boolean value that dictates whether the child row should be deleted when parent row is deleted. */
 		private boolean deleteCascade;
 		
 		/**
@@ -146,6 +184,11 @@ public class ForeignKey {
 	}
 
 	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		return "ForeignKey [columnName=" + columnName + ", referenceTable=" + referenceTable + ", referenceColumn="

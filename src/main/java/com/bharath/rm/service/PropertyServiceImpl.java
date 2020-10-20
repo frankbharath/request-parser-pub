@@ -28,25 +28,41 @@ import com.bharath.rm.model.domain.PropertyDetails;
 import com.bharath.rm.service.interfaces.PropertyService;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 2, 2020 6:50:17 PM
- 	* Class Description
-*/
+ * The Class PropertyServiceImpl.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 2, 2020 6:50:17 PM
+ */
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class PropertyServiceImpl implements PropertyService {
 	
+	/** The property DAO. */
 	private PropertyDAO propertyDAO;
 	
+	/** The dto model mapper. */
 	private DTOModelMapper dtoModelMapper;
 	
+	/**
+	 * Instantiates a new property service impl.
+	 *
+	 * @param propertyDAO the property DAO
+	 * @param dtoModelMapper the dto model mapper
+	 */
 	@Autowired
 	public PropertyServiceImpl(PropertyDAO propertyDAO, DTOModelMapper dtoModelMapper) {
 		this.dtoModelMapper=dtoModelMapper;
 		this.propertyDAO=propertyDAO;
 	}
 
+	/**
+	 * Adds the house.
+	 *
+	 * @param houseDTO the house DTO
+	 * @return the house DTO
+	 */
 	@Override
 	public HouseDTO addHouse(HouseDTO houseDTO) {
 		//adding the property to the database
@@ -70,6 +86,12 @@ public class PropertyServiceImpl implements PropertyService {
 		return dtoModelMapper.houseModelDTOMapper(house);
 	}
 	
+	/**
+	 * Adds the appartment.
+	 *
+	 * @param apartmentDTO the apartment DTO
+	 * @return the apartment DTO
+	 */
 	@Override
 	public ApartmentDTO addAppartment(ApartmentDTO apartmentDTO) {
 		//adding the property to the database
@@ -90,6 +112,12 @@ public class PropertyServiceImpl implements PropertyService {
 		return dtoModelMapper.apartmentModelDTOMapper(apartment);
 	}
 
+	/**
+	 * Adds the property.
+	 *
+	 * @param property the property
+	 * @return the long
+	 */
 	@Override
 	public Long addProperty(Property property) {
 		//check if property name already exists
@@ -100,6 +128,12 @@ public class PropertyServiceImpl implements PropertyService {
 		return propertyId;
 	}
 	
+	/**
+	 * Update house.
+	 *
+	 * @param houseDTO the house DTO
+	 * @return the house DTO
+	 */
 	@Override
 	public HouseDTO updateHouse(HouseDTO houseDTO) {
 		//update the property
@@ -117,6 +151,13 @@ public class PropertyServiceImpl implements PropertyService {
 		return dtoModelMapper.houseModelDTOMapper(house);
 	}
 
+	/**
+	 * Update appartment.
+	 *
+	 * @param apartmentDTO the apartment DTO
+	 * @param deleteUnits the delete units
+	 * @return the apartment DTO
+	 */
 	@Override
 	public ApartmentDTO updateAppartment(ApartmentDTO apartmentDTO, List<Long> deleteUnits) {
 		//update the property
@@ -162,6 +203,11 @@ public class PropertyServiceImpl implements PropertyService {
 		return dtoModelMapper.apartmentModelDTOMapper(getApartment);
 	}
 	
+	/**
+	 * Update property.
+	 *
+	 * @param property the property
+	 */
 	@Override
 	public void updateProperty(Property property) {
 		// check if property exists for the user for given type
@@ -176,6 +222,13 @@ public class PropertyServiceImpl implements PropertyService {
 		propertyDAO.updateProperty(property);
 	}
 	
+	/**
+	 * Gets the all properties.
+	 *
+	 * @param searchQuery the search query
+	 * @param pageNo the page no
+	 * @return the all properties
+	 */
 	@Override
 	public List<PropertyDTO> getAllProperties(String searchQuery, Integer pageNo) {
 		Long userId=Utils.getUserId();
@@ -187,6 +240,11 @@ public class PropertyServiceImpl implements PropertyService {
 		return propertyDTOList;
 	}
 	
+	/**
+	 * Gets the all properties with meta data.
+	 *
+	 * @return the all properties with meta data
+	 */
 	@Override
 	public HashMap<String, Object> getAllPropertiesWithMetaData() {
 		Long userId=Utils.getUserId();
@@ -232,12 +290,24 @@ public class PropertyServiceImpl implements PropertyService {
 		return map;
 	}
 	
+	/**
+	 * Gets the properties count.
+	 *
+	 * @param searchQuery the search query
+	 * @return the properties count
+	 */
 	@Override
 	public Integer getPropertiesCount(String searchQuery) {
 		Long userId=Utils.getUserId();
 		return propertyDAO.getPropertiesCount(userId, searchQuery);
 	}
 	
+	/**
+	 * Gets the house details.
+	 *
+	 * @param propertyId the property id
+	 * @return the house details
+	 */
 	@Override
 	public HouseDTO getHouseDetails(Long propertyId) {
 		Long userId=Utils.getUserId();
@@ -248,6 +318,12 @@ public class PropertyServiceImpl implements PropertyService {
 		return dtoModelMapper.houseModelDTOMapper(house);
 	}
 	
+	/**
+	 * Gets the apartment details.
+	 *
+	 * @param propertyId the property id
+	 * @return the apartment details
+	 */
 	@Override
 	public ApartmentDTO getApartmentDetails(Long propertyId) {
 		Long userId=Utils.getUserId();
@@ -259,12 +335,22 @@ public class PropertyServiceImpl implements PropertyService {
 		return dtoModelMapper.apartmentModelDTOMapper(apartment);
 	}
 	
+	/**
+	 * Delete property.
+	 *
+	 * @param propertyIds the property ids
+	 */
 	@Override
 	public void deleteProperty(List<Long> propertyIds) {
 		Long userId=Utils.getUserId();
 		propertyDAO.deleteProperty(propertyIds, userId);
 	}
 	
+	/**
+	 * Gets the statistics.
+	 *
+	 * @return the statistics
+	 */
 	@Override
 	public HashMap<String, Object> getStatistics() {
 		HashMap<String, Object> respMap=new HashMap<>();

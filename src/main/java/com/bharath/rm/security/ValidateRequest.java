@@ -14,16 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
-import com.bharath.rm.security.SecurityXMLConfig;
-import com.fasterxml.jackson.annotation.JacksonInject.Value;
-import com.bharath.rm.constants.Constants;
-import com.bharath.rm.constants.ErrorCodes;
 import com.bharath.rm.constants.SecurityXMLUtilConstants;
-import com.bharath.rm.exception.APIException;
 import com.bharath.rm.exception.URLException;
 import com.bharath.rm.model.Parameter;
 import com.bharath.rm.model.URL;
@@ -138,6 +132,13 @@ public class ValidateRequest {
 			}
 		}
 	}
+	
+	/**
+	 * Validate param.
+	 *
+	 * @param parameter the parameter
+	 * @param value the value
+	 */
 	public static void validateParam(Parameter parameter, String value) {
 		value=value.trim();
 		Pattern pattern = Pattern.compile(parameter.getRegex());

@@ -1,5 +1,4 @@
 package com.bharath.rm.model.domain;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class Lease.
@@ -7,7 +6,6 @@ package com.bharath.rm.model.domain;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 25, 2020 3:19:10 PM
- * Class Description
  */
 public class Lease {
 	

@@ -6,8 +6,8 @@ package com.bharath.rm.dto;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 18, 2020 11:59:20 PM
- * Class Description
  */
+
 public class PropertyDetailsDTO {
 	
 	/** The propertydetailsid. */

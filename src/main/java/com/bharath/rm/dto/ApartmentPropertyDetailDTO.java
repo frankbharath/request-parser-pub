@@ -1,5 +1,4 @@
 package com.bharath.rm.dto;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class ApartmentPropertyDetailDTO.

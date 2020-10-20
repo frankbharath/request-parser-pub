@@ -191,17 +191,5 @@ public class URL {
 		public URL build() {
 			return new URL(this);
 		}
-
-		@Override
-		public String toString() {
-			return "URIBuilder [url=" + url + ", method=" + method + ", authentication=" + authentication + ", roles="
-					+ roles + ", parameters=" + parameters + "]";
-		}
 	}
-	
-	@Override
-	public String toString() {
-		return "URL [url=" + url + ", method=" + method + ", authentication=" + authentication + ", roles=" + roles
-				+ ", parameters=" + parameters + "]";
-	}	
 }

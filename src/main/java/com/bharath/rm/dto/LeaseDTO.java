@@ -1,9 +1,7 @@
 package com.bharath.rm.dto;
-// TODO: Auto-generated Javadoc
 
 import com.bharath.rm.model.domain.ContractStatus;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LeaseDTO.
  *

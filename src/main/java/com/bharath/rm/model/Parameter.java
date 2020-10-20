@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.bharath.rm.common.Utils;
 
 /**
- *
  * @author bharath:
  * @version 1.0
  * Creation time: Jun 15, 2020 9:10:02 PM
@@ -299,19 +298,5 @@ public class Parameter {
 		public Parameter build() {
 			return new Parameter(this);
 		}
-
-		@Override
-		public String toString() {
-			return "ParameterBuilder [parameterName=" + parameterName + ", minLength=" + minLength + ", maxLength="
-					+ maxLength + ", required=" + required + ", regex=" + regex + ", template=" + template + ", parameters="
-					+ parameters + ", type=" + type + "]";
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "Parameter [parameterName=" + parameterName + ", minLength=" + minLength + ", maxLength=" + maxLength
-				+ ", required=" + required + ", regex=" + regex + ", template=" + template + ", parameters="
-				+ parameters + ", type=" + type + "]";
 	}
 }

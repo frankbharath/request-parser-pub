@@ -1,5 +1,4 @@
 package com.bharath.rm.model.domain;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class User.
@@ -7,8 +6,8 @@ package com.bharath.rm.model.domain;
  * @author bharath
  * @version 1.0
  * Creation time: Jul 9, 2020 9:58:03 PM
- * Class Description
  */
+
 public class User {
 	
 	/** The userid. */

@@ -21,23 +21,37 @@ import com.bharath.rm.model.domain.Verification;
 import com.bharath.rm.service.interfaces.UserService;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Jul 9, 2020 10:02:38 PM
- 	* Class Description
-*/
+ * The Class UserServiceImpl.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Jul 9, 2020 10:02:38 PM
+ */
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
+	/** The user DAO. */
 	private UserDAO userDAO;
 	
+	/** The password encoder. */
 	private PasswordEncoder passwordEncoder;
 	
+	/** The email service. */
 	private EmailServiceImpl emailService;
 	
+	/** The dto model mapper. */
 	private DTOModelMapper dtoModelMapper;
 	
+	/**
+	 * Instantiates a new user service impl.
+	 *
+	 * @param userDAO the user DAO
+	 * @param dtoModelMapper the dto model mapper
+	 * @param passwordEncoder the password encoder
+	 * @param emailUtil the email util
+	 */
 	@Autowired
 	public UserServiceImpl(UserDAO userDAO, DTOModelMapper dtoModelMapper, PasswordEncoder passwordEncoder, EmailServiceImpl emailUtil) {
 		this.userDAO=userDAO;
@@ -46,6 +60,14 @@ public class UserServiceImpl implements UserService {
 		this.dtoModelMapper=dtoModelMapper;
 	}
 	
+	/**
+	 * Adds the user.
+	 *
+	 * @param user the user
+	 * @param confirmPassword the confirm password
+	 * @return the user DTO
+	 * @throws MessagingException the messaging exception
+	 */
 	@Override
 	public UserDTO addUser(User user, String confirmPassword) throws MessagingException {
 		if(!user.getPassword().equals(confirmPassword)) {
@@ -64,6 +86,11 @@ public class UserServiceImpl implements UserService {
 		return dtoModelMapper.userModelDTOMapper(user);
 	}
 	
+	/**
+	 * Verify account for user.
+	 *
+	 * @param token the token
+	 */
 	@Override
 	public void verifyAccountForUser(String token) {
 		Verification verification=userDAO.getVerificationCode(token,Constants.Tokentype.VERIFY);
@@ -79,6 +106,13 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	/**
+	 * Send verification link to user.
+	 *
+	 * @param userid the userid
+	 * @param email the email
+	 * @throws MessagingException the messaging exception
+	 */
 	@Override
 	public void sendVerificationLinkToUser(long userid, String email) throws MessagingException {
 		Verification verification=new Verification();
@@ -92,6 +126,12 @@ public class UserServiceImpl implements UserService {
 		emailService.sendTokenEmailToUser(userid,email,token,Tokentype.VERIFY);
 	}
 	
+	/**
+	 * Reset password.
+	 *
+	 * @param email the email
+	 * @throws MessagingException the messaging exception
+	 */
 	@Override
 	public void resetPassword(String email) throws MessagingException {
 		Long userId=userDAO.getUserId(email);
@@ -108,6 +148,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	/**
+	 * Gets the user email for reset token.
+	 *
+	 * @param token the token
+	 * @return the user email for reset token
+	 */
 	@Override
 	public String getUserEmailForResetToken(String token) {
 		String email=userDAO.getUserEmailForToken(token, Tokentype.RESET);
@@ -117,6 +163,13 @@ public class UserServiceImpl implements UserService {
 		return email;
 	}
 	
+	/**
+	 * Update password.
+	 *
+	 * @param token the token
+	 * @param password the password
+	 * @param confirmPassword the confirm password
+	 */
 	@Override
 	public void updatePassword(String token, String password, String confirmPassword) {
 		if(!password.equals(confirmPassword)) {
@@ -134,6 +187,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	/**
+	 * Change password.
+	 *
+	 * @param password the password
+	 * @param confirmPassword the confirm password
+	 */
 	@Override
 	public void changePassword(String password, String confirmPassword) {
 		if(!password.equals(confirmPassword)) {
@@ -142,11 +201,22 @@ public class UserServiceImpl implements UserService {
 		userDAO.updatePassword(Utils.getUserId(), passwordEncoder.encode(password));
 	}
 	
+	/**
+	 * User verification status.
+	 *
+	 * @param userId the user id
+	 * @return the boolean
+	 */
 	@Override
 	public Boolean userVerificationStatus(long userId) {
 		return userDAO.verificationStatus(userId);
 	}
 	
+	/**
+	 * Gets the user type.
+	 *
+	 * @return the user type
+	 */
 	@Override
 	public String getUserType() {
 		return userDAO.getUserType(Utils.getUserId());

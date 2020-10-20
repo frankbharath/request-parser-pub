@@ -6,17 +6,30 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.bharath.rm.common.Utils;
 
+/**
+ * The Class CreateTablesDAO.
+ */
 public class CreateTablesDAO {
 	
-	private static final Logger log = LoggerFactory.getLogger(CreateTablesDAO.class);
-	
+	/** The connection. */
 	private Connection connection=null;
 	
+
+	/** The Environment variable to read application properties.*/
+	@Autowired
+	private Environment env;
+	
+	/**
+	 * Instantiates a new creates the tables DAO.
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public CreateTablesDAO() throws SQLException, IOException {
 		if(connection==null) {
 			connection=Utils.getDBConnection();
@@ -24,6 +37,13 @@ public class CreateTablesDAO {
 		}
 	}
 	
+	/**
+	 * Adds the tables to DB.
+	 *
+	 * @param tables the tables
+	 * @throws SQLException the SQL exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void addTablestoDB(String[] tables) throws SQLException, IOException  {
 		Statement stmt = connection.createStatement();
 		for(String table:tables) {
@@ -32,6 +52,13 @@ public class CreateTablesDAO {
 		stmt.executeBatch();
 	}
 	
+	/**
+	 * Insert default values to table.
+	 *
+	 * @param insertQuery the insert query
+	 * @throws SQLException the SQL exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void insertDefaultValuestoTable(List<String> insertQuery) throws SQLException, IOException  {
 		Statement stmt = connection.createStatement();
 		for(String insert:insertQuery) {
@@ -40,6 +67,11 @@ public class CreateTablesDAO {
 		stmt.executeBatch();
 	}
 	
+	/**
+	 * Close.
+	 *
+	 * @throws SQLException the SQL exception
+	 */
 	public void close() throws SQLException {
 		connection.commit();
 		connection.close();

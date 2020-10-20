@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -19,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -51,11 +51,12 @@ import com.bharath.rm.service.interfaces.PropertyService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@ActiveProfiles("test")
 @ContextConfiguration(classes = {SpringConfig.class, ThymeleafTemplateConfig.class})
-@Transactional
 class PropertyServiceTest extends AbstractTest {
 
 	/** The property service. */
+
 	@Autowired
 	PropertyService propertyService;
 	
@@ -81,13 +82,13 @@ class PropertyServiceTest extends AbstractTest {
 		Exception exception = assertThrows(APIRequestException.class, () -> {
 			propertyService.addProperty(property);
 		});
-		assertTrue(I18NConfig.getMessage("error.property.name_exists").contains(exception.getMessage()));
+		assertEquals(I18NConfig.getMessage("error.property.name_exists"), exception.getMessage());
 	}
 	
 	/**
 	 * On successful addition of property house, the addHouse function must return a HouseDTO object 
 	 * with given property id 1l.
-	 */
+	/ */
 	@Test
 	void testAddHouse() {
 		HouseDTO houseDTO=mock(HouseDTO.class);
@@ -145,7 +146,7 @@ class PropertyServiceTest extends AbstractTest {
 		Exception exception = assertThrows(APIRequestException.class, () -> {
 			propertyService.updateProperty(property);
 		});
-		assertTrue(I18NConfig.getMessage("error.property.name_exists").contains(exception.getMessage()));
+		assertEquals(I18NConfig.getMessage("error.property.name_exists"), exception.getMessage());
 	}
 	
 	/**
@@ -159,7 +160,7 @@ class PropertyServiceTest extends AbstractTest {
 		Exception exception = assertThrows(APIRequestException.class, () -> {
 			propertyService.updateProperty(property);
 		});
-		assertTrue(I18NConfig.getMessage("error.property.not_found").contains(exception.getMessage()));
+		assertEquals(I18NConfig.getMessage("error.property.not_found"), exception.getMessage());
 	}
 
 	/**
@@ -211,7 +212,7 @@ class PropertyServiceTest extends AbstractTest {
 			propertyService.updateAppartment(apartmentDTO, new ArrayList<>());
 		});
 		
-		assertTrue(I18NConfig.getMessage("error.appartment_property_no_unit").contains(exception.getMessage()));
+		assertEquals(I18NConfig.getMessage("error.appartment_property_no_unit"), exception.getMessage());
 	}
 	
 	/**

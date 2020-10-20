@@ -24,24 +24,38 @@ import com.bharath.rm.model.domain.Tenant;
 import com.bharath.rm.rowmapper.LeaseRowMapper;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 25, 2020 3:27:50 PM
- 	* Class Description
-*/
+ * The Class TenantDAOImpl.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 25, 2020 3:27:50 PM
+ */
 
 @Repository
 public class TenantDAOImpl implements TenantDAO {
 
+	/** The named parameter jdbc template. */
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
+	/** The Constant PAGE_LIMIT. */
 	public static final int PAGE_LIMIT=50;
 	
+	/**
+	 * Instantiates a new tenant DAO impl.
+	 *
+	 * @param namedParameterJdbcTemplate the named parameter jdbc template
+	 */
 	@Autowired
 	public TenantDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate=namedParameterJdbcTemplate;
 	}
 	
+	/**
+	 * Tenant exists.
+	 *
+	 * @param tenant the tenant
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean tenantExists(Tenant tenant) {
 		StringBuilder query=new StringBuilder("SELECT EXISTS (SELECT 1 FROM ").append(RM_Tenant.TABLENAME);
@@ -72,6 +86,13 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameters, Boolean.class);
 	}
 	
+	/**
+	 * Tenant exists.
+	 *
+	 * @param userId the user id
+	 * @param tenantId the tenant id
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean tenantExists(Long userId, Long tenantId) {
 		StringBuilder query=new StringBuilder("SELECT EXISTS (SELECT 1 FROM ").append(RM_Tenant.TABLENAME);
@@ -85,6 +106,12 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameters, Boolean.class);
 	}
 	
+	/**
+	 * Adds the tenant.
+	 *
+	 * @param tenant the tenant
+	 * @return the long
+	 */
 	@Override
 	public Long addTenant(Tenant tenant) {
 		List<String> cols=new ArrayList<>();
@@ -110,6 +137,11 @@ public class TenantDAOImpl implements TenantDAO {
 		return (Long) keyHolder.getKey();
 	}
 	
+	/**
+	 * Update tenant.
+	 *
+	 * @param tenant the tenant
+	 */
 	@Override
 	public void updateTenant(Tenant tenant) {
 		List<String> cols=new ArrayList<>();
@@ -137,6 +169,13 @@ public class TenantDAOImpl implements TenantDAO {
 		namedParameterJdbcTemplate.update(query.toString(), namedParameters);
 	}
 	
+	/**
+	 * Gets the tenant info.
+	 *
+	 * @param userId the user id
+	 * @param tenantId the tenant id
+	 * @return the tenant info
+	 */
 	@Override
 	public Tenant getTenantInfo(Long userId, Long tenantId) {
 		List<String> cols=new ArrayList<>();
@@ -159,6 +198,14 @@ public class TenantDAOImpl implements TenantDAO {
 		return DataAccessUtils.singleResult(namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<Tenant>(Tenant.class)));
 	}
 	
+	/**
+	 * Gets the tenants.
+	 *
+	 * @param userId the user id
+	 * @param searchQuery the search query
+	 * @param pageNo the page no
+	 * @return the tenants
+	 */
 	@Override
 	public List<Tenant> getTenants(Long userId, String searchQuery, Integer pageNo) {
 		List<String> cols=new ArrayList<>();
@@ -192,6 +239,13 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<Tenant>(Tenant.class));
 	}
 	
+	/**
+	 * Gets the tenants count.
+	 *
+	 * @param userId the user id
+	 * @param searchQuery the search query
+	 * @return the tenants count
+	 */
 	@Override
 	public Integer getTenantsCount(Long userId, String searchQuery) {
 		StringBuilder query=new StringBuilder("SELECT COUNT(*) FROM ").append(RM_Tenant.TABLENAME);
@@ -210,6 +264,12 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameters, Integer.class);
 	}
 	
+	/**
+	 * Delete tenants.
+	 *
+	 * @param userId the user id
+	 * @param tenantIds the tenant ids
+	 */
 	@Override
 	public void deleteTenants(Long userId, List<Long> tenantIds) {
 		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
@@ -224,6 +284,12 @@ public class TenantDAOImpl implements TenantDAO {
 		namedParameterJdbcTemplate.update(query.toString(), namedParameters);
 	}
 	
+	/**
+	 * Adds the lease.
+	 *
+	 * @param lease the lease
+	 * @return the long
+	 */
 	@Override
 	public Long addLease(Lease lease) {
 		List<String> cols=new ArrayList<>();
@@ -251,6 +317,11 @@ public class TenantDAOImpl implements TenantDAO {
 		return (Long) keyHolder.getKey();
 	}
 	
+	/**
+	 * Update lease.
+	 *
+	 * @param lease the lease
+	 */
 	@Override
 	public void updateLease(Lease lease) {
 		List<String> cols=new ArrayList<>();
@@ -280,6 +351,13 @@ public class TenantDAOImpl implements TenantDAO {
 		namedParameterJdbcTemplate.update(query.toString(), namedParameters);
 	}
 	
+	/**
+	 * Lease exist.
+	 *
+	 * @param userId the user id
+	 * @param leaseId the lease id
+	 * @return the boolean
+	 */
 	@Override
 	public Boolean leaseExist(Long userId, Long leaseId) {
 		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();
@@ -297,6 +375,13 @@ public class TenantDAOImpl implements TenantDAO {
 	}
 	
 	
+	/**
+	 * Gets the lease.
+	 *
+	 * @param userId the user id
+	 * @param leaseId the lease id
+	 * @return the lease
+	 */
 	@Override
 	public Lease getLease(Long userId, Long leaseId) {
 		List<String> cols=new ArrayList<>();
@@ -324,6 +409,13 @@ public class TenantDAOImpl implements TenantDAO {
 		return DataAccessUtils.singleResult(namedParameterJdbcTemplate.query(query.toString(), namedParameters, new LeaseRowMapper()));
 	}
 
+	/**
+	 * Gets the all lease for tenant.
+	 *
+	 * @param userId the user id
+	 * @param tenantId the tenant id
+	 * @return the all lease for tenant
+	 */
 	@Override
 	public List<Lease> getAllLeaseForTenant(Long userId, Long tenantId) {
 		List<String> cols=new ArrayList<>();
@@ -351,6 +443,12 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.query(query.toString(), namedParameters, new BeanPropertyRowMapper<Lease>(Lease.class));
 	}
 	
+	/**
+	 * Gets the contract status.
+	 *
+	 * @param leaseId the lease id
+	 * @return the contract status
+	 */
 	@Override
 	public String getContractStatus(Long leaseId) {
 		List<String> cols=new ArrayList<>();
@@ -366,6 +464,12 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameters, String.class);
 	}
 	
+	/**
+	 * Gets the contract status.
+	 *
+	 * @param status the status
+	 * @return the contract status
+	 */
 	@Override
 	public Long getContractStatus(Constants.ContractStatus status) {
 		List<String> cols=new ArrayList<>();
@@ -380,6 +484,12 @@ public class TenantDAOImpl implements TenantDAO {
 		return namedParameterJdbcTemplate.queryForObject(query.toString(), namedParameter, Long.class);
 	}
 	
+	/**
+	 * Update contract id.
+	 *
+	 * @param leaseId the lease id
+	 * @param requestId the request id
+	 */
 	@Override
 	public void updateContractId(Long leaseId, String requestId) {
 		List<String> cols=new ArrayList<>();
@@ -396,6 +506,11 @@ public class TenantDAOImpl implements TenantDAO {
 		
 	}
 	
+	/**
+	 * Delete lease.
+	 *
+	 * @param leaseId the lease id
+	 */
 	@Override
 	public void deleteLease(Long leaseId) {
 		MapSqlParameterSource  namedParameters = new MapSqlParameterSource();

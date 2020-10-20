@@ -4,8 +4,8 @@ package com.bharath.rm.dto;
 	* @author bharath
  	* @version 1.0
 	* Creation time: Sep 18, 2020 2:17:15 AM
- 	* Class Description
 */
+
 public class PropertyDTO {
 	/** The userid. */
 	private Long userid;

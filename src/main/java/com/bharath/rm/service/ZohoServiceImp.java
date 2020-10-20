@@ -2,8 +2,6 @@ package com.bharath.rm.service;
 
 import java.io.IOException;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -29,24 +27,35 @@ import com.bharath.rm.model.domain.PropertyDetails;
 import com.bharath.rm.model.domain.Tenant;
 
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 28, 2020 11:05:41 PM
- 	* Class Description
-*/
+ * The Class ZohoServiceImp.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 28, 2020 11:05:41 PM
+ */
 
 @Service
 public class ZohoServiceImp {
 
+	/** The oauth details. */
 	private OAuthDetails oAuthDetails;
 	
+	/** The access token. */
 	private String accessToken=null;
 	
+	/**
+	 * Instantiates a new zoho service imp.
+	 *
+	 * @param oAuthDetails the o auth details
+	 */
 	@Autowired
 	public ZohoServiceImp(OAuthDetails oAuthDetails) {
 		this.oAuthDetails=oAuthDetails;
 	}
 	
+	/**
+	 * Generate access token.
+	 */
 	public void generateAccessToken() {
 		this.accessToken=null;
 		HttpPost postMethod = new HttpPost(ApplicationProperties.getInstance().getProperty("zoho.accounts.oauth")+"?client_id="+oAuthDetails.getClientId()+"&client_secret="+oAuthDetails.getClientSecret()+"&grant_type=refresh_token&refresh_token="+oAuthDetails.getRefreshToken());
@@ -65,6 +74,12 @@ public class ZohoServiceImp {
 		}
 	}
 	
+	/**
+	 * Gets the request details.
+	 *
+	 * @param requestId the request id
+	 * @return the request details
+	 */
 	public JSONObject getRequestDetails(Long requestId) {
 		HttpGet getMethod = new HttpGet(ApplicationProperties.getInstance().getProperty("zoho.sign.requests")+"/"+requestId);
 		getMethod.setHeader("Authorization","Zoho-oauthtoken "+ accessToken);
@@ -81,6 +96,16 @@ public class ZohoServiceImp {
 		}
 	}
 	
+	/**
+	 * Creates the sign request.
+	 *
+	 * @param tenant the tenant
+	 * @param lease the lease
+	 * @param address the address
+	 * @param propertyDetails the property details
+	 * @param retry the retry
+	 * @return the string
+	 */
 	public String createSignRequest(Tenant tenant, Lease lease, Address address, PropertyDetails propertyDetails, int retry) {
 		JSONArray actions = new JSONArray();
 		JSONObject actionJson = new JSONObject();
@@ -88,7 +113,7 @@ public class ZohoServiceImp {
 		actionJson.put("action_type","SIGN");
 		actionJson.put("recipient_email",Utils.getUserEmail());
 		actionJson.put("recipient_name",Utils.getUserEmail().split("@")[0]);
-		actionJson.put("action_id","178669000000008050");
+		actionJson.put("action_id","16312000000011020");
 		actionJson.put("verify_recipient", false);   
 		actionJson.put("signing_order", 1);   
 		actionJson.put("role", "owner");   
@@ -98,7 +123,7 @@ public class ZohoServiceImp {
 		actionJson.put("action_type","SIGN");
 		actionJson.put("recipient_email", tenant.getEmail());
 		actionJson.put("recipient_name", tenant.getFirstname()+" "+tenant.getLastname());
-		actionJson.put("action_id","178669000000008056");
+		actionJson.put("action_id","16312000000011026");
 		actionJson.put("verify_recipient", false);   
 		actionJson.put("signing_order", 2);   
 		actionJson.put("role", "tenant");   

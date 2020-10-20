@@ -1,5 +1,4 @@
 package com.bharath.rm.model.domain;
-// TODO: Auto-generated Javadoc
 
 /**
  * The Class ContractStatus.
@@ -7,7 +6,6 @@ package com.bharath.rm.model.domain;
  * @author bharath
  * @version 1.0
  * Creation time: Sep 29, 2020 8:37:32 PM
- * Class Description
  */
 public class ContractStatus {
 	

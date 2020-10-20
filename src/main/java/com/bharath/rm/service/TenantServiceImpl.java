@@ -1,9 +1,5 @@
 package com.bharath.rm.service;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,8 +10,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.bharath.rm.common.DTOModelMapper;
 import com.bharath.rm.common.Utils;
@@ -35,26 +29,38 @@ import com.bharath.rm.model.domain.PropertyDetails;
 import com.bharath.rm.model.domain.Tenant;
 import com.bharath.rm.service.interfaces.TenantService;
 
-
 /**
-	* @author bharath
- 	* @version 1.0
-	* Creation time: Sep 25, 2020 5:50:45 PM
- 	* Class Description
-*/
+ * The Class TenantServiceImpl.
+ *
+ * @author bharath
+ * @version 1.0
+ * Creation time: Sep 25, 2020 5:50:45 PM
+ */
 
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class TenantServiceImpl implements TenantService {
 	
+	/** The tenant DAO. */
 	private TenantDAO tenantDAO;
 	
+	/** The property DAO. */
 	private PropertyDAO propertyDAO;
 	
+	/** The zoho service imp. */
 	private ZohoServiceImp zohoServiceImp;
 	
+	/** The dto model mapper. */
 	private DTOModelMapper dtoModelMapper;
 	
+	/**
+	 * Instantiates a new tenant service impl.
+	 *
+	 * @param tenantDAO the tenant DAO
+	 * @param propertyDAO the property DAO
+	 * @param zohoServiceImp the zoho service imp
+	 * @param dtoModelMapper the dto model mapper
+	 */
 	@Autowired
 	public TenantServiceImpl(TenantDAO tenantDAO, PropertyDAO propertyDAO, ZohoServiceImp zohoServiceImp, DTOModelMapper dtoModelMapper) {
 		this.tenantDAO=tenantDAO;
@@ -63,6 +69,12 @@ public class TenantServiceImpl implements TenantService {
 		this.dtoModelMapper=dtoModelMapper;
 	}
 	
+	/**
+	 * Adds the tenant.
+	 *
+	 * @param tenant the tenant
+	 * @return the tenant DTO
+	 */
 	@Override
 	public TenantDTO addTenant(Tenant tenant) {
 		Long userId=Utils.getUserId();
@@ -75,6 +87,12 @@ public class TenantServiceImpl implements TenantService {
 		return dtoModelMapper.tenantModelDTOMapper(tenant);
 	}
 	
+	/**
+	 * Update tenant.
+	 *
+	 * @param tenant the tenant
+	 * @return the tenant DTO
+	 */
 	@Override
 	public TenantDTO updateTenant(Tenant tenant) {
 		Long userId=Utils.getUserId();
@@ -89,6 +107,11 @@ public class TenantServiceImpl implements TenantService {
 		return dtoModelMapper.tenantModelDTOMapper(tenant);
 	}
 	
+	/**
+	 * Delete tenants.
+	 *
+	 * @param tenantIds the tenant ids
+	 */
 	@Override
 	public void deleteTenants(List<Long> tenantIds) {
 		Long userId=Utils.getUserId();
@@ -99,6 +122,13 @@ public class TenantServiceImpl implements TenantService {
 		tenantDAO.deleteTenants(userId, tenantIds);
 	}
 	
+	/**
+	 * Gets the tenants.
+	 *
+	 * @param searchQuery the search query
+	 * @param pageNo the page no
+	 * @return the tenants
+	 */
 	@Override
 	public List<TenantDTO> getTenants(String searchQuery, Integer pageNo) {
 		Long userId=Utils.getUserId();
@@ -110,12 +140,24 @@ public class TenantServiceImpl implements TenantService {
 		return tenantListDTO;
 	}
 	
+	/**
+	 * Gets the tenants count.
+	 *
+	 * @param searchQuery the search query
+	 * @return the tenants count
+	 */
 	@Override
 	public Integer getTenantsCount(String searchQuery) {
 		Long userId=Utils.getUserId();
 		return tenantDAO.getTenantsCount(userId, searchQuery);
 	}
 	
+	/**
+	 * Gets the tenant info.
+	 *
+	 * @param tenantId the tenant id
+	 * @return the tenant info
+	 */
 	@Override
 	public TenantDTO getTenantInfo(Long tenantId) {
 		Long userId=Utils.getUserId();
@@ -126,13 +168,21 @@ public class TenantServiceImpl implements TenantService {
 		return dtoModelMapper.tenantModelDTOMapper(tenant);
 	}
 	
+	/**
+	 * Adds the lease.
+	 *
+	 * @param leaseDTO the lease DTO
+	 * @param propertyType the property type
+	 * @param propertyId the property id
+	 * @param contractRequired the contract required
+	 * @return the lease DTO
+	 */
 	@Override
 	public LeaseDTO addLease(LeaseDTO leaseDTO, String propertyType, Long propertyId, Boolean contractRequired) {
 		try {
 			// convert DTO to domain model
 			Lease lease=dtoModelMapper.leaseDTOModelMapper(leaseDTO);
 			Long currentDate = Utils.parseDateToMilliseconds(new SimpleDateFormat("MMM d, yyyy").format(new Date()));
-			
 			if(lease.getMovein()<currentDate || Utils.diffDays(lease.getMovein(), lease.getMoveout())<Constants.MINDAYS) {
 				throw new APIRequestException(I18NConfig.getMessage("error.invalid_lease_date"));
 			}
@@ -181,6 +231,15 @@ public class TenantServiceImpl implements TenantService {
 		}
 	}
 	
+	/**
+	 * Update lease.
+	 *
+	 * @param leaseDTO the lease DTO
+	 * @param propertyType the property type
+	 * @param propertyId the property id
+	 * @param contractRequired the contract required
+	 * @return the lease DTO
+	 */
 	@Override
 	public LeaseDTO updateLease(LeaseDTO leaseDTO, String propertyType, Long propertyId, Boolean contractRequired) {
 		try {
@@ -194,7 +253,7 @@ public class TenantServiceImpl implements TenantService {
 			}
 			
 			// check if property exists
-			boolean exists=propertyDAO.propertyExists(userId, propertyId, propertyType, leaseDTO.getTenantspropertydetailid());
+			boolean exists=propertyDAO.propertyExists(userId, propertyId, propertyType, lease.getTenantspropertydetailid());
 			if(!exists) {
 				throw new APIRequestException(I18NConfig.getMessage("error.property.not_found"));
 			}
@@ -212,6 +271,7 @@ public class TenantServiceImpl implements TenantService {
 			}
 			// check if the agreement is not initiated
 			String status=tenantDAO.getContractStatus(lease.getLeaseid());
+
 			if(!Constants.ContractStatus.NOCONTRACT.toString().equals(status)) {
 				throw new APIRequestException(I18NConfig.getMessage("error.lease_contract_exists"));
 			}
@@ -228,6 +288,7 @@ public class TenantServiceImpl implements TenantService {
 			// check if there are accommodation for new tenants
 			PropertyDetails details=propertyDAO.getPropertyDetails(lease.getTenantspropertydetailid());
 			int totalOccupants=lease.getOccupants()+details.getOccupied();
+		
 			if(oldLease.getTenantspropertydetailid()==lease.getTenantspropertydetailid()) {
 				totalOccupants-=oldLease.getOccupants();
 			}else {
@@ -251,6 +312,12 @@ public class TenantServiceImpl implements TenantService {
 		}	
 	}
 	
+	/**
+	 * Gets the all leases for tenant.
+	 *
+	 * @param tenantId the tenant id
+	 * @return the all leases for tenant
+	 */
 	@Override
 	public List<LeaseDTO> getAllLeasesForTenant(Long tenantId) {
 		Long userId=Utils.getUserId();
@@ -279,6 +346,15 @@ public class TenantServiceImpl implements TenantService {
 		return leaseDTOs;
 	}
 	
+	/**
+	 * Update contract status.
+	 *
+	 * @param userId the user id
+	 * @param lease the lease
+	 * @param propertyId the property id
+	 * @param propertyType the property type
+	 * @param details the details
+	 */
 	@Override
 	public void updateContractStatus(Long userId, Lease lease, Long propertyId, String propertyType, PropertyDetails details) {
 		Tenant tenant=tenantDAO.getTenantInfo(userId, lease.getLeasetenantid());
@@ -301,6 +377,11 @@ public class TenantServiceImpl implements TenantService {
 		}
 	}
 	
+	/**
+	 * Delete lease.
+	 *
+	 * @param leaseId the lease id
+	 */
 	@Override
 	public void deleteLease(Long leaseId) {
 		Long userId=Utils.getUserId();
@@ -312,38 +393,4 @@ public class TenantServiceImpl implements TenantService {
 			tenantDAO.deleteLease(leaseId);
 		}
 	}
-	
-	/*@Override
-	public void check() {
-		String html = this.templateEngine.process("rentalagreement", new Context());
-
-		String outputFolder = "thymeleaf.pdf";
-	    OutputStream outputStream=null;
-		try {
-			outputStream = new FileOutputStream(outputFolder);
-			ITextRenderer renderer = new ITextRenderer();
-		    renderer.setDocumentFromString(html);
-		    renderer.layout();
-		    renderer.createPDF(outputStream);
-		 
-		    
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if(outputStream!=null) {
-				try {
-					outputStream.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	    
-		
-	}*/
 }

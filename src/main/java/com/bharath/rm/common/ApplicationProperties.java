@@ -23,7 +23,7 @@ public class ApplicationProperties {
 	private static ApplicationProperties SINGLE_INSTANCE = null;
 	
 	/** The application.properties is located in the /src/main/resources. */
-	private static final String APPLICATION_PROPERTIES="application.properties";
+	private static final String APPLICATION_PROPERTIES="application-live.properties";
 	
 	/** Holds all the properties from application.properties file. */
 	private Properties properties = new Properties();

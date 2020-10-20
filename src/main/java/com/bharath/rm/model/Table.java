@@ -3,6 +3,8 @@ package com.bharath.rm.model;
 import java.util.List;
 
 /**
+ * The Class Table.
+ *
  * @author frank
  * 
  * This class contains all necessary attribute to create a table such as table name, columns and constraints such as primary key, foreign key.
@@ -10,32 +12,71 @@ import java.util.List;
  */
 public class Table {
 	
+	/** The table name. */
 	private String tableName;
+	
+	/** The columns. */
 	private List<Column> columns;
+	
+	/** The primary keys. */
 	private List<String> primaryKeys;
+	
+	/** The foreign keys. */
 	private List<ForeignKey> foreignKeys;
+	
+	/** The inherit tables. */
 	private List<String> inheritTables;
 	
+	/**
+	 * Gets the table name.
+	 *
+	 * @return the table name
+	 */
 	public String getTableName() {
 		return tableName;
 	}
 
+	/**
+	 * Gets the columns.
+	 *
+	 * @return the columns
+	 */
 	public List<Column> getColumns() {
 		return columns;
 	}
 
+	/**
+	 * Gets the primary keys.
+	 *
+	 * @return the primary keys
+	 */
 	public List<String> getPrimaryKeys() {
 		return primaryKeys;
 	}
 
+	/**
+	 * Gets the foreign keys.
+	 *
+	 * @return the foreign keys
+	 */
 	public List<ForeignKey> getForeignKeys() {
 		return foreignKeys;
 	}
 	
+	/**
+	 * Gets the inherit tables.
+	 *
+	 * @return the inherit tables
+	 */
 	public List<String> getInheritTables() {
 		return inheritTables;
 	}
 
+	/**
+	 * Instantiates a new table.
+	 *
+	 * @param tableBuilder the table builder
+	 */
 	private Table(TableBuilder tableBuilder) {
 		String error=null;
 		if(tableBuilder.getTableName()==null) {
@@ -52,6 +93,10 @@ public class Table {
 		this.foreignKeys=tableBuilder.getForeignKeys();
 		this.inheritTables=tableBuilder.getInheritTables();
 	}
+	
+	/**
+	 * The Class TableBuilder.
+	 */
 	public static class TableBuilder {
 		
 		/** Holds the table name. */
@@ -66,7 +111,7 @@ public class Table {
 		/** Holds all the foreign keys, if any. */
 		private List<ForeignKey> foreignKeys;
 		
-		/** Hold all the tables needs to be inherited*/
+		/**  Hold all the tables needs to be inherited. */
 		private List<String> inheritTables;
 		/**
 		 * Gets the table name.
@@ -149,6 +194,8 @@ public class Table {
 		}
 		
 		/**
+		 * Gets the inherit tables.
+		 *
 		 * @return the inheritTables
 		 */
 		public List<String> getInheritTables() {
@@ -156,6 +203,8 @@ public class Table {
 		}
 
 		/**
+		 * Sets the inherit tables.
+		 *
 		 * @param inheritTables the inheritTables to set
 		 */
 		public void setInheritTables(List<String> inheritTables) {

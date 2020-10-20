@@ -1,4 +1,5 @@
 package com.bharath.rm.model.domain;
+
 /**
 	* @author bharath
  	* @version 1.0

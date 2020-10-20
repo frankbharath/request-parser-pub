@@ -20,7 +20,6 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.method.P;
 
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.constants.SecurityXMLUtilConstants;
@@ -30,9 +29,10 @@ import com.bharath.rm.model.URL;
 
 import com.bharath.rm.model.Parameter.ParameterBuilder;
 import com.bharath.rm.model.URL.URIBuilder;
-import com.sun.istack.FinalArrayList;
 
 /**
+ * The Class SecurityXMLConfig.
+ *
  * @author bharath
  * @version 1.0
  * Creation time: Jun 15, 2020 10:59:14 PM
@@ -60,10 +60,13 @@ public final class SecurityXMLConfig {
 	/** A map that stores template name and it's parameters in HashMap. It will be cleared when all the url's are processed.  */
 	private final HashMap<String,HashMap<String, Parameter>> templateMaps=new HashMap<>();
 	
+	/** The Constant URLNODES. */
 	public static final URLNode URLNODES=new URLNode();
 	
+	/** The Constant NOAUTHURL. */
 	private static final HashSet<String> NOAUTHURL= new HashSet<>();
 	
+	/** The Constant AUTHURL. */
 	private static final HashSet<String> AUTHURL= new HashSet<>();
 	
 	/** XMLInputFactory instance. */
@@ -71,8 +74,6 @@ public final class SecurityXMLConfig {
 	
 	/**
 	 * This method is the entry point and it is invoked from the Listener class.
-	 *
-	 * @throws Exception the exception
 	 */
 	public static void init() {
 		SecurityXMLConfig config=new SecurityXMLConfig();
@@ -384,6 +385,14 @@ public final class SecurityXMLConfig {
 		}
 	}
 	
+	/**
+	 * Creates the URL node tree.
+	 *
+	 * @param urlnode the urlnode
+	 * @param url the url
+	 * @param urlTokens the url tokens
+	 * @param index the index
+	 */
 	public static void createURLNodeTree(final URLNode urlnode, final URL url, final String[] urlTokens, int index) {
 		ArrayList<Node> nodes= urlnode.getNodes();
 		for(Node node:nodes) {
@@ -406,6 +415,15 @@ public final class SecurityXMLConfig {
 		nodes.add(node);
 	}
 	
+	/**
+	 * Gets the url.
+	 *
+	 * @param urlnode the urlnode
+	 * @param searchTokens the search tokens
+	 * @param index the index
+	 * @param protocol the protocol
+	 * @return the url
+	 */
 	public static URL getUrl(final URLNode urlnode, final String[] searchTokens, int index, String protocol) {
 		ArrayList<Node> nodes= urlnode.getNodes();
 		ArrayList<Node> regexNodes=new ArrayList<>();
@@ -546,6 +564,11 @@ public final class SecurityXMLConfig {
     	return new Regex(regexName, regexValue);
 	}
 	
+	/**
+	 * Gets the no auth url.
+	 *
+	 * @return the no auth url
+	 */
 	public static String[] getNoAuthUrl() {
 		String[] noAuthUrls=new String[NOAUTHURL.size()];
 		Iterator<String> iterator=NOAUTHURL.iterator();
@@ -556,6 +579,11 @@ public final class SecurityXMLConfig {
 		return noAuthUrls;
 	}
 	
+	/**
+	 * Gets the auth req url.
+	 *
+	 * @return the auth req url
+	 */
 	public static String[] getAuthReqUrl() {
 		String[] authUrls=new String[AUTHURL.size()];
 		Iterator<String> iterator=AUTHURL.iterator();
@@ -566,14 +594,37 @@ public final class SecurityXMLConfig {
 		return authUrls;
 	}
 	
+	/**
+	 * Checks if is no auth url.
+	 *
+	 * @param url the url
+	 * @return true, if is no auth url
+	 */
 	public static boolean  isNoAuthUrl(String url) {
 		 return NOAUTHURL.contains(url);
 	}
 	
+	/**
+	 * Checks if is auth url.
+	 *
+	 * @param url the url
+	 * @return true, if is auth url
+	 */
 	public static boolean isAuthUrl(String url) {
 		return AUTHURL.contains(url);
 	}
+	
+	/**
+	 * Gets the url.
+	 *
+	 * @param request the request
+	 * @return the url
+	 */
 	public static URL getURL(HttpServletRequest request) {
+		String[] splitUrl=request.getRequestURI().split("/");
+		if(splitUrl.length==0) {
+			return null;
+		}
 		return getUrl(SecurityXMLConfig.URLNODES, request.getRequestURI().split("/"), 1, request.getMethod().toLowerCase());
 	}
 }

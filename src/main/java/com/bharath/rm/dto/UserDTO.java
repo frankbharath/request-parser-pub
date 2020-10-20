@@ -1,13 +1,11 @@
 package com.bharath.rm.dto;
 
-import com.bharath.rm.model.domain.UserType;
-
 /**
 	* @author bharath
  	* @version 1.0
 	* Creation time: Sep 15, 2020 12:18:39 AM
- 	* Class Description
 */
+
 public class UserDTO {
 	/** The userid. */
 	private Long userid;

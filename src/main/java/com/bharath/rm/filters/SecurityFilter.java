@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.RentPalThreadLocal;
 import com.bharath.rm.security.SecurityXMLConfig;
 import com.bharath.rm.security.UserSession;
 import com.bharath.rm.model.SpringUserDetails;
+import com.bharath.rm.model.URL;
 
 /**
 	* @author bharath
@@ -56,14 +58,15 @@ public class SecurityFilter implements Filter {
 			response.sendRedirect(request.getContextPath() + "/home");
 			return;
 		}
-		if(SecurityXMLConfig.isAuthUrl(url) && userSession.isAuthenticated()) {
+		URL urlObj=SecurityXMLConfig.getURL(request);
+		if(urlObj!=null && urlObj.isAuthentication() && userSession.isAuthenticated()) {
 			SpringUserDetails details=userSession.getLoggedInUserDetails();
 			RentPalThreadLocal.init();
 			RentPalThreadLocal.add("userId", details.getUserId());
 			RentPalThreadLocal.add("email", details.getUsername());
 		}
 		chain.doFilter(request, response);
-		if(SecurityXMLConfig.isAuthUrl(url) && userSession.isAuthenticated()) {
+		if(urlObj!=null && urlObj.isAuthentication() && userSession.isAuthenticated()) {
 			 RentPalThreadLocal.clear();
 		}
 	}

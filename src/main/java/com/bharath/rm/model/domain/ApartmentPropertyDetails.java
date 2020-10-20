@@ -1,14 +1,13 @@
 package com.bharath.rm.model.domain;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ApartmentPropertyDetails.
  *
  * @author bharath
  * @version 1.0
  * Creation time: Aug 11, 2020 3:13:29 PM
- * Class Description
  */
+
 public class ApartmentPropertyDetails {
 	
 	/** The property details. */

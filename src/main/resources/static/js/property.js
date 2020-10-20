@@ -141,7 +141,7 @@
 		var vm = this;
 		vm.constants = constants;
 		vm.type = constants.HOUSETYPE.HOUSE;
-		setTimeout(() => {
+		/*setTimeout(() => {
 			vm.propertyname = "Maison Alfort_3";
 			vm.address_1 = "10 Bis";
 			vm.address_2 = "Place Des Martrys De La Deportation";
@@ -150,15 +150,15 @@
 			vm.area = "10";
 			vm.rent = "20";
 			vm.capacity = "30";
-		}, 500);
+		}, 500);*/
 		vm.units = [];
-		vm.units.push({
+		/*vm.units.push({
 			area:1,
 			capacity:1,
 			door:1,
 			floor:1,
 			rent:1
-		});
+		});*/
 		vm.typeRadioChange = function(event) {
 			if (event.target.value === constants.HOUSETYPE.APPARTMENT) {
 				vm.type = constants.HOUSETYPE.APPARTMENT;

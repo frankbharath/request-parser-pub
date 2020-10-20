@@ -202,7 +202,7 @@
 		});
 		$locationProvider.html5Mode({enabled: true, requireBase: false});
 		$translateProvider.useStaticFilesLoader({
-			prefix: '/resources/i18N/',
+			prefix: '/resources/i18n/',
 			suffix: '.json'
 		});
 		$translateProvider.preferredLanguage('en');
