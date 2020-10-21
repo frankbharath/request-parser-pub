@@ -132,30 +132,31 @@
 			        <groupId>org.apache.maven.plugins</groupId>
 			        <artifactId>maven-surefire-plugin</artifactId>
 			        <version>3.0.0-M5</version>
-			        <!-->configuration>
+			        <configuration>
 			          <skipTests>true</skipTests>
-			        </configuration-->
+			        </configuration>
 			      </plugin>
 			      <plugin>
 			      	<groupId>org.apache.maven.plugins</groupId>
 			      	<artifactId>maven-compiler-plugin</artifactId>
-			      	<configuration>
+			      	<!--configuration>
 			      		<source>1.8</source>
 			      		<target>1.8</target>
-			      	</configuration>
+			      	</configuration-->
 			      </plugin>
 			    </plugins>
+			     <finalName>rentpal-live</finalName>
 			  </build>
         </profile>
 	</profiles>
 	
 	<build>
-		 <!--resources>
+		 <resources>
 		   <resource>
 	            <directory>src/main/resources</directory>
 	            <filtering>true</filtering>
 	        </resource>
-	    </resources-->
+	    </resources>
 	    <plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

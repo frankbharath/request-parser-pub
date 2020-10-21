@@ -21,6 +21,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -59,6 +60,7 @@ import com.bharath.rm.model.OAuthDetails;
 
 @EnableTransactionManagement
 @EnableConfigurationProperties
+@ActiveProfiles("live")
 @PropertySource("classpath:application.properties")
 public class SpringConfig  {
 	

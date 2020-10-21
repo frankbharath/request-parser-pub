@@ -46,7 +46,7 @@ import com.bharath.rm.service.interfaces.TenantService;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles("live")
 @ContextConfiguration(classes = {SpringConfig.class, ThymeleafTemplateConfig.class})
 class TenantServiceImplTest extends AbstractTest {
 

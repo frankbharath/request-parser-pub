@@ -51,7 +51,7 @@ import com.bharath.rm.service.interfaces.PropertyService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles("live")
 @ContextConfiguration(classes = {SpringConfig.class, ThymeleafTemplateConfig.class})
 class PropertyServiceTest extends AbstractTest {
 

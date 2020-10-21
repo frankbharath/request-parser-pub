@@ -41,7 +41,7 @@ import com.bharath.rm.service.interfaces.UserService;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles("live")
 @ContextConfiguration(classes = {SpringConfig.class, ThymeleafTemplateConfig.class})
 class UserServiceImplTest extends AbstractTest {
 
