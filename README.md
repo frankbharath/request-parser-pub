@@ -1,6 +1,6 @@
 # Rentpal
 
-This document describes the purpose of the developing rentpal, tools and technologies that were used to developed the project
+This document describes the purpose of the developing rentpal, tools and technologies that were used to developed the project.
 
 ## Idea behind the project
 The inception of computer has revolutioned the way we approch a problem. An example could be, as a student in a foreign country, I had to renew my visa. The process was not simple as I had to get an appointment which was very tough to book. After having the appointment, I had to make sure that I have all the documents with me during the appointment. Unfortunately, I had a document missing that denied my visa and I had to wait for another 45 days to book an appointment.
