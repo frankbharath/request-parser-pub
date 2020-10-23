@@ -152,6 +152,7 @@
 			vm.capacity = "30";
 		}, 500);*/
 		vm.units = [];
+		vm.units.push({});
 		/*vm.units.push({
 			area:1,
 			capacity:1,
@@ -168,11 +169,11 @@
 		};
 		vm.addUnit = function() {
 			let entry = {};
-			entry.area = vm.units.length + 1;
+			/*entry.area = vm.units.length + 1;
 			entry.capacity = vm.units.length + 1;
 			entry.door = vm.units.length + 1;
 			entry.floor = vm.units.length + 1;
-			entry.rent = vm.units.length + 1;
+			entry.rent = vm.units.length + 1;*/
 			vm.units.push(entry);
 		}
 		vm.removeUnit = (index) => {
