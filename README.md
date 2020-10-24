@@ -28,9 +28,9 @@ Once when I have defined my rules in the XML file, I can read the file in two wa
 2.	A better approach would be to parse the file during the server startup and using some form of data structure we can store the rules in the memory. This is efficient than the above approach as we parse only one time.  
 
 ### What kind of data structure we can use to store the rules?
-- We can take inspiration from Windows file explorer. In the left pane of file explorer, we have folders and if we click on the arrow button on folders, it shows child folder and we can further click and go on. We have some form tree structure where each folder is root to its children folder and documents. We can use the same technique to convert our rules into a n-ary tree structure.
+- We can take inspiration from Windows file explorer. In the left pane of file explorer, we have folders and if we click on the arrow button on folders, it shows child folder and we can further click and go on. We have some form tree structure where each folder is root to its children folder and documents. We can use the same technique to convert our rules into a trie tree structure.
 
-- We can convert our example into an n-ary tree structure.
+- We can convert our example into an trie tree structure.
 ![urltree](https://user-images.githubusercontent.com/49817583/97086256-6ab6dc00-1622-11eb-85dc-6d3d0a125742.png)
 
 The above tree represents,
