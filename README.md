@@ -1,35 +1,31 @@
-# Rentpal
+# Request Parser
 
-This document describes the purpose of developing rentpal, tools, and technologies that were used to develop the project.
+The document describes the purpose of developing a framework that validates incoming parameter requests.
 
-## Idea behind the project
-The inception of the computer has revolutionized the way we approach a problem. An example could be, as a student in a foreign country, I had to renew my visa. The process was not easy as I had to get an appointment which was very tough to book. After having the appointment, I had to make sure that I have all the documents with me. Unfortunately, I had a document missing that denied my visa and I had to wait for another 45 days to book an appointment.
+## Problem
+When I was working on my project, I had to make sure all the incoming request parameters are validated before providing them to corresponding service class. I was developing my project using Spring framework and spring does provide annotations to validate the request parameters. For example 
 
-But fortunately, now everything has moved online, all I had to do is create an online account, apply for the visa, and upload all the necessary documents. Even if there is a document missing I will get a message from the visa office, asking me to upload the file. This process is fairly simple when compared to the previous approach.
+@RestController
+@Validated
+public class TestController {<br/>
+&nbsp;&nbsp;@GetMapping("/student/")<br/>
+&nbsp;&nbsp;ResponseEntity<String> student(@RequestParam("age") @Min(5) int age) {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;return ResponseEntity.ok("Your age is " + age);<br/>
+&nbsp;&nbsp;}<br/>
+}<br/>
 
-Even though there is technology advancement in a lot of areas, there are few areas where we could do better with existing technologies. One of the areas is property management.
+The above student function expects the age value to be greater than or equal to 5 and throws exception if is less the 5. But what if there are multiple criteria’s such as minimum length, maximum length, required, pattern match? As my domain objects were complex, annotating each parameter with a validate functions such as Min, Max or Regex bloated my controller. I did not like it and I wanted to move the logic from controller to a single entity just like controller advice.  
 
-We brainstormed with a lot of ideas of how we could approach this problem and below are the initial features that we wanted to implement.
 
-* The ability of a property owner to manage the properties. As of now, a property could be either an apartment building or a single house - development completed.
-* The ability to share the property with a tenant based on availability - development completed.
-* The ability to send a digital rental agreement to the tenant - development completed.
-* The ability to receive rent from the tenants and send monthly rent receipts automatically - under development.
-* The ability to provide a messaging service between an owner and tenant - under development. 
+## Solution 
 
-## Features 
+As I know the request, I will define the rules based upon my expectations in an XML file. 
 
-### 1. Property management
-  - As of now, an owner can add a property that could be either an apartment building or a single house. Below are the attributes that we gather to store the property information
-    * Address
-    * Rent
-    * Area
-    * Capacity
-    * Floor number and door number(applicable for apartment building)
-    
-    [![addproperty.png](https://i.postimg.cc/QtSFPW4p/addproperty.png)](https://postimg.cc/2bbjL3f6)
+For example,
+<url value="/api/user/login" method="post" authentication="false">
+![url](https://user-images.githubusercontent.com/49817583/97086122-c339a980-1621-11eb-93fc-ccefd8450e4c.png)
+
  
-  - Above screenshot is a cite universite property of apartment type and its corresponding attributes. An owner can add any number of properties and there is no threshold. 
  
 ### 2. Tenant Management
   - Once when an owner adds a property, the property is available for leasing. An owner can add a tenant and lease the property to the tenant according to the capacity at the time of leasing. 
