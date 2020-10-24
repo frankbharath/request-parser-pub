@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.bharath.rm.common.Utils;
 import com.bharath.rm.configuration.I18NConfig;
 import com.bharath.rm.constants.SecurityXMLUtilConstants;
-import com.bharath.rm.exception.URLException;
+
 import com.bharath.rm.model.Parameter;
 import com.bharath.rm.model.URL;
 
@@ -40,12 +40,13 @@ public class ValidateRequest {
 	 *
 	 * @param request the request
 	 * @return the JSON object
+	 * @throws Exception 
 	 */
-	public static void checkValidity(HttpServletRequest request) {
+	public static void checkValidity(HttpServletRequest request) throws Exception {
 		URL url=SecurityXMLConfig.getURL(request);
 		if(url==null) {
 			log.error("The URL "+request.getRequestURI()+" for the HTTP protocol "+request.getMethod()+" is not configured in the security.xml file.");
-			throw new URLException(I18NConfig.getMessage("error.url_validity.not_found"));
+			throw new Exception(I18NConfig.getMessage("error.url_validity.not_found"));
 		}
 		JSONObject data=new JSONObject();
 		Enumeration<String> parameterNames=request.getParameterNames();
@@ -66,12 +67,13 @@ public class ValidateRequest {
 	 * @param data the data
 	 * @param parameters the parameters
 	 * @return the JSON object
+	 * @throws Exception 
 	 */
-	public static void validateParameters(JSONObject data, HashMap<String, Parameter> parameters) {
+	public static void validateParameters(JSONObject data, HashMap<String, Parameter> parameters) throws Exception {
 		for(Map.Entry<String, Parameter>entry:parameters.entrySet()) {
 			Parameter parameter=entry.getValue();
 			if(parameter.isRequired() && !data.has(parameter.getParameterName())) {
-				throw new URLException(I18NConfig.getMessage("error.url_validity.required_parameter_not_found",new Object[] {parameter.getParameterName()}));
+				throw new Exception(I18NConfig.getMessage("error.url_validity.required_parameter_not_found",new Object[] {parameter.getParameterName()}));
 			}
 		}
 		Iterator<String> parameterNames= data.keys();
@@ -86,13 +88,13 @@ public class ValidateRequest {
 							validateParameters(object,parameter.getParameters());
 						}catch (JSONException e) {
 							log.error("The parameter "+paramName+" is not an object type.",e);
-							throw new URLException(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
+							throw new Exception(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
 					    }
 					}else {
 						try {
 							JSONArray jsonObjects=new JSONArray(data.get(paramName).toString());
 							if(parameter.isRequired() && jsonObjects.length()==0) {
-								throw new URLException(I18NConfig.getMessage("error.url_validity.array_empty",new Object[] {paramName}));
+								throw new Exception(I18NConfig.getMessage("error.url_validity.array_empty",new Object[] {paramName}));
 							}
 							for(int i=0;i<jsonObjects.length();i++) {
 								JSONObject object=new JSONObject(jsonObjects.get(i).toString());
@@ -100,7 +102,7 @@ public class ValidateRequest {
 						}
 						}catch (JSONException e) {
 							log.error("The parameter "+paramName+" is not an object or array type.",e);
-							throw new URLException(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
+							throw new Exception(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
 					    }
 					}
 				}else {
@@ -112,7 +114,7 @@ public class ValidateRequest {
 							}
 						}catch (JSONException e) {
 							log.error("The parameter "+paramName+" is not an array type.",e);
-							throw new URLException(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
+							throw new Exception(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {paramName}));
 					    }
 					}else {
 						String value=data.get(paramName).toString();
@@ -138,17 +140,18 @@ public class ValidateRequest {
 	 *
 	 * @param parameter the parameter
 	 * @param value the value
+	 * @throws Exception 
 	 */
-	public static void validateParam(Parameter parameter, String value) {
+	public static void validateParam(Parameter parameter, String value) throws Exception {
 		value=value.trim();
 		Pattern pattern = Pattern.compile(parameter.getRegex());
 		Matcher matcher = pattern.matcher(value);
 		if(!matcher.matches()) {
-			throw new URLException(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {parameter.getParameterName()}));
+			throw new Exception(I18NConfig.getMessage("error.url_validity.invalid_parameter",new Object[] {parameter.getParameterName()}));
 		}else if(parameter.getMinLength()>value.length()) {
-			throw new URLException(I18NConfig.getMessage("error.url_validity.min_length",new Object[] {parameter.getParameterName(), parameter.getMinLength()}));
+			throw new Exception(I18NConfig.getMessage("error.url_validity.min_length",new Object[] {parameter.getParameterName(), parameter.getMinLength()}));
 		}else if(parameter.getMaxLength()!=0 && parameter.getMaxLength()<value.length()) {
-			throw new URLException(I18NConfig.getMessage("error.url_validity.max_length",new Object[] {parameter.getParameterName(), parameter.getMaxLength()}));
+			throw new Exception(I18NConfig.getMessage("error.url_validity.max_length",new Object[] {parameter.getParameterName(), parameter.getMaxLength()}));
 		}
 	}
 }
