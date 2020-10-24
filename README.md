@@ -33,6 +33,17 @@ Once when I have defined my rules in the XML file, I can read the file in two wa
 - We can convert our example into an n-ary tree structure.
 ![urltree](https://user-images.githubusercontent.com/49817583/97086256-6ab6dc00-1622-11eb-85dc-6d3d0a125742.png)
 
+The above tree represents,
+
+- /api/user/{id} – The rules pertaining to POST, PUT and DELETE will be stored in user node. The rule for GET user will stored in {id} node  
+- /api/property/apartment/{id} - The rules pertaining to POST, PUT and DELETE will be stored in apartment node. The rule for GET apartment will stored in {id} node  
+- /api/property/house/{id} - The rules pertaining to POST, PUT and DELETE will be stored in house node. The rule for GET house will stored in {id} node  
+- /api/tenant/{id} - The rules pertaining to POST, PUT and DELETE will be stored in tenant node. The rule for GET tenant will stored in {id} node  
+- /api/tenant/lease/{id} - POST, PUT, DELETE, GET - The rules pertaining to POST, PUT and DELETE will be stored in lease node. The rule for GET lease will stored in {id} node  
+
+We can store the tree in main memory. Once when the request hits the server, we can parse the tree and find the corresponding rule for the request.
+
+
  
  
 ### 2. Tenant Management
