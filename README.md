@@ -58,3 +58,5 @@ Example,
 
 These can represented in XML as
 ![sampleurl](https://user-images.githubusercontent.com/49817583/97086559-3f34f100-1624-11eb-9bb2-6751dfba9ddd.png)
+
+But in the end every parameter should have parameter rule associate with it. Moreover, an object can contain another object as well. But the depth of the object is restricted to 3 as of now.
