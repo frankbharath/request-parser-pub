@@ -19,10 +19,8 @@ The above student function expects the age value to be greater than or equal to 
 
 ## Solution 
 
-As I know the request, I will define the rules based upon my expectations in an XML file. 
+As I know the request, I will define the rules based upon my expectations in an XML file. For example,
 
-For example,
-<url value="/api/user/login" method="post" authentication="false">
 ![url](https://user-images.githubusercontent.com/49817583/97086122-c339a980-1621-11eb-93fc-ccefd8450e4c.png)
 
  
