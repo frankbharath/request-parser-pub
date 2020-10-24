@@ -43,8 +43,21 @@ The above tree represents,
 
 We can store the tree in main memory. Once when the request hits the server, we can parse the tree and find the corresponding rule for the request.
 
+### Supported Request Types
+As of now this library supports application/x-www-form-urlencoded and multipart/form-data
 
- 
+### Supported Data Types
+A request parameter value can be either a string, list or object. 
+Example,
+- email=test@test.com&password=test@123
+  - email and password can be categorized as string
+- id=1&id=2&id=3, 
+  - id be categorized as list of string. 
+- address={line_1:10B, line_2: Camille Groult,code:94400,city:paris},
+  - sometimes we might be sending JSONObject to server. A list of objects can be sent from client as well. 
+
+These can represented in XML as
+
  
 ### 2. Tenant Management
   - Once when an owner adds a property, the property is available for leasing. An owner can add a tenant and lease the property to the tenant according to the capacity at the time of leasing. 
