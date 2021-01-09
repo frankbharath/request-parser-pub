@@ -3,7 +3,7 @@
 The document describes the purpose of developing a framework that validates incoming parameter requests.
 
 ## Problem
-When I was working on my project, I had to make sure all the incoming request parameters are validated before providing them to corresponding service class. I was developing my project using Spring framework and spring does provide annotations to validate the request parameters. For example 
+When I was working on my personal project, I had to make sure all the incoming request parameters are validated before providing them to corresponding service class. I was developing my project using Spring framework and spring does provide annotations to validate the request parameters. For example 
 
 @RestController
 @Validated
